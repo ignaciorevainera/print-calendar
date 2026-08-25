@@ -1,0 +1,6 @@
+{
+  "name": "Calendario 2027 Minimalista A4",
+  "description": "Calendario anual 2027 minimalista con buscador y carga automática de festivos nacionales/regionales por API, marcado multicolor de días y exportación a PDF A4.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

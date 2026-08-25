@@ -1,0 +1,159 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-family: var(--font-sans);
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Color Palettes (Pure sRGB hex values for crisp UI & 100% canvas & print compatibility) */
+.theme-gris {
+  --cal-bg: #ffffff;
+  --cal-text: #1e293b;
+  --cal-muted: #64748b;
+  --cal-accent: #334155;
+  --cal-border: #cbd5e1;
+  --cal-grid-border: #e2e8f0;
+  --cal-weekend: #475569;
+  --cal-weekend-bg: #f8fafc;
+  --cal-badge: #334155;
+}
+
+.theme-monocromo {
+  --cal-bg: #ffffff;
+  --cal-text: #000000;
+  --cal-muted: #52525b;
+  --cal-accent: #000000;
+  --cal-border: #a1a1aa;
+  --cal-grid-border: #d4d4d8;
+  --cal-weekend: #27272a;
+  --cal-weekend-bg: #f4f4f5;
+  --cal-badge: #000000;
+}
+
+.theme-azul {
+  --cal-bg: #ffffff;
+  --cal-text: #0f172a;
+  --cal-muted: #475569;
+  --cal-accent: #1e40af;
+  --cal-border: #94a3b8;
+  --cal-grid-border: #cbd5e1;
+  --cal-weekend: #1e3a8a;
+  --cal-weekend-bg: #f0f9ff;
+  --cal-badge: #1d4ed8;
+}
+
+.theme-oliva {
+  --cal-bg: #ffffff;
+  --cal-text: #1c1917;
+  --cal-muted: #57534e;
+  --cal-accent: #292524;
+  --cal-border: #a8a29e;
+  --cal-grid-border: #d6d3d1;
+  --cal-weekend: #3f3f46;
+  --cal-weekend-bg: #f7fee7;
+  --cal-badge: #365314;
+}
+
+.theme-terracota {
+  --cal-bg: #ffffff;
+  --cal-text: #292524;
+  --cal-muted: #78716c;
+  --cal-accent: #9a3412;
+  --cal-border: #d6d3d1;
+  --cal-grid-border: #e7e5e4;
+  --cal-weekend: #7c2d12;
+  --cal-weekend-bg: #fffbeb;
+  --cal-badge: #c2410c;
+}
+
+/* Print Rules */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 6mm 8mm;
+  }
+  
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .no-print {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #calendar-canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}
+
+/* Strict fixed table layout & sizing rules for perfect html2canvas PDF rendering */
+.cal-table {
+  table-layout: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 1px !important;
+  box-sizing: border-box !important;
+}
+
+.cal-table th,
+.cal-table td {
+  width: 14.285714% !important;
+  max-width: 14.285714% !important;
+  min-width: 14.285714% !important;
+  padding: 1px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.cal-table thead tr {
+  height: 18px !important;
+}
+
+.cal-table tbody tr {
+  height: 16.666667% !important;
+  max-height: 16.666667% !important;
+}
+
+.cal-day-cell button {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+}
+
