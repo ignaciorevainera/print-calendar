@@ -7,7 +7,7 @@ export interface PaletteOption {
   colorSwatch: string;
 }
 
-export type FontFamilyKey = 'jakarta' | 'inter' | 'playfair';
+export type FontFamilyKey = 'jakarta' | 'inter' | 'playfair' | 'roboto' | 'lora' | 'fira' | 'jetbrains';
 
 export interface FontOption {
   id: FontFamilyKey;
@@ -22,7 +22,8 @@ export type LayoutType = 'anual' | 'semestral' | 'trimestral' | 'mensual';
 
 export interface MarkedDayInfo {
   color: string;
-  label?: string; // Nombre del festivo o nota
+  label?: string;
+  note?: string;
   isHoliday?: boolean;
 }
 

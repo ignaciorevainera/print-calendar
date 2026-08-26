@@ -47,7 +47,7 @@ export default function App() {
     setActiveDayModal({ dayKey, dayNumber, monthName });
   };
 
-  const handleConfirmMarkDay = (color: string, label?: string) => {
+  const handleConfirmMarkDay = (color: string, label?: string, note?: string) => {
     if (!activeDayModal) return;
     const { dayKey, dayNumber, monthName } = activeDayModal;
     
@@ -55,11 +55,13 @@ export default function App() {
       ...prev,
       [dayKey]: { 
         color,
-        label: label || prev[dayKey]?.label
+        label: label !== undefined ? label : prev[dayKey]?.label,
+        note: note !== undefined ? note : prev[dayKey]?.note,
+        isHoliday: prev[dayKey]?.isHoliday
       }
     }));
     
-    showToast(`Día ${dayNumber} de ${monthName} marcado`, 'success');
+    showToast(`Día ${dayNumber} de ${monthName} guardado`, 'success');
     setActiveDayModal(null);
   };
 
