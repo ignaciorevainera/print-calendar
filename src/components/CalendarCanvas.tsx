@@ -49,13 +49,17 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
           className={`page-a4 theme-${palette} ${fontClassMap[fontFamily]} relative w-full max-w-[1120px] aspect-[297/210] bg-white text-[var(--cal-text)] p-4 md:p-6 rounded-sm shadow-md print:shadow-none print:rounded-none print:max-w-none print:w-full print:h-full print:aspect-auto flex flex-col justify-between box-border border border-[var(--cal-border)] print:border-none`}
           style={{ boxSizing: 'border-box' }}
         >
-          {subtitle && subtitle.trim().length > 0 && (
+          {((subtitle && subtitle.trim().length > 0) || pages.length > 1) && (
             <div className="w-full text-center mb-2 pb-1 border-b border-[var(--cal-border)] shrink-0 box-border flex justify-between items-center px-2">
-              <span className="text-[10px] opacity-0">Pág. {pageIndex + 1}</span>
+              <span className="text-[10px] opacity-0 select-none">
+                {pages.length > 1 ? `Pag. ${pageIndex + 1}` : ''}
+              </span>
               <h2 className="text-xs md:text-sm font-semibold tracking-widest uppercase text-[var(--cal-accent)] leading-tight">
-                {subtitle}
+                {subtitle || ''}
               </h2>
-              <span className="text-[10px] text-[var(--cal-muted)] font-mono">Pág. {pageIndex + 1}/{pages.length}</span>
+              <span className="text-[10px] text-[var(--cal-muted)] font-mono">
+                {pages.length > 1 ? `Pag. ${pageIndex + 1}/${pages.length}` : ''}
+              </span>
             </div>
           )}
 
