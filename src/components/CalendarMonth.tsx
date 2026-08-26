@@ -1,7 +1,14 @@
 import React from 'react';
-import { MonthInfo, WeekStart, MarkedDaysMap, DayNumberPosition, DayNumberSize, DayTextSize } from '../types';
+import { MonthInfo, WeekStart, MarkedDaysMap, DayNumberPosition, DayNumberSize, DayTextSize, MonthTitleSize } from '../types';
 import { DAYS_MONDAY_START, DAYS_SUNDAY_START, isWeekendIndex } from '../utils/calendarHelper';
 import { useCalendarStore } from '../store/useCalendarStore';
+
+const monthTitleSizeMap: Record<MonthTitleSize, string> = {
+  sm: 'text-[9px] md:text-[10px]',
+  md: 'text-[11px] md:text-[12px]',
+  lg: 'text-[13px] md:text-[14px]',
+  xl: 'text-[15px] md:text-[16px]'
+};
 
 const positionClassMap: Record<DayNumberPosition, string> = {
   'top-left': 'items-start justify-start p-1',
@@ -92,6 +99,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
 }) => {
   const dayNumberSize = useCalendarStore((state) => state.dayNumberSize);
   const dayTextSize = useCalendarStore((state) => state.dayTextSize);
+  const monthTitleSize = useCalendarStore((state) => state.monthTitleSize);
   const dayNumberPosition = useCalendarStore((state) => state.dayNumberPosition);
   const dayNotePosition = useCalendarStore((state) => state.dayNotePosition);
   const layout = useCalendarStore((state) => state.layout);
@@ -104,7 +112,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
       className="month-card flex flex-col p-1.5 md:p-2 rounded-sm border border-[var(--cal-grid-border)] bg-[var(--cal-bg)] transition-colors h-full w-full overflow-hidden box-border"
     >
       <div className="h-6 flex items-center justify-center border-b border-[var(--cal-border)] mb-1 pb-0.5 shrink-0">
-        <h3 className="text-[11px] md:text-[12px] font-bold tracking-wider text-[var(--cal-text)] uppercase select-none leading-none">
+        <h3 className={`font-bold tracking-wider text-[var(--cal-text)] uppercase select-none leading-none ${monthTitleSizeMap[monthTitleSize]}`}>
           {month.name}
         </h3>
       </div>

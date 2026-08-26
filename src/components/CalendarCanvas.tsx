@@ -1,8 +1,22 @@
 import React from 'react';
-import { MonthInfo, FontFamilyKey } from '../types';
+import { MonthInfo, FontFamilyKey, HeaderTitleSize } from '../types';
 import { CalendarMonth } from './CalendarMonth';
 import { useCalendarStore } from '../store/useCalendarStore';
 import { chunkMonths } from '../utils/calendarHelper';
+
+const headerTitleSizeMap: Record<HeaderTitleSize, string> = {
+  sm: 'text-xs md:text-sm',
+  md: 'text-sm md:text-base',
+  lg: 'text-base md:text-lg',
+  xl: 'text-lg md:text-xl'
+};
+
+const headerSubtitleSizeMap: Record<HeaderTitleSize, string> = {
+  sm: 'text-[10px] md:text-xs',
+  md: 'text-xs md:text-sm',
+  lg: 'text-sm md:text-base',
+  xl: 'text-base md:text-lg'
+};
 
 interface CalendarCanvasProps {
   months: MonthInfo[];
@@ -21,13 +35,18 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
     highlightWeekends,
     subtitle,
     markedDays,
-    layout
+    layout,
+    headerTitleSize
   } = useCalendarStore();
 
   const fontClassMap: Record<FontFamilyKey, string> = {
     jakarta: 'font-["Plus_Jakarta_Sans",sans-serif]',
     inter: 'font-["Inter",sans-serif]',
-    playfair: 'font-["Playfair_Display",serif]'
+    playfair: 'font-["Playfair_Display",serif]',
+    roboto: 'font-["Roboto",sans-serif]',
+    lora: 'font-["Lora",serif]',
+    fira: 'font-["Fira_Code",monospace]',
+    jetbrains: 'font-["JetBrains_Mono",monospace]'
   };
 
   const gridClassMap: Record<typeof layout, string> = {
@@ -49,11 +68,11 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
         >
           <div className="w-full mb-2 pb-1 border-b border-[var(--cal-border)] shrink-0 box-border flex justify-between items-center px-2">
             <div className="flex items-baseline gap-2">
-              <h1 className="text-sm md:text-base font-bold tracking-tight text-[var(--cal-text)] leading-tight">
+              <h1 className={`font-bold tracking-tight text-[var(--cal-text)] leading-tight ${headerTitleSizeMap[headerTitleSize]}`}>
                 {year}
               </h1>
               {subtitle && subtitle.trim().length > 0 && (
-                <span className="text-xs md:text-sm font-semibold tracking-widest uppercase text-[var(--cal-accent)] leading-tight">
+                <span className={`font-semibold tracking-widest uppercase text-[var(--cal-accent)] leading-tight ${headerSubtitleSizeMap[headerTitleSize]}`}>
                   · {subtitle}
                 </span>
               )}
