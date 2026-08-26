@@ -31,6 +31,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
 }) => {
   const {
     year,
+    setYear,
     palette,
     setPalette,
     fontFamily,
@@ -115,210 +116,246 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 pt-3 border-t border-base-300 text-xs">
-          <div className="flex flex-col gap-1">
-            <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
-              <Palette className="w-3.5 h-3.5 text-base-content/60" />
-              <span>Paleta de colores</span>
-            </label>
-            <select
-              id="select-palette"
-              value={palette}
-              onChange={(e) => setPalette(e.target.value as PaletteKey)}
-              className="select select-bordered select-sm w-full font-medium"
-            >
-              <option value="gris">Gris Minimalista</option>
-              <option value="monocromo">Monocromo / Negro</option>
-              <option value="azul">Azul Ejecutivo</option>
-              <option value="oliva">Verde Oliva</option>
-              <option value="terracota">Terracota</option>
-            </select>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
-              <Type className="w-3.5 h-3.5 text-base-content/60" />
-              <span>Tipografía</span>
-            </label>
-            <select
-              id="select-font"
-              value={fontFamily}
-              onChange={(e) => setFontFamily(e.target.value as FontFamilyKey)}
-              className="select select-bordered select-sm w-full font-medium"
-            >
-              <option value="jakarta">Plus Jakarta Sans (Moderna)</option>
-              <option value="inter">Inter (Clásica limpia)</option>
-              <option value="playfair">Playfair Display (Editorial Serif)</option>
-            </select>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/60" />
-              <span>Layout</span>
-            </label>
-            <select
-              id="select-layout"
-              value={layout}
-              onChange={(e) => setLayout(e.target.value as LayoutType)}
-              className="select select-bordered select-sm w-full font-medium"
-            >
-              <option value="anual">Anual (12 meses)</option>
-              <option value="semestral">Semestral (6 meses)</option>
-              <option value="trimestral">Trimestral (3 meses)</option>
-              <option value="mensual">Mensual (1 mes)</option>
-            </select>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/60" />
-              <span>Subtítulo opcional</span>
-            </label>
-            <input
-              id="input-subtitle"
-              type="text"
-              placeholder="Ej: 2027 · Planificador anual"
-              value={subtitle}
-              onChange={(e) => setSubtitle(e.target.value)}
-              maxLength={45}
-              className="input input-bordered input-sm w-full"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
-              <Type className="w-3.5 h-3.5 text-base-content/60" />
-              <span>Tamaño del número</span>
-            </label>
-            <select
-              id="select-day-size"
-              value={dayNumberSize}
-              onChange={(e) => setDayNumberSize(e.target.value as DayNumberSize)}
-              className="select select-bordered select-sm w-full font-medium"
-            >
-              <option value="sm">Pequeño</option>
-              <option value="md">Normal</option>
-              <option value="lg">Grande</option>
-              <option value="xl">Extra Grande</option>
-            </select>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/60" />
-              <span>Alineación número</span>
-            </label>
-            <DayPositionPicker />
-          </div>
-
-          <div className="flex flex-col gap-1 sm:col-span-2">
-            <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
-              <CalendarDays className="w-3.5 h-3.5 text-base-content/60" />
-              <span>Rango de meses</span>
-            </label>
-            <div className="flex gap-1.5 items-center w-full">
-              <select
-                id="select-range-start"
-                value={monthRange.start}
-                onChange={(e) => {
-                  const start = parseInt(e.target.value);
-                  const end = monthRange.end < start ? start : monthRange.end;
-                  setMonthRange({ start, end });
-                }}
-                className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
-              >
-                {MONTH_NAMES.map((name, i) => (
-                  <option key={i + 1} value={i + 1}>{name}</option>
-                ))}
-              </select>
-              <span className="text-base-content/50 font-bold shrink-0">a</span>
-              <select
-                id="select-range-end"
-                value={monthRange.end}
-                onChange={(e) => {
-                  const end = parseInt(e.target.value);
-                  const start = monthRange.start > end ? end : monthRange.start;
-                  setMonthRange({ start, end });
-                }}
-                className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
-              >
-                {MONTH_NAMES.map((name, i) => (
-                  <option key={i + 1} value={i + 1}>{name}</option>
-                ))}
-              </select>
-              <div className="dropdown dropdown-end shrink-0">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-sm btn-ghost btn-circle"
-                  title="Accesos rápidos de meses"
+        <div className="flex flex-wrap gap-4 pt-3 border-t border-base-300 text-xs">
+          {/* Grupo 1: Diseño General */}
+          <div className="flex-1 min-w-[280px] bg-base-200/20 p-3 rounded-lg border border-base-300/50 flex flex-col gap-2.5">
+            <div className="font-bold text-base-content/65 uppercase tracking-wider text-[10px] flex items-center gap-1.5 select-none">
+              <Palette className="w-3.5 h-3.5 text-base-content/50" />
+              <span>Diseño General</span>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mt-1">
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold text-base-content/85">Paleta de colores</label>
+                <select
+                  id="select-palette"
+                  value={palette}
+                  onChange={(e) => setPalette(e.target.value as PaletteKey)}
+                  className="select select-bordered select-sm w-full font-medium"
                 >
-                  <SlidersHorizontal className="w-3.5 h-3.5" />
-                </div>
-                <ul
-                  tabIndex={0}
-                  className="dropdown-content z-50 menu p-2 shadow-lg bg-base-100 rounded-box border border-base-300 w-36 text-xs mt-1"
+                  <option value="gris">Gris Minimalista</option>
+                  <option value="monocromo">Monocromo / Negro</option>
+                  <option value="azul">Azul Ejecutivo</option>
+                  <option value="oliva">Verde Oliva</option>
+                  <option value="terracota">Terracota</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold text-base-content/85">Tipografía</label>
+                <select
+                  id="select-font"
+                  value={fontFamily}
+                  onChange={(e) => setFontFamily(e.target.value as FontFamilyKey)}
+                  className="select select-bordered select-sm w-full font-medium"
                 >
-                  <li>
-                    <button type="button" onClick={() => setMonthRange({ start: 1, end: 12 })}>
-                      Todo el año
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const currentMonth = new Date().getMonth() + 1;
-                        setMonthRange({ start: currentMonth, end: currentMonth });
-                      }}
-                    >
-                      Mes actual
-                    </button>
-                  </li>
-                </ul>
+                  <option value="jakarta">Plus Jakarta Sans (Moderna)</option>
+                  <option value="inter">Inter (Clásica limpia)</option>
+                  <option value="playfair">Playfair Display (Editorial Serif)</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1 col-span-2">
+                <label className="font-semibold text-base-content/85">Formato / Layout</label>
+                <select
+                  id="select-layout"
+                  value={layout}
+                  onChange={(e) => setLayout(e.target.value as LayoutType)}
+                  className="select select-bordered select-sm w-full font-medium"
+                >
+                  <option value="anual">Anual (12 meses)</option>
+                  <option value="semestral">Semestral (6 meses)</option>
+                  <option value="trimestral">Trimestral (3 meses)</option>
+                  <option value="mensual">Mensual (1 mes)</option>
+                </select>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col justify-center gap-1">
-            <label className="flex items-center justify-between cursor-pointer">
-              <span className="font-semibold text-base-content/80 flex items-center gap-1">
-                Inicio:
-                <span className="badge badge-sm badge-neutral font-mono text-[10px] font-semibold">
-                  {weekStart === 'monday' ? 'Lunes' : 'Domingo'}
-                </span>
-              </span>
-              <input
-                id="toggle-week-start"
-                type="checkbox"
-                checked={weekStart === 'sunday'}
-                onChange={(e) => setWeekStart(e.target.checked ? 'sunday' : 'monday')}
-                className="toggle toggle-sm toggle-primary"
-              />
-            </label>
-            <span className="text-[11px] text-base-content/60 font-medium">
-              {weekStart === 'monday' ? 'Semana estándar (L-D)' : 'Semana dominical (D-S)'}
-            </span>
+          {/* Grupo 2: Contenido y Rango */}
+          <div className="flex-1 min-w-[280px] bg-base-200/20 p-3 rounded-lg border border-base-300/50 flex flex-col gap-2.5">
+            <div className="font-bold text-base-content/65 uppercase tracking-wider text-[10px] flex items-center gap-1.5 select-none">
+              <CalendarDays className="w-3.5 h-3.5 text-base-content/50" />
+              <span>Contenido y Periodo</span>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mt-1">
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold text-base-content/85">Año</label>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setYear(Math.max(1900, year - 1))}
+                    className="btn btn-sm btn-square btn-bordered text-xs font-bold"
+                    title="Año anterior"
+                  >
+                    ‹
+                  </button>
+                  <input
+                    id="input-year"
+                    type="number"
+                    min={1900}
+                    max={2100}
+                    value={year}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value, 10);
+                      if (!isNaN(val)) {
+                        setYear(Math.min(2100, Math.max(1900, val)));
+                      }
+                    }}
+                    className="input input-bordered input-sm w-full text-center font-bold text-xs"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setYear(Math.min(2100, year + 1))}
+                    className="btn btn-sm btn-square btn-bordered text-xs font-bold"
+                    title="Año siguiente"
+                  >
+                    ›
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold text-base-content/85">Subtítulo opcional</label>
+                <input
+                  id="input-subtitle"
+                  type="text"
+                  placeholder={`Ej: ${year} · Planificador anual`}
+                  value={subtitle}
+                  onChange={(e) => setSubtitle(e.target.value)}
+                  maxLength={45}
+                  className="input input-bordered input-sm w-full font-medium"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1 col-span-2">
+                <label className="font-semibold text-base-content/85">Rango de meses</label>
+                <div className="flex gap-1.5 items-center w-full">
+                  <select
+                    id="select-range-start"
+                    value={monthRange.start}
+                    onChange={(e) => {
+                      const start = parseInt(e.target.value);
+                      const end = monthRange.end < start ? start : monthRange.end;
+                      setMonthRange({ start, end });
+                    }}
+                    className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
+                  >
+                    {MONTH_NAMES.map((name, i) => (
+                      <option key={i + 1} value={i + 1}>{name}</option>
+                    ))}
+                  </select>
+                  <span className="text-base-content/50 font-bold shrink-0">a</span>
+                  <select
+                    id="select-range-end"
+                    value={monthRange.end}
+                    onChange={(e) => {
+                      const end = parseInt(e.target.value);
+                      const start = monthRange.start > end ? end : monthRange.start;
+                      setMonthRange({ start, end });
+                    }}
+                    className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
+                  >
+                    {MONTH_NAMES.map((name, i) => (
+                      <option key={i + 1} value={i + 1}>{name}</option>
+                    ))}
+                  </select>
+                  <div className="dropdown dropdown-end shrink-0">
+                    <div
+                      tabIndex={0}
+                      role="button"
+                      className="btn btn-sm btn-ghost btn-circle"
+                      title="Accesos rápidos de meses"
+                    >
+                      <SlidersHorizontal className="w-3.5 h-3.5" />
+                    </div>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content z-50 menu p-2 shadow-lg bg-base-100 rounded-box border border-base-300 w-36 text-xs mt-1"
+                    >
+                      <li>
+                        <button type="button" onClick={() => setMonthRange({ start: 1, end: 12 })}>
+                          Todo el año
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const currentMonth = new Date().getMonth() + 1;
+                            setMonthRange({ start: currentMonth, end: currentMonth });
+                          }}
+                        >
+                          Mes actual
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-col justify-center gap-1">
-            <label className="flex items-center justify-between cursor-pointer">
-              <span className="font-semibold text-base-content/80 flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                Fines de semana
-              </span>
-              <input
-                id="toggle-highlight-weekends"
-                type="checkbox"
-                checked={highlightWeekends}
-                onChange={(e) => setHighlightWeekends(e.target.checked)}
-                className="toggle toggle-sm toggle-primary"
-              />
-            </label>
-            <span className="text-[11px] text-base-content/60 font-medium">
-              {highlightWeekends ? 'Sáb/Dom destacados' : 'Estilo neutro continuo'}
-            </span>
+          {/* Grupo 3: Personalización del Día */}
+          <div className="flex-1 min-w-[280px] bg-base-200/20 p-3 rounded-lg border border-base-300/50 flex flex-col gap-2.5">
+            <div className="font-bold text-base-content/65 uppercase tracking-wider text-[10px] flex items-center gap-1.5 select-none">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/50" />
+              <span>Ajustes del Día y Semana</span>
+            </div>
+            <div className="grid grid-cols-2 gap-x-3 gap-y-2 mt-1">
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold text-base-content/85">Tamaño de número</label>
+                <select
+                  id="select-day-size"
+                  value={dayNumberSize}
+                  onChange={(e) => setDayNumberSize(e.target.value as DayNumberSize)}
+                  className="select select-bordered select-sm w-full font-medium"
+                >
+                  <option value="sm">Pequeño</option>
+                  <option value="md">Normal</option>
+                  <option value="lg">Grande</option>
+                  <option value="xl">Extra Grande</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold text-base-content/85">Alineación número</label>
+                <DayPositionPicker />
+              </div>
+
+              <div className="flex flex-col justify-center gap-0.5 pt-1">
+                <label className="flex items-center justify-between cursor-pointer">
+                  <span className="font-semibold text-base-content/80 flex items-center gap-1 text-[11px]">
+                    Semana inicia:
+                    <span className="badge badge-sm badge-neutral font-mono text-[9px] font-semibold">
+                      {weekStart === 'monday' ? 'Lun' : 'Dom'}
+                    </span>
+                  </span>
+                  <input
+                    id="toggle-week-start"
+                    type="checkbox"
+                    checked={weekStart === 'sunday'}
+                    onChange={(e) => setWeekStart(e.target.checked ? 'sunday' : 'monday')}
+                    className="toggle toggle-sm toggle-primary"
+                  />
+                </label>
+              </div>
+
+              <div className="flex flex-col justify-center gap-0.5 pt-1">
+                <label className="flex items-center justify-between cursor-pointer">
+                  <span className="font-semibold text-base-content/80 flex items-center gap-1 text-[11px]">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                    Fines de semana
+                  </span>
+                  <input
+                    id="toggle-highlight-weekends"
+                    type="checkbox"
+                    checked={highlightWeekends}
+                    onChange={(e) => setHighlightWeekends(e.target.checked)}
+                    className="toggle toggle-sm toggle-primary"
+                  />
+                </label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
