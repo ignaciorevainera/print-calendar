@@ -52,3 +52,21 @@ export interface MonthInfo {
   startDayOfWeek: number; // 0 (Sun) - 6 (Sat)
   weeks: (number | null)[][];
 }
+
+export type DayNumberSize = 'sm' | 'md' | 'lg' | 'xl';
+
+export type DayNumberPosition =
+  | 'top-left'
+  | 'top-center'
+  | 'top-right'
+  | 'middle-left'
+  | 'center'
+  | 'middle-right'
+  | 'bottom-left'
+  | 'bottom-center'
+  | 'bottom-right';
+
+export interface MonthRange {
+  start: number; // 1 to 12
+  end: number;   // 1 to 12
+}
