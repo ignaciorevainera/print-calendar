@@ -1,6 +1,7 @@
 import React from 'react';
-import { PaletteKey, FontFamilyKey, LayoutType } from '../types';
+import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize } from '../types';
 import { useCalendarStore } from '../store/useCalendarStore';
+import { DayPositionPicker } from './DayPositionPicker';
 import { 
   Printer, 
   Palette, 
@@ -11,6 +12,11 @@ import {
   Globe2, 
   SlidersHorizontal 
 } from 'lucide-react';
+
+const MONTH_NAMES = [
+  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+];
 
 interface ControlToolbarProps {
   onPrint: () => void;
@@ -37,6 +43,10 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     setHighlightWeekends,
     layout,
     setLayout,
+    dayNumberSize,
+    setDayNumberSize,
+    monthRange,
+    setMonthRange,
     markedDays
   } = useCalendarStore();
 
@@ -105,7 +115,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 pt-3 border-t border-base-300 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 pt-3 border-t border-base-300 text-xs">
           <div className="flex flex-col gap-1">
             <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
               <Palette className="w-3.5 h-3.5 text-base-content/60" />
@@ -174,6 +184,101 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               maxLength={45}
               className="input input-bordered input-sm w-full"
             />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
+              <Type className="w-3.5 h-3.5 text-base-content/60" />
+              <span>Tamaño del número</span>
+            </label>
+            <select
+              id="select-day-size"
+              value={dayNumberSize}
+              onChange={(e) => setDayNumberSize(e.target.value as DayNumberSize)}
+              className="select select-bordered select-sm w-full font-medium"
+            >
+              <option value="sm">Pequeño</option>
+              <option value="md">Normal</option>
+              <option value="lg">Grande</option>
+              <option value="xl">Extra Grande</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/60" />
+              <span>Alineación número</span>
+            </label>
+            <DayPositionPicker />
+          </div>
+
+          <div className="flex flex-col gap-1 sm:col-span-2">
+            <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
+              <CalendarDays className="w-3.5 h-3.5 text-base-content/60" />
+              <span>Rango de meses</span>
+            </label>
+            <div className="flex gap-1.5 items-center w-full">
+              <select
+                id="select-range-start"
+                value={monthRange.start}
+                onChange={(e) => {
+                  const start = parseInt(e.target.value);
+                  const end = monthRange.end < start ? start : monthRange.end;
+                  setMonthRange({ start, end });
+                }}
+                className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
+              >
+                {MONTH_NAMES.map((name, i) => (
+                  <option key={i + 1} value={i + 1}>{name}</option>
+                ))}
+              </select>
+              <span className="text-base-content/50 font-bold shrink-0">a</span>
+              <select
+                id="select-range-end"
+                value={monthRange.end}
+                onChange={(e) => {
+                  const end = parseInt(e.target.value);
+                  const start = monthRange.start > end ? end : monthRange.start;
+                  setMonthRange({ start, end });
+                }}
+                className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
+              >
+                {MONTH_NAMES.map((name, i) => (
+                  <option key={i + 1} value={i + 1}>{name}</option>
+                ))}
+              </select>
+              <div className="dropdown dropdown-end shrink-0">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-sm btn-ghost btn-circle"
+                  title="Accesos rápidos de meses"
+                >
+                  <SlidersHorizontal className="w-3.5 h-3.5" />
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content z-50 menu p-2 shadow-lg bg-base-100 rounded-box border border-base-300 w-36 text-xs mt-1"
+                >
+                  <li>
+                    <button type="button" onClick={() => setMonthRange({ start: 1, end: 12 })}>
+                      Todo el año
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const currentMonth = new Date().getMonth() + 1;
+                        setMonthRange({ start: currentMonth, end: currentMonth });
+                      }}
+                    >
+                      Mes actual
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col justify-center gap-1">
