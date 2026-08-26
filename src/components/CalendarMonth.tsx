@@ -1,5 +1,5 @@
 import React from 'react';
-import { MonthInfo, WeekStart, MarkedDaysMap, DayNumberPosition, DayNumberSize } from '../types';
+import { MonthInfo, WeekStart, MarkedDaysMap, DayNumberPosition, DayNumberSize, DayTextSize } from '../types';
 import { DAYS_MONDAY_START, DAYS_SUNDAY_START, isWeekendIndex } from '../utils/calendarHelper';
 import { useCalendarStore } from '../store/useCalendarStore';
 
@@ -22,6 +22,18 @@ const sizeClassMap: Record<DayNumberSize, string> = {
   xl: 'text-[15px] md:text-[17px]',
 };
 
+const labelSizeMap: Record<DayTextSize, string> = {
+  sm: 'text-[8px] md:text-[9px] px-1 py-0.5',
+  md: 'text-[9px] md:text-[10px] px-1 py-0.5',
+  lg: 'text-[10px] md:text-[11px] px-1.5 py-0.5',
+};
+
+const noteSizeMap: Record<DayTextSize, string> = {
+  sm: 'text-[7.5px] md:text-[8.5px] leading-tight line-clamp-5',
+  md: 'text-[9px] md:text-[10px] leading-tight line-clamp-4',
+  lg: 'text-[10px] md:text-[11px] leading-snug line-clamp-3',
+};
+
 interface CalendarMonthProps {
   month: MonthInfo;
   weekStart: WeekStart;
@@ -38,9 +50,11 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
   onSelectDay
 }) => {
   const dayNumberSize = useCalendarStore((state) => state.dayNumberSize);
+  const dayTextSize = useCalendarStore((state) => state.dayTextSize);
   const dayNumberPosition = useCalendarStore((state) => state.dayNumberPosition);
   const layout = useCalendarStore((state) => state.layout);
   const isMonthly = layout === 'mensual';
+  const isBottom = dayNumberPosition.startsWith('bottom');
   const dayHeaders = weekStart === 'monday' ? DAYS_MONDAY_START : DAYS_SUNDAY_START;
 
   return (
@@ -127,21 +141,21 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                     }`}
                   >
                     {isMonthly ? (
-                      <div className="flex flex-col w-full h-full min-h-0 overflow-hidden">
+                      <div className={`flex w-full h-full min-h-0 overflow-hidden ${isBottom ? 'flex-col-reverse' : 'flex-col'} justify-between`}>
                         <div
                           className={`flex w-full shrink-0 ${sizeClassMap[dayNumberSize]} ${positionClassMap[dayNumberPosition]}`}
                         >
                           <span>{day}</span>
                         </div>
                         {isSelected && (
-                          <div className="flex flex-col flex-1 min-h-0 w-full overflow-hidden mt-0.5">
+                          <div className={`flex flex-col flex-1 min-h-0 w-full overflow-hidden ${isBottom ? 'mb-0.5' : 'mt-0.5'}`}>
                             {markInfo?.label && (
-                              <span className="inline-block text-[9px] md:text-[10px] font-bold px-1 py-0.5 rounded bg-black/20 text-white truncate max-w-full my-0.5">
+                              <span className={`inline-block ${labelSizeMap[dayTextSize]} font-bold rounded bg-black/20 text-white truncate max-w-full my-0.5`}>
                                 {markInfo.label}
                               </span>
                             )}
                             {markInfo?.note && (
-                              <span className="text-[9px] md:text-[10px] font-normal leading-tight text-white/95 whitespace-pre-line text-left line-clamp-4 overflow-hidden w-full break-words mt-0.5">
+                              <span className={`${noteSizeMap[dayTextSize]} font-normal text-white/95 whitespace-pre-line text-left overflow-hidden w-full break-words mt-0.5`}>
                                 {markInfo.note}
                               </span>
                             )}
