@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { MarkedDaysMap } from './types';
-import { useCalendarStore } from './store/useCalendarStore';
+import { useCalendarStore, hasHolidayOrLabelMarked } from './store/useCalendarStore';
 import { generateYearData } from './utils/calendarHelper';
 import { ControlToolbar } from './components/ControlToolbar';
 import { CalendarCanvas } from './components/CalendarCanvas';
@@ -44,9 +44,7 @@ export default function App() {
   };
 
   const checkAndResetMiddlePositions = (nextMarkedDays: MarkedDaysMap) => {
-    const hasHolidaysOrLabels = Object.values(nextMarkedDays).some(
-      (d) => d.isHoliday || (d.label && d.label.trim() !== '')
-    );
+    const hasHolidaysOrLabels = hasHolidayOrLabelMarked(nextMarkedDays);
     if (!hasHolidaysOrLabels) return;
 
     const { dayNumberPosition, dayNotePosition, setDayNumberPosition, setDayNotePosition } = useCalendarStore.getState();

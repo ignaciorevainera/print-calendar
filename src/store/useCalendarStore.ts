@@ -12,7 +12,7 @@ import {
   MonthRange 
 } from '../types';
 
-const hasHolidayOrLabelMarked = (markedDays: MarkedDaysMap): boolean => {
+export const hasHolidayOrLabelMarked = (markedDays: MarkedDaysMap): boolean => {
   return Object.values(markedDays).some((d) => d.isHoliday || (d.label && d.label.trim() !== ''));
 };
 
