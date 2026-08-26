@@ -21,7 +21,7 @@ interface DayColorModalProps {
   monthName: string;
   year?: number;
   currentMark?: MarkedDayInfo;
-  onConfirm: (color: string, label?: string) => void;
+  onConfirm: (color: string, label?: string, note?: string) => void;
   onRemove?: () => void;
   onClose: () => void;
 }
@@ -40,12 +40,14 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
     currentMark?.color || PRESET_COLORS[0].hex
   );
   const [dayLabel, setDayLabel] = useState<string>(currentMark?.label || '');
+  const [dayNote, setDayNote] = useState<string>(currentMark?.note || '');
 
   // Sync color & label when modal opens or target day changes
   useEffect(() => {
     if (isOpen) {
       setSelectedColor(currentMark?.color || PRESET_COLORS[0].hex);
       setDayLabel(currentMark?.label || '');
+      setDayNote(currentMark?.note || '');
     }
   }, [isOpen, currentMark]);
 
@@ -56,15 +58,18 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
-      } else if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        onConfirm(selectedColor, dayLabel.trim() || undefined);
+      } else {
+        const isTextarea = (e.target as HTMLElement)?.tagName === 'TEXTAREA';
+        if (e.key === 'Enter' && !e.shiftKey && !isTextarea) {
+          e.preventDefault();
+          onConfirm(selectedColor, dayLabel.trim() || undefined, dayNote.trim() || undefined);
+        }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, selectedColor, dayLabel, onConfirm, onClose]);
+  }, [isOpen, selectedColor, dayLabel, dayNote, onConfirm, onClose]);
 
   if (!isOpen) return null;
 
@@ -181,6 +186,21 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
               className="input input-bordered input-sm w-full"
             />
           </div>
+
+          <div className="space-y-1">
+            <label htmlFor="input-day-note" className="font-bold text-base-content/80 block">
+              Nota o texto descriptivo (opcional):
+            </label>
+            <textarea
+              id="input-day-note"
+              rows={3}
+              placeholder="Escribe detalles, horarios, recordatorios..."
+              value={dayNote}
+              onChange={(e) => setDayNote(e.target.value)}
+              maxLength={250}
+              className="textarea textarea-bordered textarea-sm w-full text-xs"
+            />
+          </div>
         </div>
 
         {/* Action Buttons */}
@@ -220,7 +240,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
             <button
               type="button"
               id="btn-confirm-mark-color"
-              onClick={() => onConfirm(selectedColor, dayLabel.trim() || undefined)}
+              onClick={() => onConfirm(selectedColor, dayLabel.trim() || undefined, dayNote.trim() || undefined)}
               className="btn btn-sm btn-primary gap-1.5 text-white"
             >
               <Check className="w-3.5 h-3.5" />
