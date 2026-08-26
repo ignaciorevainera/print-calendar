@@ -186,6 +186,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                     onClick={() => setYear(Math.max(1900, year - 1))}
                     className="btn btn-sm btn-square btn-bordered text-xs font-bold"
                     title="Año anterior"
+                    aria-label="Año anterior"
                   >
                     ‹
                   </button>
@@ -208,6 +209,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                     onClick={() => setYear(Math.min(2100, year + 1))}
                     className="btn btn-sm btn-square btn-bordered text-xs font-bold"
                     title="Año siguiente"
+                    aria-label="Año siguiente"
                   >
                     ›
                   </button>
