@@ -112,7 +112,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                           }
                         : undefined
                     }
-                    className={`w-full h-full min-h-0 p-0 m-0 rounded-xs flex cursor-pointer select-none leading-none box-border ${positionClassMap[dayNumberPosition]} ${sizeClassMap[dayNumberSize]} ${
+                    className={`w-full h-full min-h-0 m-0 rounded-xs flex cursor-pointer select-none leading-none box-border ${positionClassMap[dayNumberPosition]} ${sizeClassMap[dayNumberSize]} ${
                       isSelected
                         ? 'font-bold'
                         : isWeekend && highlightWeekends
