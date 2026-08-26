@@ -51,15 +51,21 @@ export default function App() {
     if (!activeDayModal) return;
     const { dayKey, dayNumber, monthName } = activeDayModal;
     
-    setMarkedDays((prev) => ({
-      ...prev,
-      [dayKey]: { 
-        color,
-        label: label ? label.trim() : undefined,
-        note: note ? note.trim() : undefined,
-        isHoliday: prev[dayKey]?.isHoliday
-      }
-    }));
+    setMarkedDays((prev) => {
+      const existing = prev[dayKey];
+      const nextLabel = label !== undefined ? (label.trim() !== '' ? label.trim() : undefined) : existing?.label;
+      const nextNote = note !== undefined ? (note.trim() !== '' ? note.trim() : undefined) : existing?.note;
+
+      return {
+        ...prev,
+        [dayKey]: { 
+          color,
+          label: nextLabel,
+          note: nextNote,
+          isHoliday: existing?.isHoliday
+        }
+      };
+    });
     
     showToast(`Día ${dayNumber} de ${monthName} guardado`, 'success');
     setActiveDayModal(null);
