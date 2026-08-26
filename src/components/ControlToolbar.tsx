@@ -1,7 +1,7 @@
 import React from 'react';
-import { PaletteKey, WeekStart, FontFamilyKey } from '../types';
+import { PaletteKey, WeekStart, FontFamilyKey, LayoutType } from '../types';
+import { useCalendarStore } from '../store/useCalendarStore';
 import { 
-  Download, 
   Printer, 
   Palette, 
   CalendarDays, 
@@ -13,46 +13,54 @@ import {
 } from 'lucide-react';
 
 interface ControlToolbarProps {
-  palette: PaletteKey;
-  onPaletteChange: (p: PaletteKey) => void;
-  fontFamily: FontFamilyKey;
-  onFontFamilyChange: (f: FontFamilyKey) => void;
-  weekStart: WeekStart;
-  onWeekStartChange: (w: WeekStart) => void;
-  highlightWeekends: boolean;
-  onToggleHighlightWeekends: () => void;
-  subtitle: string;
-  onSubtitleChange: (s: string) => void;
-  onExportPdf: () => void;
+  palette?: PaletteKey;
+  onPaletteChange?: (p: PaletteKey) => void;
+  fontFamily?: FontFamilyKey;
+  onFontFamilyChange?: (f: FontFamilyKey) => void;
+  weekStart?: WeekStart;
+  onWeekStartChange?: (w: WeekStart) => void;
+  highlightWeekends?: boolean;
+  onToggleHighlightWeekends?: () => void;
+  subtitle?: string;
+  onSubtitleChange?: (s: string) => void;
   onPrint: () => void;
-  isExporting: boolean;
-  selectedCount: number;
+  selectedCount?: number;
   onClearSelectedDays: () => void;
   onOpenHolidaysModal: () => void;
 }
 
 export const ControlToolbar: React.FC<ControlToolbarProps> = ({
-  palette,
   onPaletteChange,
-  fontFamily,
   onFontFamilyChange,
-  weekStart,
   onWeekStartChange,
-  highlightWeekends,
   onToggleHighlightWeekends,
-  subtitle,
   onSubtitleChange,
-  onExportPdf,
   onPrint,
-  isExporting,
-  selectedCount,
+  selectedCount: propSelectedCount,
   onClearSelectedDays,
   onOpenHolidaysModal
 }) => {
+  const {
+    palette,
+    setPalette,
+    fontFamily,
+    setFontFamily,
+    subtitle,
+    setSubtitle,
+    weekStart,
+    setWeekStart,
+    highlightWeekends,
+    setHighlightWeekends,
+    layout,
+    setLayout,
+    markedDays
+  } = useCalendarStore();
+
+  const selectedCount = propSelectedCount ?? Object.keys(markedDays).length;
+
   return (
     <header className="no-print bg-base-100 border-b border-base-300 shadow-xs sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 py-3">
-        {/* Top line with branding & primary action buttons */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
           <div className="flex items-center gap-2.5">
             <div className="p-2 bg-primary/10 text-primary rounded-lg border border-primary/20 flex items-center justify-center">
@@ -68,7 +76,6 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </div>
           </div>
 
-          {/* Action Buttons using DaisyUI classes */}
           <div className="flex items-center gap-2 flex-wrap">
             <button
               type="button"
@@ -106,32 +113,15 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               type="button"
               id="btn-print-browser"
               onClick={onPrint}
-              className="btn btn-sm btn-outline gap-1.5"
+              className="btn btn-sm btn-primary gap-1.5 text-white shadow-xs"
             >
               <Printer className="w-4 h-4" />
-              <span>Imprimir</span>
-            </button>
-
-            <button
-              type="button"
-              id="btn-export-pdf"
-              onClick={onExportPdf}
-              disabled={isExporting}
-              className="btn btn-sm btn-primary gap-1.5 text-white"
-            >
-              {isExporting ? (
-                <span className="loading loading-spinner loading-xs"></span>
-              ) : (
-                <Download className="w-4 h-4" />
-              )}
-              <span>Descargar PDF (A4)</span>
+              <span>Imprimir / Guardar PDF</span>
             </button>
           </div>
         </div>
 
-        {/* Configuration Controls Bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-3 border-t border-base-300 text-xs">
-          {/* 1. Selector de Paleta de Colores */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 pt-3 border-t border-base-300 text-xs">
           <div className="flex flex-col gap-1">
             <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
               <Palette className="w-3.5 h-3.5 text-base-content/60" />
@@ -140,7 +130,11 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             <select
               id="select-palette"
               value={palette}
-              onChange={(e) => onPaletteChange(e.target.value as PaletteKey)}
+              onChange={(e) => {
+                const val = e.target.value as PaletteKey;
+                setPalette(val);
+                onPaletteChange?.(val);
+              }}
               className="select select-bordered select-sm w-full font-medium"
             >
               <option value="gris">Gris Minimalista</option>
@@ -151,7 +145,6 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </select>
           </div>
 
-          {/* 2. Selector de Tipografía */}
           <div className="flex flex-col gap-1">
             <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
               <Type className="w-3.5 h-3.5 text-base-content/60" />
@@ -160,7 +153,11 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             <select
               id="select-font"
               value={fontFamily}
-              onChange={(e) => onFontFamilyChange(e.target.value as FontFamilyKey)}
+              onChange={(e) => {
+                const val = e.target.value as FontFamilyKey;
+                setFontFamily(val);
+                onFontFamilyChange?.(val);
+              }}
               className="select select-bordered select-sm w-full font-medium"
             >
               <option value="jakarta">Plus Jakarta Sans (Moderna)</option>
@@ -169,7 +166,24 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </select>
           </div>
 
-          {/* 3. Subtítulo personalizado */}
+          <div className="flex flex-col gap-1">
+            <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/60" />
+              <span>Layout</span>
+            </label>
+            <select
+              id="select-layout"
+              value={layout}
+              onChange={(e) => setLayout(e.target.value as LayoutType)}
+              className="select select-bordered select-sm w-full font-medium"
+            >
+              <option value="anual">Anual (12 meses)</option>
+              <option value="semestral">Semestral (6 meses)</option>
+              <option value="trimestral">Trimestral (3 meses)</option>
+              <option value="mensual">Mensual (1 mes)</option>
+            </select>
+          </div>
+
           <div className="flex flex-col gap-1">
             <label className="flex items-center gap-1.5 font-semibold text-base-content/80">
               <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/60" />
@@ -180,13 +194,16 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               type="text"
               placeholder="Ej: 2027 · Planificador anual"
               value={subtitle}
-              onChange={(e) => onSubtitleChange(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSubtitle(val);
+                onSubtitleChange?.(val);
+              }}
               maxLength={45}
               className="input input-bordered input-sm w-full"
             />
           </div>
 
-          {/* 4. Inicio de semana toggle */}
           <div className="flex flex-col justify-center gap-1">
             <label className="flex items-center justify-between cursor-pointer">
               <span className="font-semibold text-base-content/80 flex items-center gap-1">
@@ -199,7 +216,11 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 id="toggle-week-start"
                 type="checkbox"
                 checked={weekStart === 'sunday'}
-                onChange={(e) => onWeekStartChange(e.target.checked ? 'sunday' : 'monday')}
+                onChange={(e) => {
+                  const val: WeekStart = e.target.checked ? 'sunday' : 'monday';
+                  setWeekStart(val);
+                  onWeekStartChange?.(val);
+                }}
                 className="toggle toggle-sm toggle-primary"
               />
             </label>
@@ -208,7 +229,6 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </span>
           </div>
 
-          {/* 5. Resaltar fines de semana toggle */}
           <div className="flex flex-col justify-center gap-1">
             <label className="flex items-center justify-between cursor-pointer">
               <span className="font-semibold text-base-content/80 flex items-center gap-1">
@@ -219,7 +239,11 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 id="toggle-highlight-weekends"
                 type="checkbox"
                 checked={highlightWeekends}
-                onChange={onToggleHighlightWeekends}
+                onChange={(e) => {
+                  const val = e.target.checked;
+                  setHighlightWeekends(val);
+                  onToggleHighlightWeekends?.();
+                }}
                 className="toggle toggle-sm toggle-primary"
               />
             </label>
