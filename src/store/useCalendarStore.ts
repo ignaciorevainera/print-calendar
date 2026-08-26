@@ -16,8 +16,19 @@ const hasHolidayMarked = (markedDays: MarkedDaysMap): boolean => {
   return Object.values(markedDays).some((d) => d.isHoliday);
 };
 
-const isBottomRow = (pos: DayNumberPosition): boolean => pos.startsWith('bottom');
 const isMiddleRow = (pos: DayNumberPosition): boolean => pos.startsWith('middle') || pos === 'center';
+
+const OPPOSITE_POSITIONS: Record<DayNumberPosition, DayNumberPosition> = {
+  'top-left': 'bottom-right',
+  'top-center': 'bottom-center',
+  'top-right': 'bottom-left',
+  'middle-left': 'middle-right',
+  'center': 'bottom-right',
+  'middle-right': 'middle-left',
+  'bottom-left': 'top-right',
+  'bottom-center': 'top-center',
+  'bottom-right': 'top-left',
+};
 
 interface CalendarState {
   year: number;
@@ -82,27 +93,26 @@ export const useCalendarStore = create<CalendarState>()(
           return;
         }
 
-        if (isBottomRow(dayNumberPosition) && isBottomRow(get().dayNotePosition)) {
-          const newNotePos = get().dayNotePosition.replace('bottom', 'top') as DayNumberPosition;
+        if (dayNumberPosition === get().dayNotePosition) {
+          const newNotePos = OPPOSITE_POSITIONS[dayNumberPosition];
           set({ dayNumberPosition, dayNotePosition: newNotePos });
           onDeflected?.(newNotePos);
         } else {
           set({ dayNumberPosition });
         }
       },
-      setDayNotePosition: (dayNotePosition, onBlocked, onDeflected) => {
+      setDayNotePosition: (dayNotePosition, onBlocked) => {
         if (hasHolidayMarked(get().markedDays) && isMiddleRow(dayNotePosition)) {
           onBlocked?.();
           return;
         }
 
-        if (isBottomRow(dayNotePosition) && isBottomRow(get().dayNumberPosition)) {
-          const newNumPos = get().dayNumberPosition.replace('bottom', 'top') as DayNumberPosition;
-          set({ dayNotePosition, dayNumberPosition: newNumPos });
-          onDeflected?.(newNumPos);
-        } else {
-          set({ dayNotePosition });
+        if (dayNotePosition === get().dayNumberPosition) {
+          onBlocked?.();
+          return;
         }
+
+        set({ dayNotePosition });
       },
       setMonthRange: (monthRange) => set({ monthRange }),
     }),
