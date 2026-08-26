@@ -18,6 +18,8 @@ export interface FontOption {
 
 export type WeekStart = 'monday' | 'sunday';
 
+export type LayoutType = 'anual' | 'semestral' | 'trimestral' | 'mensual';
+
 export interface MarkedDayInfo {
   color: string;
   label?: string; // Nombre del festivo o nota
