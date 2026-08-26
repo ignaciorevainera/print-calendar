@@ -44,8 +44,10 @@ export default function App() {
   };
 
   const checkAndResetMiddlePositions = (nextMarkedDays: MarkedDaysMap) => {
-    const hasHolidays = Object.values(nextMarkedDays).some((d) => d.isHoliday);
-    if (!hasHolidays) return;
+    const hasHolidaysOrLabels = Object.values(nextMarkedDays).some(
+      (d) => d.isHoliday || (d.label && d.label.trim() !== '')
+    );
+    if (!hasHolidaysOrLabels) return;
 
     const { dayNumberPosition, dayNotePosition, setDayNumberPosition, setDayNotePosition } = useCalendarStore.getState();
     let message = '';
@@ -62,7 +64,7 @@ export default function App() {
     }
 
     if (message) {
-      showToast(`${message}Los festivos ocupan la fila central.`, 'info');
+      showToast(`${message}Los festivos o etiquetas ocupan la fila central.`, 'info');
     }
   };
 
