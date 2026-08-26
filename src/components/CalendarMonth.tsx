@@ -58,14 +58,21 @@ const OPPOSITE_POSITIONS: Record<DayNumberPosition, DayNumberPosition> = {
   'bottom-right': 'top-left',
 };
 
+const isMiddleRow = (pos: DayNumberPosition): boolean => pos.startsWith('middle') || pos === 'center';
+
 export function resolveNotePosition(
   numberPos: DayNumberPosition,
-  notePos: DayNumberPosition
+  notePos: DayNumberPosition,
+  isHoliday: boolean
 ): DayNumberPosition {
-  if (numberPos === notePos) {
+  let resolved = notePos;
+  if (isHoliday && isMiddleRow(resolved)) {
+    resolved = 'bottom-left';
+  }
+  if (numberPos === resolved) {
     return OPPOSITE_POSITIONS[numberPos] || 'bottom-right';
   }
-  return notePos;
+  return resolved;
 }
 
 interface CalendarMonthProps {
@@ -89,7 +96,6 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
   const dayNotePosition = useCalendarStore((state) => state.dayNotePosition);
   const layout = useCalendarStore((state) => state.layout);
   const isMonthly = layout === 'mensual';
-  const effectiveNotePos = resolveNotePosition(dayNumberPosition, dayNotePosition);
   const dayHeaders = weekStart === 'monday' ? DAYS_MONDAY_START : DAYS_SUNDAY_START;
 
   return (
@@ -138,6 +144,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
               const dayKey = `${month.monthIndex + 1}-${day}`;
               const markInfo = markedDays ? markedDays[dayKey] : undefined;
               const isSelected = Boolean(markInfo);
+              const cellNotePos = resolveNotePosition(dayNumberPosition, dayNotePosition, Boolean(markInfo?.isHoliday || markInfo?.label));
 
               const dayTitle = isSelected
                 ? markInfo?.label
@@ -193,10 +200,10 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                         )}
                         {isSelected && markInfo?.note && (
                           <div
-                            className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden flex ${positionClassMap[effectiveNotePos]}`}
+                            className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden flex ${positionClassMap[cellNotePos]}`}
                           >
                             <span
-                              className={`${noteSizeMap[dayTextSize]} ${noteTextAlignMap[effectiveNotePos]} font-normal text-white/95 whitespace-pre-line overflow-hidden w-full break-words`}
+                              className={`${noteSizeMap[dayTextSize]} ${noteTextAlignMap[cellNotePos]} font-normal text-white/95 whitespace-pre-line overflow-hidden w-full break-words`}
                             >
                               {markInfo.note}
                             </span>
