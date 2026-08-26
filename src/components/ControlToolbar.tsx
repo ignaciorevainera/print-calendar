@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize } from '../types';
+import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize, DayNumberPosition } from '../types';
 import { useCalendarStore } from '../store/useCalendarStore';
 import { DayPositionPicker } from './DayPositionPicker';
 import { 
@@ -61,6 +61,8 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   } = useCalendarStore();
 
   const selectedCount = Object.keys(markedDays).length;
+  const hasHolidays = Object.values(markedDays).some((d) => d.isHoliday);
+  const middlePositions: DayNumberPosition[] = ['middle-left', 'center', 'middle-right'];
 
   const [tempYear, setTempYear] = useState<string>(String(year));
 
@@ -383,6 +385,8 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   onChange={setDayNumberPosition}
                   title="Posición número (3×3)"
                   onShowToast={onShowToast}
+                  disabledPositions={[dayNotePosition, ...(hasHolidays ? middlePositions : [])]}
+                  disabledMessage="Esta posición está ocupada por la nota o bloqueada por días festivos"
                 />
               </div>
 
@@ -394,6 +398,8 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   onChange={setDayNotePosition}
                   title="Posición nota (3×3)"
                   onShowToast={onShowToast}
+                  disabledPositions={[dayNumberPosition, ...(hasHolidays ? middlePositions : [])]}
+                  disabledMessage="Esta posición está ocupada por el número o bloqueada por días festivos"
                 />
               </div>
 
