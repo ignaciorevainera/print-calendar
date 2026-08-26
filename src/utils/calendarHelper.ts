@@ -1,4 +1,4 @@
-import { MonthInfo, WeekStart } from '../types';
+import { MonthInfo, WeekStart, LayoutType } from '../types';
 
 export const SPANISH_MONTH_NAMES = [
   'ENERO',
@@ -89,3 +89,17 @@ export function generateYearData(year: number = 2027, weekStart: WeekStart = 'mo
 
   return months;
 }
+
+export function chunkMonths(months: MonthInfo[], layout: LayoutType): MonthInfo[][] {
+  let chunkSize = 12;
+  if (layout === 'semestral') chunkSize = 6;
+  if (layout === 'trimestral') chunkSize = 3;
+  if (layout === 'mensual') chunkSize = 1;
+
+  const chunks: MonthInfo[][] = [];
+  for (let i = 0; i < months.length; i += chunkSize) {
+    chunks.push(months.slice(i, i + chunkSize));
+  }
+  return chunks;
+}
+
