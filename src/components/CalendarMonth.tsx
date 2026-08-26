@@ -180,19 +180,17 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                         <div
                           className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden flex ${positionClassMap[dayNumberPosition]}`}
                         >
-                          <div
-                            className={`flex gap-1 w-full min-w-0 shrink-0 ${sizeClassMap[dayNumberSize]} ${positionClassMap[dayNumberPosition]}`}
-                          >
+                          <div className={`flex w-full shrink-0 ${sizeClassMap[dayNumberSize]} ${positionClassMap[dayNumberPosition]}`}>
                             <span>{day}</span>
-                            {isSelected && markInfo?.label && (
-                              <span
-                                className={`inline-block min-w-0 truncate font-bold rounded bg-black/20 text-white max-w-full my-0.5 ${labelSizeMap[dayTextSize]}`}
-                              >
-                                {markInfo.label}
-                              </span>
-                            )}
                           </div>
                         </div>
+                        {isSelected && markInfo?.label && (
+                          <div className="col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 flex items-center justify-center p-0.5 pointer-events-none">
+                            <span className={`inline-block w-full text-center font-bold rounded bg-black/20 text-white truncate max-w-full ${labelSizeMap[dayTextSize]}`}>
+                              {markInfo.label}
+                            </span>
+                          </div>
+                        )}
                         {isSelected && markInfo?.note && (
                           <div
                             className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden flex ${positionClassMap[effectiveNotePos]}`}
