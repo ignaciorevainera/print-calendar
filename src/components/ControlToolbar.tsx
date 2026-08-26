@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize } from '../types';
+import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize } from '../types';
 import { useCalendarStore } from '../store/useCalendarStore';
 import { DayPositionPicker } from './DayPositionPicker';
 import { 
@@ -10,7 +10,8 @@ import {
   Sparkles, 
   Eraser, 
   Globe2, 
-  SlidersHorizontal 
+  SlidersHorizontal,
+  RotateCcw
 } from 'lucide-react';
 
 const MONTH_NAMES = [
@@ -46,6 +47,8 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     setLayout,
     dayNumberSize,
     setDayNumberSize,
+    dayTextSize,
+    setDayTextSize,
     monthRange,
     setMonthRange,
     markedDays
@@ -160,9 +163,13 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   onChange={(e) => setFontFamily(e.target.value as FontFamilyKey)}
                   className="select select-bordered select-sm w-full font-medium"
                 >
-                  <option value="jakarta">Plus Jakarta Sans (Moderna)</option>
-                  <option value="inter">Inter (Clásica limpia)</option>
-                  <option value="playfair">Playfair Display (Editorial Serif)</option>
+                  <option value="jakarta">Plus Jakarta Sans</option>
+                  <option value="inter">Inter</option>
+                  <option value="playfair">Playfair Display</option>
+                  <option value="roboto">Roboto</option>
+                  <option value="lora">Lora</option>
+                  <option value="fira">Fira Code</option>
+                  <option value="jetbrains">JetBrains Mono</option>
                 </select>
               </div>
 
@@ -191,7 +198,21 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </div>
             <div className="grid grid-cols-2 gap-3 mt-1">
               <div className="flex flex-col gap-1">
-                <label className="font-semibold text-base-content/85">Año</label>
+                <div className="flex items-center justify-between">
+                  <label className="font-semibold text-base-content/85">Año</label>
+                  {year !== new Date().getFullYear() && (
+                    <button
+                      type="button"
+                      id="btn-reset-year"
+                      onClick={() => setYear(new Date().getFullYear())}
+                      className="text-[10px] font-bold text-primary hover:underline cursor-pointer flex items-center gap-0.5"
+                      title={`Restablecer al año actual (${new Date().getFullYear()})`}
+                    >
+                      <RotateCcw className="w-2.5 h-2.5" />
+                      Hoy ({new Date().getFullYear()})
+                    </button>
+                  )}
+                </div>
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
@@ -216,7 +237,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                         handleYearCommit();
                       }
                     }}
-                    className="input input-bordered input-sm w-full text-center font-bold text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="input input-bordered input-sm w-full text-center !px-1 font-bold text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <button
                     type="button"
@@ -335,6 +356,20 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               </div>
 
               <div className="flex flex-col gap-1">
+                <label className="font-semibold text-base-content/85">Tamaño de notas</label>
+                <select
+                  id="select-day-text-size"
+                  value={dayTextSize}
+                  onChange={(e) => setDayTextSize(e.target.value as DayTextSize)}
+                  className="select select-bordered select-sm w-full font-medium"
+                >
+                  <option value="sm">Pequeño</option>
+                  <option value="md">Normal</option>
+                  <option value="lg">Grande</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1 col-span-2">
                 <label className="font-semibold text-base-content/85">Alineación número</label>
                 <DayPositionPicker />
               </div>
