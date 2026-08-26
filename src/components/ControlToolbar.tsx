@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize } from '../types';
 import { useCalendarStore } from '../store/useCalendarStore';
 import { DayPositionPicker } from './DayPositionPicker';
@@ -52,6 +52,18 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   } = useCalendarStore();
 
   const selectedCount = Object.keys(markedDays).length;
+
+  const [tempYear, setTempYear] = useState<string>(String(year));
+
+  useEffect(() => {
+    setTempYear(String(year));
+  }, [year]);
+
+  const handleYearCommit = () => {
+    const validYear = Math.min(2100, Math.max(1900, parseInt(tempYear, 10) || new Date().getFullYear()));
+    setYear(validYear);
+    setTempYear(String(validYear));
+  };
 
   return (
     <header className="no-print bg-base-100 border-b border-base-300 shadow-xs sticky top-0 z-40">
@@ -184,6 +196,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   <button
                     type="button"
                     onClick={() => setYear(Math.max(1900, year - 1))}
+                    disabled={year <= 1900}
                     className="btn btn-sm btn-square btn-bordered text-xs font-bold"
                     title="Año anterior"
                     aria-label="Año anterior"
@@ -195,18 +208,20 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                     type="number"
                     min={1900}
                     max={2100}
-                    value={year}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value, 10);
-                      if (!isNaN(val)) {
-                        setYear(Math.min(2100, Math.max(1900, val)));
+                    value={tempYear}
+                    onChange={(e) => setTempYear(e.target.value)}
+                    onBlur={handleYearCommit}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleYearCommit();
                       }
                     }}
-                    className="input input-bordered input-sm w-full text-center font-bold text-xs"
+                    className="input input-bordered input-sm w-full text-center font-bold text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <button
                     type="button"
                     onClick={() => setYear(Math.min(2100, year + 1))}
+                    disabled={year >= 2100}
                     className="btn btn-sm btn-square btn-bordered text-xs font-bold"
                     title="Año siguiente"
                     aria-label="Año siguiente"
