@@ -55,8 +55,8 @@ export default function App() {
       ...prev,
       [dayKey]: { 
         color,
-        label: label !== undefined ? label : prev[dayKey]?.label,
-        note: note !== undefined ? note : prev[dayKey]?.note,
+        label: label ? label.trim() : undefined,
+        note: note ? note.trim() : undefined,
         isHoliday: prev[dayKey]?.isHoliday
       }
     }));

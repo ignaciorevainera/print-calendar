@@ -62,7 +62,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
         const isTextarea = (e.target as HTMLElement)?.tagName === 'TEXTAREA';
         if (e.key === 'Enter' && !e.shiftKey && !isTextarea) {
           e.preventDefault();
-          onConfirm(selectedColor, dayLabel.trim() || undefined, dayNote.trim() || undefined);
+          onConfirm(selectedColor, dayLabel.trim(), dayNote.trim());
         }
       }
     };
@@ -240,7 +240,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
             <button
               type="button"
               id="btn-confirm-mark-color"
-              onClick={() => onConfirm(selectedColor, dayLabel.trim() || undefined, dayNote.trim() || undefined)}
+              onClick={() => onConfirm(selectedColor, dayLabel.trim(), dayNote.trim())}
               className="btn btn-sm btn-primary gap-1.5 text-white"
             >
               <Check className="w-3.5 h-3.5" />
