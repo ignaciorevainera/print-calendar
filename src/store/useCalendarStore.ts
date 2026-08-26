@@ -9,7 +9,9 @@ import {
   DayNumberSize, 
   DayTextSize,
   DayNumberPosition, 
-  MonthRange 
+  MonthRange,
+  HeaderTitleSize,
+  MonthTitleSize 
 } from '../types';
 
 export const hasHolidayOrLabelMarked = (markedDays: MarkedDaysMap): boolean => {
@@ -41,6 +43,8 @@ interface CalendarState {
   layout: LayoutType;
   dayNumberSize: DayNumberSize;
   dayTextSize: DayTextSize;
+  headerTitleSize: HeaderTitleSize;
+  monthTitleSize: MonthTitleSize;
   dayNumberPosition: DayNumberPosition;
   dayNotePosition: DayNumberPosition;
   monthRange: MonthRange;
@@ -54,6 +58,8 @@ interface CalendarState {
   setLayout: (layout: LayoutType) => void;
   setDayNumberSize: (size: DayNumberSize) => void;
   setDayTextSize: (dayTextSize: DayTextSize) => void;
+  setHeaderTitleSize: (size: HeaderTitleSize) => void;
+  setMonthTitleSize: (size: MonthTitleSize) => void;
   setDayNumberPosition: (position: DayNumberPosition, onBlocked?: () => void, onDeflected?: (newNotePos: DayNumberPosition) => void) => void;
   setDayNotePosition: (position: DayNumberPosition, onBlocked?: () => void, onDeflected?: (newNumPos: DayNumberPosition) => void) => void;
   setMonthRange: (range: MonthRange) => void;
@@ -72,6 +78,8 @@ export const useCalendarStore = create<CalendarState>()(
       layout: 'anual',
       dayNumberSize: 'md',
       dayTextSize: 'md',
+      headerTitleSize: 'md',
+      monthTitleSize: 'md',
       dayNumberPosition: 'center',
       dayNotePosition: 'bottom-left',
       monthRange: { start: 1, end: 12 },
@@ -87,6 +95,8 @@ export const useCalendarStore = create<CalendarState>()(
       setLayout: (layout) => set({ layout }),
       setDayNumberSize: (dayNumberSize) => set({ dayNumberSize }),
       setDayTextSize: (dayTextSize) => set({ dayTextSize }),
+      setHeaderTitleSize: (headerTitleSize) => set({ headerTitleSize }),
+      setMonthTitleSize: (monthTitleSize) => set({ monthTitleSize }),
       setDayNumberPosition: (dayNumberPosition, onBlocked, onDeflected) => {
         if (hasHolidayOrLabelMarked(get().markedDays) && isMiddleRow(dayNumberPosition)) {
           onBlocked?.();
