@@ -39,6 +39,8 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
 }) => {
   const dayNumberSize = useCalendarStore((state) => state.dayNumberSize);
   const dayNumberPosition = useCalendarStore((state) => state.dayNumberPosition);
+  const layout = useCalendarStore((state) => state.layout);
+  const isMonthly = layout === 'mensual';
   const dayHeaders = weekStart === 'monday' ? DAYS_MONDAY_START : DAYS_SUNDAY_START;
 
   return (
@@ -112,7 +114,11 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                           }
                         : undefined
                     }
-                    className={`w-full h-full min-h-0 m-0 rounded-xs flex cursor-pointer select-none leading-none box-border ${positionClassMap[dayNumberPosition]} ${sizeClassMap[dayNumberSize]} ${
+                    className={`w-full h-full min-h-0 m-0 rounded-xs flex cursor-pointer select-none leading-none box-border ${
+                      isMonthly
+                        ? 'flex-col justify-start items-stretch p-1 overflow-hidden'
+                        : `${positionClassMap[dayNumberPosition]} ${sizeClassMap[dayNumberSize]}`
+                    } ${
                       isSelected
                         ? 'font-bold'
                         : isWeekend && highlightWeekends
@@ -120,7 +126,31 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                         : 'text-[var(--cal-text)] font-normal hover:bg-[var(--cal-grid-border)]'
                     }`}
                   >
-                    <span>{day}</span>
+                    {isMonthly ? (
+                      <div className="flex flex-col w-full h-full min-h-0 overflow-hidden">
+                        <div
+                          className={`flex w-full shrink-0 ${sizeClassMap[dayNumberSize]} ${positionClassMap[dayNumberPosition]}`}
+                        >
+                          <span>{day}</span>
+                        </div>
+                        {isSelected && (
+                          <div className="flex flex-col flex-1 min-h-0 w-full overflow-hidden mt-0.5">
+                            {markInfo?.label && (
+                              <span className="inline-block text-[9px] md:text-[10px] font-bold px-1 py-0.5 rounded bg-black/20 text-white truncate max-w-full my-0.5">
+                                {markInfo.label}
+                              </span>
+                            )}
+                            {markInfo?.note && (
+                              <span className="text-[9px] md:text-[10px] font-normal leading-tight text-white/95 whitespace-pre-line text-left line-clamp-4 overflow-hidden w-full break-words mt-0.5">
+                                {markInfo.note}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <span>{day}</span>
+                    )}
                   </button>
                 </div>
               );
