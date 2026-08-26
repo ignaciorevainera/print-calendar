@@ -12,8 +12,8 @@ import {
   MonthRange 
 } from '../types';
 
-const hasHolidayMarked = (markedDays: MarkedDaysMap): boolean => {
-  return Object.values(markedDays).some((d) => d.isHoliday);
+const hasHolidayOrLabelMarked = (markedDays: MarkedDaysMap): boolean => {
+  return Object.values(markedDays).some((d) => d.isHoliday || (d.label && d.label.trim() !== ''));
 };
 
 const isMiddleRow = (pos: DayNumberPosition): boolean => pos.startsWith('middle') || pos === 'center';
@@ -88,7 +88,7 @@ export const useCalendarStore = create<CalendarState>()(
       setDayNumberSize: (dayNumberSize) => set({ dayNumberSize }),
       setDayTextSize: (dayTextSize) => set({ dayTextSize }),
       setDayNumberPosition: (dayNumberPosition, onBlocked, onDeflected) => {
-        if (hasHolidayMarked(get().markedDays) && isMiddleRow(dayNumberPosition)) {
+        if (hasHolidayOrLabelMarked(get().markedDays) && isMiddleRow(dayNumberPosition)) {
           onBlocked?.();
           return;
         }
@@ -102,7 +102,7 @@ export const useCalendarStore = create<CalendarState>()(
         }
       },
       setDayNotePosition: (dayNotePosition, onBlocked) => {
-        if (hasHolidayMarked(get().markedDays) && isMiddleRow(dayNotePosition)) {
+        if (hasHolidayOrLabelMarked(get().markedDays) && isMiddleRow(dayNotePosition)) {
           onBlocked?.();
           return;
         }
