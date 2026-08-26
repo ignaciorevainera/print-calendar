@@ -33,6 +33,7 @@ interface DayPositionPickerProps {
   pickerType?: 'number' | 'note';
   disabledPositions?: DayNumberPosition[];
   disabledMessage?: string;
+  oppositeElementPosition?: DayNumberPosition;
 }
 
 export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
@@ -43,12 +44,23 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
   pickerType = 'number',
   disabledPositions,
   disabledMessage,
+  oppositeElementPosition: propOppositePosition,
 }) => {
-  const { dayNumberPosition, setDayNumberPosition } = useCalendarStore();
+  const { dayNumberPosition, dayNotePosition, setDayNumberPosition } = useCalendarStore();
 
   const currentPosition = value ?? dayNumberPosition;
+  const oppositeElementPosition = propOppositePosition ?? (pickerType === 'number' ? dayNotePosition : dayNumberPosition);
 
   const handleSelect = (pos: DayNumberPosition) => {
+    if (disabledPositions?.includes(pos)) {
+      if (pos === oppositeElementPosition) {
+        onShowToast?.('No se puede colocar la nota y el número en el mismo cuadrante', 'error');
+      } else {
+        onShowToast?.('No se puede usar la fila central porque hay días festivos cargados en el calendario', 'error');
+      }
+      return;
+    }
+
     const handleBlocked = () => {
       onShowToast?.('No se puede usar la fila central porque hay días festivos cargados en el calendario', 'error');
     };
@@ -100,7 +112,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
               <button
                 key={pos.id}
                 type="button"
-                onClick={isDisabled ? undefined : () => handleSelect(pos.id)}
+                onClick={() => handleSelect(pos.id)}
                 title={isDisabled ? (disabledMessage || 'Posición no disponible') : pos.label}
                 className={`h-9 rounded flex items-center justify-center transition-all ${
                   isDisabled

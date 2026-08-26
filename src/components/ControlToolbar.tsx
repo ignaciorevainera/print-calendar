@@ -385,8 +385,9 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   onChange={setDayNumberPosition}
                   title="Posición número (3×3)"
                   onShowToast={onShowToast}
-                  disabledPositions={[dayNotePosition, ...(hasHolidays ? middlePositions : [])]}
-                  disabledMessage="Esta posición está ocupada por la nota o bloqueada por días festivos"
+                  disabledPositions={hasHolidays ? middlePositions : []}
+                  disabledMessage="Esta posición está bloqueada por días festivos"
+                  oppositeElementPosition={dayNotePosition}
                 />
               </div>
 
@@ -400,6 +401,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   onShowToast={onShowToast}
                   disabledPositions={[dayNumberPosition, ...(hasHolidays ? middlePositions : [])]}
                   disabledMessage="Esta posición está ocupada por el número o bloqueada por días festivos"
+                  oppositeElementPosition={dayNumberPosition}
                 />
               </div>
 
