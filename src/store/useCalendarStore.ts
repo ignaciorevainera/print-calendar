@@ -83,7 +83,7 @@ export const useCalendarStore = create<CalendarState>()(
         }
 
         if (isBottomRow(dayNumberPosition) && isBottomRow(get().dayNotePosition)) {
-          const newNotePos = dayNumberPosition.replace('bottom', 'top') as DayNumberPosition;
+          const newNotePos = get().dayNotePosition.replace('bottom', 'top') as DayNumberPosition;
           set({ dayNumberPosition, dayNotePosition: newNotePos });
           onDeflected?.(newNotePos);
         } else {
@@ -97,7 +97,7 @@ export const useCalendarStore = create<CalendarState>()(
         }
 
         if (isBottomRow(dayNotePosition) && isBottomRow(get().dayNumberPosition)) {
-          const newNumPos = dayNotePosition.replace('bottom', 'top') as DayNumberPosition;
+          const newNumPos = get().dayNumberPosition.replace('bottom', 'top') as DayNumberPosition;
           set({ dayNotePosition, dayNumberPosition: newNumPos });
           onDeflected?.(newNumPos);
         } else {

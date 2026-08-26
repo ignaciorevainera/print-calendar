@@ -30,6 +30,7 @@ interface DayPositionPickerProps {
   ) => void;
   title?: string;
   onShowToast?: (text: string, type?: 'success' | 'info' | 'error') => void;
+  pickerType?: 'number' | 'note';
 }
 
 export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
@@ -37,6 +38,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
   onChange,
   title = 'Posición (3×3)',
   onShowToast,
+  pickerType = 'number',
 }) => {
   const { dayNumberPosition, setDayNumberPosition } = useCalendarStore();
 
@@ -52,7 +54,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
         pos,
         handleBlocked,
         (deflectedPos) => {
-          const area = value === dayNumberPosition ? 'nota' : 'número';
+          const area = pickerType === 'number' ? 'nota' : 'número';
           onShowToast?.(`Posición de ${area} desplazada a ${deflectedPos.replace('-', ' ')} para evitar colisiones en la fila inferior`, 'info');
         }
       );

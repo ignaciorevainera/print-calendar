@@ -378,6 +378,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               <div className="flex flex-col gap-1">
                 <label className="font-semibold text-base-content/85">Alineación número</label>
                 <DayPositionPicker
+                  pickerType="number"
                   value={dayNumberPosition}
                   onChange={setDayNumberPosition}
                   title="Posición número (3×3)"
@@ -388,6 +389,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               <div className="flex flex-col gap-1">
                 <label className="font-semibold text-base-content/85">Alineación nota</label>
                 <DayPositionPicker
+                  pickerType="note"
                   value={dayNotePosition}
                   onChange={setDayNotePosition}
                   title="Posición nota (3×3)"
