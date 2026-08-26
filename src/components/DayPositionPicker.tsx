@@ -31,6 +31,8 @@ interface DayPositionPickerProps {
   title?: string;
   onShowToast?: (text: string, type?: 'success' | 'info' | 'error') => void;
   pickerType?: 'number' | 'note';
+  disabledPositions?: DayNumberPosition[];
+  disabledMessage?: string;
 }
 
 export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
@@ -39,6 +41,8 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
   title = 'Posición (3×3)',
   onShowToast,
   pickerType = 'number',
+  disabledPositions,
+  disabledMessage,
 }) => {
   const { dayNumberPosition, setDayNumberPosition } = useCalendarStore();
 
@@ -91,14 +95,17 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
         <div className="grid grid-cols-3 gap-1.5 p-1 bg-base-200 rounded-lg">
           {POSITIONS.flat().map((pos) => {
             const isSelected = currentPosition === pos.id;
+            const isDisabled = disabledPositions?.includes(pos.id);
             return (
               <button
                 key={pos.id}
                 type="button"
-                onClick={() => handleSelect(pos.id)}
-                title={pos.label}
+                onClick={isDisabled ? undefined : () => handleSelect(pos.id)}
+                title={isDisabled ? (disabledMessage || 'Posición no disponible') : pos.label}
                 className={`h-9 rounded flex items-center justify-center transition-all ${
-                  isSelected
+                  isDisabled
+                    ? 'bg-base-100 opacity-30 cursor-not-allowed'
+                    : isSelected
                     ? 'bg-primary text-primary-content font-bold shadow-xs'
                     : 'bg-base-100 hover:bg-base-300 text-base-content/70'
                 }`}
