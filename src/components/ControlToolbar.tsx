@@ -61,7 +61,9 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   } = useCalendarStore();
 
   const selectedCount = Object.keys(markedDays).length;
-  const hasHolidays = Object.values(markedDays).some((d) => d.isHoliday);
+  const hasHolidaysOrLabels = Object.values(markedDays).some(
+    (d) => d.isHoliday || (d.label && d.label.trim() !== '')
+  );
   const middlePositions: DayNumberPosition[] = ['middle-left', 'center', 'middle-right'];
 
   const [tempYear, setTempYear] = useState<string>(String(year));
@@ -385,7 +387,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   onChange={setDayNumberPosition}
                   title="Posición número (3×3)"
                   onShowToast={onShowToast}
-                  disabledPositions={hasHolidays ? middlePositions : []}
+                  disabledPositions={hasHolidaysOrLabels ? middlePositions : []}
                   disabledMessage="Esta posición está bloqueada por días festivos"
                   oppositeElementPosition={dayNotePosition}
                 />
@@ -399,7 +401,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   onChange={setDayNotePosition}
                   title="Posición nota (3×3)"
                   onShowToast={onShowToast}
-                  disabledPositions={[dayNumberPosition, ...(hasHolidays ? middlePositions : [])]}
+                  disabledPositions={[dayNumberPosition, ...(hasHolidaysOrLabels ? middlePositions : [])]}
                   disabledMessage="Esta posición está ocupada por el número o bloqueada por días festivos"
                   oppositeElementPosition={dayNumberPosition}
                 />
