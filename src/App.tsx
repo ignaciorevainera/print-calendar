@@ -13,7 +13,8 @@ export default function App() {
     year,
     weekStart,
     markedDays,
-    setMarkedDays
+    setMarkedDays,
+    monthRange
   } = useCalendarStore();
 
   const [isHolidaysModalOpen, setIsHolidaysModalOpen] = useState<boolean>(false);
@@ -27,6 +28,13 @@ export default function App() {
   const monthsData = useMemo(() => {
     return generateYearData(year, weekStart);
   }, [year, weekStart]);
+
+  const visibleMonthsData = useMemo(() => {
+    return monthsData.filter((m) => {
+      const monthNum = m.monthIndex + 1;
+      return monthNum >= monthRange.start && monthNum <= monthRange.end;
+    });
+  }, [monthsData, monthRange.start, monthRange.end]);
 
   const showToast = (text: string, type: 'success' | 'info' | 'error' = 'info') => {
     setToastMessage({ type, text });
@@ -105,7 +113,7 @@ export default function App() {
       {/* Área Principal de Visualización del Calendario */}
       <main className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 print:p-0">
         <CalendarCanvas
-          months={monthsData}
+          months={visibleMonthsData}
           onSelectDay={handleOpenDayModal}
         />
 
