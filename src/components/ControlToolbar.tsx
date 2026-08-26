@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize, DayNumberPosition } from '../types';
+import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize, DayNumberPosition, HeaderTitleSize, MonthTitleSize } from '../types';
 import { useCalendarStore, hasHolidayOrLabelMarked } from '../store/useCalendarStore';
 import { DayPositionPicker } from './DayPositionPicker';
 import { 
@@ -47,6 +47,10 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     setHighlightWeekends,
     layout,
     setLayout,
+    headerTitleSize,
+    setHeaderTitleSize,
+    monthTitleSize,
+    setMonthTitleSize,
     dayNumberSize,
     setDayNumberSize,
     dayTextSize,
@@ -181,7 +185,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 </select>
               </div>
 
-              <div className="flex flex-col gap-1 col-span-2">
+              <div className="flex flex-col gap-1">
                 <label className="font-semibold text-base-content/85">Formato / Layout</label>
                 <select
                   id="select-layout"
@@ -193,6 +197,21 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   <option value="semestral">Semestral (6 meses)</option>
                   <option value="trimestral">Trimestral (3 meses)</option>
                   <option value="mensual">Mensual (1 mes)</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold text-base-content/85">Tamaño de encabezado</label>
+                <select
+                  id="select-header-size"
+                  value={headerTitleSize}
+                  onChange={(e) => setHeaderTitleSize(e.target.value as HeaderTitleSize)}
+                  className="select select-bordered select-sm w-full font-medium"
+                >
+                  <option value="sm">Pequeño</option>
+                  <option value="md">Normal</option>
+                  <option value="lg">Grande</option>
+                  <option value="xl">Extra Grande</option>
                 </select>
               </div>
             </div>
@@ -348,6 +367,21 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               <span>Ajustes del Día y Semana</span>
             </div>
             <div className="grid grid-cols-2 gap-x-3 gap-y-2 mt-1">
+              <div className="flex flex-col gap-1 col-span-2">
+                <label className="font-semibold text-base-content/85">Tamaño del mes</label>
+                <select
+                  id="select-month-size"
+                  value={monthTitleSize}
+                  onChange={(e) => setMonthTitleSize(e.target.value as MonthTitleSize)}
+                  className="select select-bordered select-sm w-full font-medium"
+                >
+                  <option value="sm">Pequeño</option>
+                  <option value="md">Normal</option>
+                  <option value="lg">Grande</option>
+                  <option value="xl">Extra Grande</option>
+                </select>
+              </div>
+
               <div className="flex flex-col gap-1">
                 <label className="font-semibold text-base-content/85">Tamaño de número</label>
                 <select
