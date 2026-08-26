@@ -1,6 +1,26 @@
 import React from 'react';
-import { MonthInfo, WeekStart, MarkedDaysMap } from '../types';
+import { MonthInfo, WeekStart, MarkedDaysMap, DayNumberPosition, DayNumberSize } from '../types';
 import { DAYS_MONDAY_START, DAYS_SUNDAY_START, isWeekendIndex } from '../utils/calendarHelper';
+import { useCalendarStore } from '../store/useCalendarStore';
+
+const positionClassMap: Record<DayNumberPosition, string> = {
+  'top-left': 'items-start justify-start p-1',
+  'top-center': 'items-start justify-center pt-1',
+  'top-right': 'items-start justify-end p-1',
+  'middle-left': 'items-center justify-start pl-1',
+  'center': 'items-center justify-center',
+  'middle-right': 'items-center justify-end pr-1',
+  'bottom-left': 'items-end justify-start p-1',
+  'bottom-center': 'items-end justify-center pb-1',
+  'bottom-right': 'items-end justify-end p-1',
+};
+
+const sizeClassMap: Record<DayNumberSize, string> = {
+  sm: 'text-[8px] md:text-[9px]',
+  md: 'text-[10px] md:text-[11px]',
+  lg: 'text-[12px] md:text-[14px]',
+  xl: 'text-[15px] md:text-[17px]',
+};
 
 interface CalendarMonthProps {
   month: MonthInfo;
@@ -17,6 +37,8 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
   markedDays,
   onSelectDay
 }) => {
+  const dayNumberSize = useCalendarStore((state) => state.dayNumberSize);
+  const dayNumberPosition = useCalendarStore((state) => state.dayNumberPosition);
   const dayHeaders = weekStart === 'monday' ? DAYS_MONDAY_START : DAYS_SUNDAY_START;
 
   return (
@@ -90,7 +112,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                           }
                         : undefined
                     }
-                    className={`w-full h-full min-h-0 p-0 m-0 text-[10px] md:text-[11px] rounded-xs flex items-center justify-center text-center cursor-pointer select-none leading-none box-border ${
+                    className={`w-full h-full min-h-0 p-0 m-0 rounded-xs flex cursor-pointer select-none leading-none box-border ${positionClassMap[dayNumberPosition]} ${sizeClassMap[dayNumberSize]} ${
                       isSelected
                         ? 'font-bold'
                         : isWeekend && highlightWeekends
