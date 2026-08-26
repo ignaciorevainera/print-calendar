@@ -21,8 +21,21 @@ const POSITIONS: { id: DayNumberPosition; label: string }[][] = [
   ],
 ];
 
-export const DayPositionPicker: React.FC = () => {
-  const { dayNumberPosition, setDayNumberPosition } = useCalendarStore();
+interface DayPositionPickerProps {
+  value?: DayNumberPosition;
+  onChange?: (pos: DayNumberPosition) => void;
+  title?: string;
+}
+
+export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
+  value,
+  onChange,
+  title = 'Posición (3×3)',
+}) => {
+  const { dayNumberPosition: defaultPosition, setDayNumberPosition: setDefaultPosition } = useCalendarStore();
+
+  const currentPosition = value ?? defaultPosition;
+  const handleChange = onChange ?? setDefaultPosition;
 
   return (
     <div className="dropdown dropdown-end">
@@ -33,7 +46,7 @@ export const DayPositionPicker: React.FC = () => {
       >
         <span className="flex items-center gap-1.5 truncate">
           <LayoutGrid className="w-3.5 h-3.5 text-base-content/60" />
-          <span className="capitalize">{dayNumberPosition.replace('-', ' ')}</span>
+          <span className="capitalize">{currentPosition.replace('-', ' ')}</span>
         </span>
       </div>
       <div
@@ -41,16 +54,16 @@ export const DayPositionPicker: React.FC = () => {
         className="dropdown-content z-50 p-3 shadow-xl bg-base-100 rounded-box border border-base-300 w-44 mt-1"
       >
         <div className="text-[11px] font-bold text-base-content/70 mb-2 uppercase tracking-wider text-center">
-          Posición (3×3)
+          {title}
         </div>
         <div className="grid grid-cols-3 gap-1.5 p-1 bg-base-200 rounded-lg">
           {POSITIONS.flat().map((pos) => {
-            const isSelected = dayNumberPosition === pos.id;
+            const isSelected = currentPosition === pos.id;
             return (
               <button
                 key={pos.id}
                 type="button"
-                onClick={() => setDayNumberPosition(pos.id)}
+                onClick={() => handleChange(pos.id)}
                 title={pos.label}
                 className={`h-9 rounded flex items-center justify-center transition-all ${
                   isSelected

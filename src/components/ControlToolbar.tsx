@@ -49,6 +49,8 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     setDayNumberSize,
     dayTextSize,
     setDayTextSize,
+    dayNotePosition,
+    setDayNotePosition,
     monthRange,
     setMonthRange,
     markedDays
@@ -369,9 +371,18 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 </select>
               </div>
 
-              <div className="flex flex-col gap-1 col-span-2">
+              <div className="flex flex-col gap-1">
                 <label className="font-semibold text-base-content/85">Alineación número</label>
                 <DayPositionPicker />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold text-base-content/85">Alineación nota</label>
+                <DayPositionPicker
+                  value={dayNotePosition}
+                  onChange={setDayNotePosition}
+                  title="Posición nota (3×3)"
+                />
               </div>
 
               <div className="flex flex-col justify-center gap-0.5 pt-1">
