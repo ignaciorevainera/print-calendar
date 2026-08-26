@@ -34,6 +34,28 @@ const noteSizeMap: Record<DayTextSize, string> = {
   lg: 'text-[10px] md:text-[11px] leading-snug line-clamp-3',
 };
 
+const OPPOSITE_POSITIONS: Record<DayNumberPosition, DayNumberPosition> = {
+  'top-left': 'bottom-right',
+  'top-center': 'bottom-center',
+  'top-right': 'bottom-left',
+  'middle-left': 'middle-right',
+  'center': 'bottom-right',
+  'middle-right': 'middle-left',
+  'bottom-left': 'top-right',
+  'bottom-center': 'top-center',
+  'bottom-right': 'top-left',
+};
+
+export function resolveNotePosition(
+  numberPos: DayNumberPosition,
+  notePos: DayNumberPosition
+): DayNumberPosition {
+  if (numberPos === notePos) {
+    return OPPOSITE_POSITIONS[numberPos] || 'bottom-right';
+  }
+  return notePos;
+}
+
 interface CalendarMonthProps {
   month: MonthInfo;
   weekStart: WeekStart;
@@ -52,9 +74,11 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
   const dayNumberSize = useCalendarStore((state) => state.dayNumberSize);
   const dayTextSize = useCalendarStore((state) => state.dayTextSize);
   const dayNumberPosition = useCalendarStore((state) => state.dayNumberPosition);
+  const dayNotePosition = useCalendarStore((state) => state.dayNotePosition);
   const layout = useCalendarStore((state) => state.layout);
   const isMonthly = layout === 'mensual';
   const isBottom = dayNumberPosition.startsWith('bottom');
+  const effectiveNotePos = resolveNotePosition(dayNumberPosition, dayNotePosition);
   const dayHeaders = weekStart === 'monday' ? DAYS_MONDAY_START : DAYS_SUNDAY_START;
 
   return (
@@ -143,22 +167,26 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                     {isMonthly ? (
                       <div className={`flex w-full h-full min-h-0 overflow-hidden ${isBottom ? 'flex-col-reverse' : 'flex-col'} justify-between`}>
                         <div
-                          className={`flex w-full shrink-0 ${sizeClassMap[dayNumberSize]} ${positionClassMap[dayNumberPosition]}`}
+                          className={`flex items-center gap-1 w-full shrink-0 ${sizeClassMap[dayNumberSize]} ${positionClassMap[dayNumberPosition]}`}
                         >
                           <span>{day}</span>
+                          {isSelected && markInfo?.label && (
+                            <span className={`inline-block ${labelSizeMap[dayTextSize]} font-bold rounded bg-black/20 text-white truncate max-w-full`}>
+                              {markInfo.label}
+                            </span>
+                          )}
                         </div>
-                        {isSelected && (
-                          <div className={`flex flex-col flex-1 min-h-0 w-full overflow-hidden ${isBottom ? 'mb-0.5 pt-0.5' : 'mt-0.5'}`}>
-                            {markInfo?.label && (
-                              <span className={`inline-block ${labelSizeMap[dayTextSize]} font-bold rounded bg-black/20 text-white truncate max-w-full my-0.5`}>
-                                {markInfo.label}
-                              </span>
-                            )}
-                            {markInfo?.note && (
-                              <span className={`${noteSizeMap[dayTextSize]} font-normal text-white/95 whitespace-pre-line text-left overflow-hidden w-full break-words mt-0.5`}>
-                                {markInfo.note}
-                              </span>
-                            )}
+                        {isSelected && markInfo?.note && (
+                          <div className={`flex flex-1 min-h-0 w-full overflow-hidden ${positionClassMap[effectiveNotePos]}`}>
+                            <span className={`${noteSizeMap[dayTextSize]} font-normal text-white/95 whitespace-pre-line overflow-hidden w-full break-words ${
+                              effectiveNotePos.includes('right')
+                                ? 'text-right'
+                                : effectiveNotePos.includes('center')
+                                ? 'text-center'
+                                : 'text-left'
+                            }`}>
+                              {markInfo.note}
+                            </span>
                           </div>
                         )}
                       </div>
