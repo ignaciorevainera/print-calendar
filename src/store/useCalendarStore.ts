@@ -24,6 +24,7 @@ interface CalendarState {
   dayNumberSize: DayNumberSize;
   dayTextSize: DayTextSize;
   dayNumberPosition: DayNumberPosition;
+  dayNotePosition: DayNumberPosition;
   monthRange: MonthRange;
   setYear: (year: number) => void;
   setPalette: (palette: PaletteKey) => void;
@@ -36,6 +37,7 @@ interface CalendarState {
   setDayNumberSize: (size: DayNumberSize) => void;
   setDayTextSize: (dayTextSize: DayTextSize) => void;
   setDayNumberPosition: (position: DayNumberPosition) => void;
+  setDayNotePosition: (dayNotePosition: DayNumberPosition) => void;
   setMonthRange: (range: MonthRange) => void;
 }
 
@@ -53,6 +55,7 @@ export const useCalendarStore = create<CalendarState>()(
       dayNumberSize: 'md',
       dayTextSize: 'md',
       dayNumberPosition: 'center',
+      dayNotePosition: 'bottom-left',
       monthRange: { start: 1, end: 12 },
       setYear: (year) => set({ year }),
       setPalette: (palette) => set({ palette }),
@@ -67,6 +70,7 @@ export const useCalendarStore = create<CalendarState>()(
       setDayNumberSize: (dayNumberSize) => set({ dayNumberSize }),
       setDayTextSize: (dayTextSize) => set({ dayTextSize }),
       setDayNumberPosition: (dayNumberPosition) => set({ dayNumberPosition }),
+      setDayNotePosition: (dayNotePosition) => set({ dayNotePosition }),
       setMonthRange: (monthRange) => set({ monthRange }),
     }),
     {
