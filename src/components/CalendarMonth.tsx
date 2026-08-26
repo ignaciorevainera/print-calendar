@@ -148,7 +148,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                           <span>{day}</span>
                         </div>
                         {isSelected && (
-                          <div className={`flex flex-col flex-1 min-h-0 w-full overflow-hidden ${isBottom ? 'mb-0.5' : 'mt-0.5'}`}>
+                          <div className={`flex flex-col flex-1 min-h-0 w-full overflow-hidden ${isBottom ? 'mb-0.5 pt-0.5' : 'mt-0.5'}`}>
                             {markInfo?.label && (
                               <span className={`inline-block ${labelSizeMap[dayTextSize]} font-bold rounded bg-black/20 text-white truncate max-w-full my-0.5`}>
                                 {markInfo.label}
