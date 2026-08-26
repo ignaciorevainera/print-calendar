@@ -127,15 +127,23 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
         })}
       </div>
 
-      <div className="flex-1 w-full min-h-0 flex flex-col justify-between">
+      <div 
+        className="flex-1 w-full min-h-0 grid gap-0"
+        style={{
+          gridTemplateRows: `repeat(${month.weeks.length}, minmax(0, 1fr))`
+        }}
+      >
         {month.weeks.map((week, weekIdx) => (
-          <div key={`week-${month.monthIndex}-${weekIdx}`} className="flex flex-row flex-1 min-h-0 w-full items-stretch">
+          <div 
+            key={`week-${month.monthIndex}-${weekIdx}`} 
+            className="grid grid-cols-7 w-full h-full min-h-0 items-stretch gap-0"
+          >
             {week.map((day, dayIdx) => {
               if (day === null) {
                 return (
                   <div
                     key={`empty-${month.monthIndex}-${weekIdx}-${dayIdx}`}
-                    className="w-[14.2857%] h-full p-0.5 box-border"
+                    className="w-full h-full min-h-0 p-0.5 box-border"
                   />
                 );
               }
@@ -155,7 +163,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
               return (
                 <div
                   key={`day-cell-${month.monthIndex}-${day}`}
-                  className="w-[14.2857%] h-full p-0.5 box-border"
+                  className="w-full h-full min-h-0 p-0.5 box-border"
                 >
                   <button
                     type="button"
