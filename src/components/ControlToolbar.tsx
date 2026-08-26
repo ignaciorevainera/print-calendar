@@ -23,12 +23,14 @@ interface ControlToolbarProps {
   onPrint: () => void;
   onClearSelectedDays: () => void;
   onOpenHolidaysModal: () => void;
+  onShowToast?: (text: string, type?: 'success' | 'info' | 'error') => void;
 }
 
 export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   onPrint,
   onClearSelectedDays,
-  onOpenHolidaysModal
+  onOpenHolidaysModal,
+  onShowToast
 }) => {
   const {
     year,
@@ -49,6 +51,8 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     setDayNumberSize,
     dayTextSize,
     setDayTextSize,
+    dayNumberPosition,
+    setDayNumberPosition,
     dayNotePosition,
     setDayNotePosition,
     monthRange,
@@ -373,7 +377,12 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
 
               <div className="flex flex-col gap-1">
                 <label className="font-semibold text-base-content/85">Alineación número</label>
-                <DayPositionPicker />
+                <DayPositionPicker
+                  value={dayNumberPosition}
+                  onChange={setDayNumberPosition}
+                  title="Posición número (3×3)"
+                  onShowToast={onShowToast}
+                />
               </div>
 
               <div className="flex flex-col gap-1">
@@ -382,6 +391,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   value={dayNotePosition}
                   onChange={setDayNotePosition}
                   title="Posición nota (3×3)"
+                  onShowToast={onShowToast}
                 />
               </div>
 

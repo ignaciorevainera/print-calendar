@@ -23,19 +23,49 @@ const POSITIONS: { id: DayNumberPosition; label: string }[][] = [
 
 interface DayPositionPickerProps {
   value?: DayNumberPosition;
-  onChange?: (pos: DayNumberPosition) => void;
+  onChange?: (
+    pos: DayNumberPosition,
+    onBlocked?: () => void,
+    onDeflected?: (deflectedPos: DayNumberPosition) => void
+  ) => void;
   title?: string;
+  onShowToast?: (text: string, type?: 'success' | 'info' | 'error') => void;
 }
 
 export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
   value,
   onChange,
   title = 'Posición (3×3)',
+  onShowToast,
 }) => {
-  const { dayNumberPosition: defaultPosition, setDayNumberPosition: setDefaultPosition } = useCalendarStore();
+  const { dayNumberPosition, setDayNumberPosition } = useCalendarStore();
 
-  const currentPosition = value ?? defaultPosition;
-  const handleChange = onChange ?? setDefaultPosition;
+  const currentPosition = value ?? dayNumberPosition;
+
+  const handleSelect = (pos: DayNumberPosition) => {
+    const handleBlocked = () => {
+      onShowToast?.('No se puede usar la fila central porque hay días festivos cargados en el calendario', 'error');
+    };
+    
+    if (onChange) {
+      onChange(
+        pos,
+        handleBlocked,
+        (deflectedPos) => {
+          const area = value === dayNumberPosition ? 'nota' : 'número';
+          onShowToast?.(`Posición de ${area} desplazada a ${deflectedPos.replace('-', ' ')} para evitar colisiones en la fila inferior`, 'info');
+        }
+      );
+    } else {
+      setDayNumberPosition(
+        pos,
+        handleBlocked,
+        (deflectedPos) => {
+          onShowToast?.(`Posición de nota desplazada a ${deflectedPos.replace('-', ' ')} para evitar colisiones en la fila inferior`, 'info');
+        }
+      );
+    }
+  };
 
   return (
     <div className="dropdown dropdown-end">
@@ -63,7 +93,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
               <button
                 key={pos.id}
                 type="button"
-                onClick={() => handleChange(pos.id)}
+                onClick={() => handleSelect(pos.id)}
                 title={pos.label}
                 className={`h-9 rounded flex items-center justify-center transition-all ${
                   isSelected

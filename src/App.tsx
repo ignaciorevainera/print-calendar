@@ -43,6 +43,29 @@ export default function App() {
     }, 4500);
   };
 
+  const checkAndResetMiddlePositions = (nextMarkedDays: MarkedDaysMap) => {
+    const hasHolidays = Object.values(nextMarkedDays).some((d) => d.isHoliday);
+    if (!hasHolidays) return;
+
+    const { dayNumberPosition, dayNotePosition, setDayNumberPosition, setDayNotePosition } = useCalendarStore.getState();
+    let message = '';
+
+    const isMiddleRow = (pos: string) => pos.startsWith('middle') || pos === 'center';
+
+    if (isMiddleRow(dayNumberPosition)) {
+      setDayNumberPosition('top-right');
+      message += 'Número de día movido a superior derecha. ';
+    }
+    if (isMiddleRow(dayNotePosition)) {
+      setDayNotePosition('bottom-left');
+      message += 'Nota movida a inferior izquierda. ';
+    }
+
+    if (message) {
+      showToast(`${message}Los festivos ocupan la fila central.`, 'info');
+    }
+  };
+
   const handleOpenDayModal = (dayKey: string, dayNumber: number, monthName: string) => {
     setActiveDayModal({ dayKey, dayNumber, monthName });
   };
@@ -51,12 +74,13 @@ export default function App() {
     if (!activeDayModal) return;
     const { dayKey, dayNumber, monthName } = activeDayModal;
     
+    let updatedMarkedDays: MarkedDaysMap = {};
     setMarkedDays((prev) => {
       const existing = prev[dayKey];
       const nextLabel = label !== undefined ? (label.trim() !== '' ? label.trim() : undefined) : existing?.label;
       const nextNote = note !== undefined ? (note.trim() !== '' ? note.trim() : undefined) : existing?.note;
 
-      return {
+      const next = {
         ...prev,
         [dayKey]: { 
           color,
@@ -65,9 +89,12 @@ export default function App() {
           isHoliday: existing?.isHoliday
         }
       };
+      updatedMarkedDays = next;
+      return next;
     });
     
     showToast(`Día ${dayNumber} de ${monthName} guardado`, 'success');
+    checkAndResetMiddlePositions(updatedMarkedDays);
     setActiveDayModal(null);
   };
 
@@ -96,14 +123,15 @@ export default function App() {
     countryLabel: string, 
     count: number
   ) => {
+    let updatedMarkedDays: MarkedDaysMap = {};
     setMarkedDays((prev) => {
-      if (append) {
-        return { ...prev, ...holidaysMap };
-      }
-      return holidaysMap;
+      const next = append ? { ...prev, ...holidaysMap } : holidaysMap;
+      updatedMarkedDays = next;
+      return next;
     });
 
     showToast(`Se han cargado ${count} festivos de ${countryLabel} en el calendario`, 'success');
+    checkAndResetMiddlePositions(updatedMarkedDays);
   };
 
   const handlePrint = () => {
@@ -116,6 +144,7 @@ export default function App() {
         onPrint={handlePrint}
         onClearSelectedDays={handleClearSelectedDays}
         onOpenHolidaysModal={() => setIsHolidaysModalOpen(true)}
+        onShowToast={showToast}
       />
 
       {/* Área Principal de Visualización del Calendario */}
