@@ -7,6 +7,7 @@ import {
   MarkedDaysMap, 
   LayoutType, 
   DayNumberSize, 
+  DayTextSize,
   DayNumberPosition, 
   MonthRange 
 } from '../types';
@@ -21,6 +22,7 @@ interface CalendarState {
   markedDays: MarkedDaysMap;
   layout: LayoutType;
   dayNumberSize: DayNumberSize;
+  dayTextSize: DayTextSize;
   dayNumberPosition: DayNumberPosition;
   monthRange: MonthRange;
   setYear: (year: number) => void;
@@ -32,6 +34,7 @@ interface CalendarState {
   setMarkedDays: (markedDays: MarkedDaysMap | ((prev: MarkedDaysMap) => MarkedDaysMap)) => void;
   setLayout: (layout: LayoutType) => void;
   setDayNumberSize: (size: DayNumberSize) => void;
+  setDayTextSize: (dayTextSize: DayTextSize) => void;
   setDayNumberPosition: (position: DayNumberPosition) => void;
   setMonthRange: (range: MonthRange) => void;
 }
@@ -48,6 +51,7 @@ export const useCalendarStore = create<CalendarState>()(
       markedDays: {},
       layout: 'anual',
       dayNumberSize: 'md',
+      dayTextSize: 'md',
       dayNumberPosition: 'center',
       monthRange: { start: 1, end: 12 },
       setYear: (year) => set({ year }),
@@ -61,6 +65,7 @@ export const useCalendarStore = create<CalendarState>()(
       })),
       setLayout: (layout) => set({ layout }),
       setDayNumberSize: (dayNumberSize) => set({ dayNumberSize }),
+      setDayTextSize: (dayTextSize) => set({ dayTextSize }),
       setDayNumberPosition: (dayNumberPosition) => set({ dayNumberPosition }),
       setMonthRange: (monthRange) => set({ monthRange }),
     }),

@@ -56,6 +56,8 @@ export interface MonthInfo {
 
 export type DayNumberSize = 'sm' | 'md' | 'lg' | 'xl';
 
+export type DayTextSize = 'sm' | 'md' | 'lg';
+
 export type DayNumberPosition =
   | 'top-left'
   | 'top-center'
