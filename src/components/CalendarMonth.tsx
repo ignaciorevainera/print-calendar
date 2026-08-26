@@ -34,6 +34,18 @@ const noteSizeMap: Record<DayTextSize, string> = {
   lg: 'text-[10px] md:text-[11px] leading-snug line-clamp-3',
 };
 
+const noteTextAlignMap: Record<DayNumberPosition, string> = {
+  'top-left': 'text-left',
+  'top-center': 'text-center',
+  'top-right': 'text-right',
+  'middle-left': 'text-left',
+  'center': 'text-center',
+  'middle-right': 'text-right',
+  'bottom-left': 'text-left',
+  'bottom-center': 'text-center',
+  'bottom-right': 'text-right',
+};
+
 const OPPOSITE_POSITIONS: Record<DayNumberPosition, DayNumberPosition> = {
   'top-left': 'bottom-right',
   'top-center': 'bottom-center',
@@ -77,7 +89,6 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
   const dayNotePosition = useCalendarStore((state) => state.dayNotePosition);
   const layout = useCalendarStore((state) => state.layout);
   const isMonthly = layout === 'mensual';
-  const isBottom = dayNumberPosition.startsWith('bottom');
   const effectiveNotePos = resolveNotePosition(dayNumberPosition, dayNotePosition);
   const dayHeaders = weekStart === 'monday' ? DAYS_MONDAY_START : DAYS_SUNDAY_START;
 
@@ -154,7 +165,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                     }
                     className={`w-full h-full min-h-0 m-0 rounded-xs flex cursor-pointer select-none leading-none box-border ${
                       isMonthly
-                        ? 'flex-col justify-start items-stretch p-1 overflow-hidden'
+                        ? 'p-0 overflow-hidden'
                         : `${positionClassMap[dayNumberPosition]} ${sizeClassMap[dayNumberSize]}`
                     } ${
                       isSelected
@@ -165,26 +176,30 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                     }`}
                   >
                     {isMonthly ? (
-                      <div className={`flex w-full h-full min-h-0 overflow-hidden ${isBottom ? 'flex-col-reverse' : 'flex-col'} justify-between`}>
+                      <div className="grid grid-cols-1 grid-rows-1 relative w-full h-full min-h-0 overflow-hidden box-border p-1">
                         <div
-                          className={`flex items-center gap-1 w-full shrink-0 ${sizeClassMap[dayNumberSize]} ${positionClassMap[dayNumberPosition]}`}
+                          className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden flex ${positionClassMap[dayNumberPosition]}`}
                         >
-                          <span>{day}</span>
-                          {isSelected && markInfo?.label && (
-                            <span className={`inline-block ${labelSizeMap[dayTextSize]} font-bold rounded bg-black/20 text-white truncate max-w-full`}>
-                              {markInfo.label}
-                            </span>
-                          )}
+                          <div
+                            className={`flex gap-1 w-full min-w-0 shrink-0 ${sizeClassMap[dayNumberSize]} ${positionClassMap[dayNumberPosition]}`}
+                          >
+                            <span>{day}</span>
+                            {isSelected && markInfo?.label && (
+                              <span
+                                className={`inline-block min-w-0 truncate font-bold rounded bg-black/20 text-white max-w-full my-0.5 ${labelSizeMap[dayTextSize]}`}
+                              >
+                                {markInfo.label}
+                              </span>
+                            )}
+                          </div>
                         </div>
                         {isSelected && markInfo?.note && (
-                          <div className={`flex flex-1 min-h-0 w-full overflow-hidden ${positionClassMap[effectiveNotePos]}`}>
-                            <span className={`${noteSizeMap[dayTextSize]} font-normal text-white/95 whitespace-pre-line overflow-hidden w-full break-words ${
-                              effectiveNotePos.includes('right')
-                                ? 'text-right'
-                                : effectiveNotePos.includes('center')
-                                ? 'text-center'
-                                : 'text-left'
-                            }`}>
+                          <div
+                            className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden flex ${positionClassMap[effectiveNotePos]}`}
+                          >
+                            <span
+                              className={`${noteSizeMap[dayTextSize]} ${noteTextAlignMap[effectiveNotePos]} font-normal text-white/95 whitespace-pre-line overflow-hidden w-full break-words`}
+                            >
                               {markInfo.note}
                             </span>
                           </div>
