@@ -29,7 +29,7 @@ interface HolidaysModalProps {
 
 export const HolidaysModal: React.FC<HolidaysModalProps> = ({
   isOpen,
-  year = 2027,
+  year = new Date().getFullYear(),
   onClose,
   onApplyHolidays
 }) => {
@@ -93,7 +93,7 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
       })
       .catch((err) => {
         if (isMounted) {
-          setErrorMessage(err.message || 'No se pudieron cargar los festivos para este país.');
+          setErrorMessage(err.message || `No se pudieron cargar los festivos de ${year} para este país.`);
           setRawHolidays([]);
           setIsLoadingHolidays(false);
         }
@@ -414,7 +414,7 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
                 </div>
               ) : displayedHolidays.length === 0 ? (
                 <div className="py-8 text-center text-base-content/40 font-medium">
-                  No se encontraron festivos para el filtro seleccionado.
+                  No se encontraron festivos para {year} con el filtro seleccionado.
                 </div>
               ) : (
                 displayedHolidays.map((h, idx) => (
