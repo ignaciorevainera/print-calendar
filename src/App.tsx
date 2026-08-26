@@ -11,11 +11,7 @@ import { Info, CheckCircle2, AlertCircle } from 'lucide-react';
 export default function App() {
   const {
     year,
-    palette,
-    fontFamily,
     weekStart,
-    highlightWeekends,
-    subtitle,
     markedDays,
     setMarkedDays
   } = useCalendarStore();
@@ -110,12 +106,6 @@ export default function App() {
       <main className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 print:p-0">
         <CalendarCanvas
           months={monthsData}
-          palette={palette}
-          fontFamily={fontFamily}
-          weekStart={weekStart}
-          highlightWeekends={highlightWeekends}
-          subtitle={subtitle}
-          markedDays={markedDays}
           onSelectDay={handleOpenDayModal}
         />
 

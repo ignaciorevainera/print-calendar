@@ -1,5 +1,5 @@
 import React from 'react';
-import { PaletteKey, WeekStart, FontFamilyKey, LayoutType } from '../types';
+import { PaletteKey, FontFamilyKey, LayoutType } from '../types';
 import { useCalendarStore } from '../store/useCalendarStore';
 import { 
   Printer, 
@@ -13,34 +13,18 @@ import {
 } from 'lucide-react';
 
 interface ControlToolbarProps {
-  palette?: PaletteKey;
-  onPaletteChange?: (p: PaletteKey) => void;
-  fontFamily?: FontFamilyKey;
-  onFontFamilyChange?: (f: FontFamilyKey) => void;
-  weekStart?: WeekStart;
-  onWeekStartChange?: (w: WeekStart) => void;
-  highlightWeekends?: boolean;
-  onToggleHighlightWeekends?: () => void;
-  subtitle?: string;
-  onSubtitleChange?: (s: string) => void;
   onPrint: () => void;
-  selectedCount?: number;
   onClearSelectedDays: () => void;
   onOpenHolidaysModal: () => void;
 }
 
 export const ControlToolbar: React.FC<ControlToolbarProps> = ({
-  onPaletteChange,
-  onFontFamilyChange,
-  onWeekStartChange,
-  onToggleHighlightWeekends,
-  onSubtitleChange,
   onPrint,
-  selectedCount: propSelectedCount,
   onClearSelectedDays,
   onOpenHolidaysModal
 }) => {
   const {
+    year,
     palette,
     setPalette,
     fontFamily,
@@ -56,7 +40,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     markedDays
   } = useCalendarStore();
 
-  const selectedCount = propSelectedCount ?? Object.keys(markedDays).length;
+  const selectedCount = Object.keys(markedDays).length;
 
   return (
     <header className="no-print bg-base-100 border-b border-base-300 shadow-xs sticky top-0 z-40">
@@ -68,7 +52,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </div>
             <div>
               <h1 className="text-base font-bold text-base-content leading-tight">
-                Calendario 2027 Minimalista
+                Calendario {year} Minimalista
               </h1>
               <p className="text-xs text-base-content/70 font-medium">
                 Formato A4 Horizontal · Imprimible & Exportable
@@ -130,11 +114,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             <select
               id="select-palette"
               value={palette}
-              onChange={(e) => {
-                const val = e.target.value as PaletteKey;
-                setPalette(val);
-                onPaletteChange?.(val);
-              }}
+              onChange={(e) => setPalette(e.target.value as PaletteKey)}
               className="select select-bordered select-sm w-full font-medium"
             >
               <option value="gris">Gris Minimalista</option>
@@ -153,11 +133,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             <select
               id="select-font"
               value={fontFamily}
-              onChange={(e) => {
-                const val = e.target.value as FontFamilyKey;
-                setFontFamily(val);
-                onFontFamilyChange?.(val);
-              }}
+              onChange={(e) => setFontFamily(e.target.value as FontFamilyKey)}
               className="select select-bordered select-sm w-full font-medium"
             >
               <option value="jakarta">Plus Jakarta Sans (Moderna)</option>
@@ -194,11 +170,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               type="text"
               placeholder="Ej: 2027 · Planificador anual"
               value={subtitle}
-              onChange={(e) => {
-                const val = e.target.value;
-                setSubtitle(val);
-                onSubtitleChange?.(val);
-              }}
+              onChange={(e) => setSubtitle(e.target.value)}
               maxLength={45}
               className="input input-bordered input-sm w-full"
             />
@@ -216,11 +188,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 id="toggle-week-start"
                 type="checkbox"
                 checked={weekStart === 'sunday'}
-                onChange={(e) => {
-                  const val: WeekStart = e.target.checked ? 'sunday' : 'monday';
-                  setWeekStart(val);
-                  onWeekStartChange?.(val);
-                }}
+                onChange={(e) => setWeekStart(e.target.checked ? 'sunday' : 'monday')}
                 className="toggle toggle-sm toggle-primary"
               />
             </label>
@@ -239,11 +207,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 id="toggle-highlight-weekends"
                 type="checkbox"
                 checked={highlightWeekends}
-                onChange={(e) => {
-                  const val = e.target.checked;
-                  setHighlightWeekends(val);
-                  onToggleHighlightWeekends?.();
-                }}
+                onChange={(e) => setHighlightWeekends(e.target.checked)}
                 className="toggle toggle-sm toggle-primary"
               />
             </label>
