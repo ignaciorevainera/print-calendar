@@ -12,6 +12,13 @@ import {
   MonthRange 
 } from '../types';
 
+const hasHolidayMarked = (markedDays: MarkedDaysMap): boolean => {
+  return Object.values(markedDays).some((d) => d.isHoliday);
+};
+
+const isBottomRow = (pos: DayNumberPosition): boolean => pos.startsWith('bottom');
+const isMiddleRow = (pos: DayNumberPosition): boolean => pos.startsWith('middle') || pos === 'center';
+
 interface CalendarState {
   year: number;
   palette: PaletteKey;
@@ -36,14 +43,14 @@ interface CalendarState {
   setLayout: (layout: LayoutType) => void;
   setDayNumberSize: (size: DayNumberSize) => void;
   setDayTextSize: (dayTextSize: DayTextSize) => void;
-  setDayNumberPosition: (position: DayNumberPosition) => void;
-  setDayNotePosition: (dayNotePosition: DayNumberPosition) => void;
+  setDayNumberPosition: (position: DayNumberPosition, onBlocked?: () => void, onDeflected?: (newNotePos: DayNumberPosition) => void) => void;
+  setDayNotePosition: (position: DayNumberPosition, onBlocked?: () => void, onDeflected?: (newNumPos: DayNumberPosition) => void) => void;
   setMonthRange: (range: MonthRange) => void;
 }
 
 export const useCalendarStore = create<CalendarState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       year: 2027,
       palette: 'gris',
       fontFamily: 'jakarta',
@@ -69,8 +76,34 @@ export const useCalendarStore = create<CalendarState>()(
       setLayout: (layout) => set({ layout }),
       setDayNumberSize: (dayNumberSize) => set({ dayNumberSize }),
       setDayTextSize: (dayTextSize) => set({ dayTextSize }),
-      setDayNumberPosition: (dayNumberPosition) => set({ dayNumberPosition }),
-      setDayNotePosition: (dayNotePosition) => set({ dayNotePosition }),
+      setDayNumberPosition: (dayNumberPosition, onBlocked, onDeflected) => {
+        if (hasHolidayMarked(get().markedDays) && isMiddleRow(dayNumberPosition)) {
+          onBlocked?.();
+          return;
+        }
+
+        if (isBottomRow(dayNumberPosition) && isBottomRow(get().dayNotePosition)) {
+          const newNotePos = dayNumberPosition.replace('bottom', 'top') as DayNumberPosition;
+          set({ dayNumberPosition, dayNotePosition: newNotePos });
+          onDeflected?.(newNotePos);
+        } else {
+          set({ dayNumberPosition });
+        }
+      },
+      setDayNotePosition: (dayNotePosition, onBlocked, onDeflected) => {
+        if (hasHolidayMarked(get().markedDays) && isMiddleRow(dayNotePosition)) {
+          onBlocked?.();
+          return;
+        }
+
+        if (isBottomRow(dayNotePosition) && isBottomRow(get().dayNumberPosition)) {
+          const newNumPos = dayNotePosition.replace('bottom', 'top') as DayNumberPosition;
+          set({ dayNotePosition, dayNumberPosition: newNumPos });
+          onDeflected?.(newNumPos);
+        } else {
+          set({ dayNotePosition });
+        }
+      },
       setMonthRange: (monthRange) => set({ monthRange }),
     }),
     {
