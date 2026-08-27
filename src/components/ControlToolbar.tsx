@@ -10,8 +10,7 @@ import {
   Eraser, 
   Globe2, 
   SlidersHorizontal,
-  RotateCcw,
-  X
+  RotateCcw
 } from 'lucide-react';
 
 const MONTH_NAMES = [
@@ -123,8 +122,8 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
 
   return (
     <aside
-      style={{ width: isOpen ? `${width}px` : '0px' }}
-      className={`no-print h-auto md:h-screen sticky top-0 bg-base-100 border-l border-base-300 shadow-sm flex flex-col z-40 shrink-0 ${isDragging ? 'transition-none' : 'transition-all duration-300 ease-in-out'} ${isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'}`}
+      style={{ width: `${width}px` }}
+      className={`no-print h-auto md:h-screen sticky top-0 bg-base-100 border-l border-base-300 shadow-sm flex flex-col z-40 shrink-0 ${isDragging ? 'transition-none' : 'transition-all duration-300 ease-in-out'} translate-x-0 opacity-100`}
     >
       <div
         onMouseDown={startDragging}
@@ -145,27 +144,14 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </p>
           </div>
         </div>
-        {onToggle && (
-          <button
-            type="button"
-            onClick={onToggle}
-            className="btn btn-sm btn-ghost btn-square text-base-content/70 hover:text-base-content shrink-0"
-            title="Ocultar panel"
-            aria-label="Ocultar panel"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        )}
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3.5 min-h-0">
-        <div className="collapse collapse-arrow collapse-visible-dropdowns bg-base-200/40 border border-base-300/60 rounded-xl relative focus-within:z-30 transition-[z-index]">
-          <input type="checkbox" defaultChecked />
-          <div className="collapse-title font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none min-h-0 py-3 px-4">
+        <div className="bg-base-200/40 border border-base-300/60 rounded-xl p-4 flex flex-col gap-3 text-xs relative focus-within:z-30">
+          <div className="font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none pb-1.5 border-b border-base-300/40">
             <Palette className="w-3.5 h-3.5 text-base-content/50" />
             <span>Diseño General</span>
           </div>
-          <div className="collapse-content px-4 pb-4 flex flex-col gap-3 text-xs">
             <div className="flex flex-col gap-1">
               <label className="font-semibold text-base-content/85">Paleta de colores</label>
               <select
@@ -229,16 +215,13 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 <option value="xl">Extra Grande</option>
               </select>
             </div>
-          </div>
         </div>
 
-        <div className="collapse collapse-arrow collapse-visible-dropdowns bg-base-200/40 border border-base-300/60 rounded-xl relative focus-within:z-30 transition-[z-index]">
-          <input type="checkbox" defaultChecked />
-          <div className="collapse-title font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none min-h-0 py-3 px-4">
+        <div className="bg-base-200/40 border border-base-300/60 rounded-xl p-4 flex flex-col gap-3 text-xs relative focus-within:z-30">
+          <div className="font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none pb-1.5 border-b border-base-300/40">
             <CalendarDays className="w-3.5 h-3.5 text-base-content/50" />
             <span>Contenido y Periodo</span>
           </div>
-          <div className="collapse-content px-4 pb-4 flex flex-col gap-3 text-xs">
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
                 <label className="font-semibold text-base-content/85">Año</label>
@@ -372,16 +355,13 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 </div>
               </div>
             </div>
-          </div>
         </div>
 
-        <div className="collapse collapse-arrow collapse-visible-dropdowns bg-base-200/40 border border-base-300/60 rounded-xl relative focus-within:z-30 transition-[z-index]">
-          <input type="checkbox" defaultChecked />
-          <div className="collapse-title font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none min-h-0 py-3 px-4">
+        <div className="bg-base-200/40 border border-base-300/60 rounded-xl p-4 flex flex-col gap-3 text-xs relative focus-within:z-30">
+          <div className="font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none pb-1.5 border-b border-base-300/40">
             <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/50" />
             <span>Ajustes del Día y Semana</span>
           </div>
-          <div className="collapse-content px-4 pb-4 flex flex-col gap-3 text-xs">
             <div className="flex flex-col gap-1">
               <label className="font-semibold text-base-content/85">Tamaño del mes</label>
               <select
@@ -489,7 +469,6 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 />
               </label>
             </div>
-          </div>
         </div>
       </div>
 

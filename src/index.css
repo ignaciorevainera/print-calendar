@@ -143,10 +143,4 @@
   animation: modal-pop 200ms ease-out forwards;
 }
 
-.collapse-visible-dropdowns:has(> input:checked) {
-  overflow: visible;
-}
 
-.collapse-visible-dropdowns:has(> input:checked) .collapse-content {
-  overflow: visible;
-}

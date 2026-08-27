@@ -13,14 +13,13 @@ import {
   Info,
   CheckCircle2,
   AlertCircle,
-  SlidersHorizontal,
 } from "lucide-react";
 
 export default function App() {
   const { year, weekStart, markedDays, setMarkedDays, monthRange } =
     useCalendarStore();
 
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+
   const [isHolidaysModalOpen, setIsHolidaysModalOpen] =
     useState<boolean>(false);
   const [activeDayModal, setActiveDayModal] = useState<{
@@ -181,16 +180,7 @@ export default function App() {
 
   return (
     <div className="h-screen flex flex-col md:flex-row bg-slate-100 selection:bg-blue-100 relative overflow-hidden print:h-auto print:overflow-visible">
-      {!sidebarOpen && (
-        <button
-          onClick={() => setSidebarOpen(true)}
-          className="fixed top-4 right-4 z-40 no-print btn btn-sm btn-circle btn-primary shadow-lg modal-box-animate-in"
-          title="Abrir panel de control"
-          aria-label="Abrir panel de control"
-        >
-          <SlidersHorizontal className="w-4 h-4" />
-        </button>
-      )}
+
 
       {/* Área Principal de Visualización del Calendario */}
       <main className="flex-1 min-w-0 flex flex-col items-center justify-center p-3 sm:p-6 print:p-0 print:w-full print:overflow-visible overflow-auto">
@@ -217,8 +207,6 @@ export default function App() {
       </main>
 
       <ControlToolbar
-        isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
         onPrint={handlePrint}
         onClearSelectedDays={handleClearSelectedDays}
         onOpenHolidaysModal={() => setIsHolidaysModalOpen(true)}
