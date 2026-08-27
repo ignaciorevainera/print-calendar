@@ -197,13 +197,13 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
     >
       <div
         id="holidays-modal-card"
-        className="modal-box max-w-2xl p-0 flex flex-col max-h-[90vh] overflow-hidden bg-base-100 text-base-content border border-base-300 shadow-2xl modal-box-animate-in"
+        className="modal-box w-[calc(100vw-1rem)] max-w-2xl p-0 flex flex-col max-h-[90vh] overflow-hidden bg-base-100 text-base-content border border-base-300 shadow-2xl modal-box-animate-in"
         role="dialog"
         aria-modal="true"
         aria-labelledby="holidays-modal-title"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-base-300 bg-base-200/50">
+        <div className="flex items-center justify-between p-3 sm:p-5 border-b border-base-300 bg-base-200/50">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary/10 text-primary rounded-xl border border-primary/20 flex items-center justify-center">
               <Globe2 className="w-5 h-5" />
@@ -228,7 +228,7 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1">
+        <div className="p-3 sm:p-5 space-y-3 sm:space-y-4 overflow-y-auto flex-1">
           {/* Top Controls Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             {/* Country Selector */}
@@ -420,28 +420,28 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
                 displayedHolidays.map((h, idx) => (
                   <div
                     key={`${h.date}-${h.localName}-${idx}`}
-                    className="py-1.5 px-2.5 bg-base-100 border border-base-300 rounded-lg flex items-center justify-between shadow-xs transition-colors hover:border-base-content/20"
+                    className="py-1.5 px-2.5 bg-base-100 border border-base-300 rounded-lg flex items-center justify-between shadow-xs transition-colors hover:border-base-content/20 gap-1.5"
                   >
-                    <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 pr-1">
                       <span
                         className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs"
                         style={{ backgroundColor: holidayColor }}
                       />
-                      <span className="font-bold text-base-content whitespace-nowrap">
+                      <span className="font-bold text-base-content whitespace-nowrap text-[11px] sm:text-xs">
                         {formatHolidayDate(h.date)}:
                       </span>
-                      <span className="text-base-content/80 font-medium truncate" title={h.localName}>
+                      <span className="text-base-content/80 font-medium truncate text-[11px] sm:text-xs" title={h.localName}>
                         {h.localName}
                       </span>
                     </div>
 
                     <div className="shrink-0 flex items-center gap-1">
                       {h.global ? (
-                        <span className="badge badge-sm badge-neutral font-bold text-[10px]">
+                        <span className="badge badge-sm badge-neutral font-bold text-[9px] sm:text-[10px] px-1.5">
                           Nacional
                         </span>
                       ) : (
-                        <span className="badge badge-sm badge-outline font-bold text-[10px]">
+                        <span className="badge badge-sm badge-outline font-bold text-[9px] sm:text-[10px] px-1.5">
                           {h.counties && h.counties.length === 1
                             ? formatSubdivisionName(h.counties[0])
                             : 'Regional'}
@@ -456,7 +456,7 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-base-300 bg-base-200/50 flex items-center justify-between gap-3">
+        <div className="p-3 sm:p-4 border-t border-base-300 bg-base-200/50 flex items-center justify-between gap-2 sm:gap-3">
           <button
             type="button"
             onClick={onClose}
@@ -472,8 +472,8 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
             disabled={isLoadingHolidays || displayedHolidays.length === 0}
             className="btn btn-sm btn-primary gap-1.5 text-white"
           >
-            <Check className="w-4 h-4" />
-            <span>Cargar {displayedHolidays.length} festivos en el calendario</span>
+            <Check className="w-4 h-4 shrink-0" />
+            <span className="truncate">Cargar {displayedHolidays.length} festivos<span className="hidden sm:inline"> en el calendario</span></span>
           </button>
         </div>
       </div>

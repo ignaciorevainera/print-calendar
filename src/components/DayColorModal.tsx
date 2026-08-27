@@ -85,7 +85,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
     >
       <div
         id="day-color-modal-card"
-        className="modal-box max-w-sm p-5 space-y-4 bg-base-100 text-base-content border border-base-300 shadow-2xl modal-box-animate-in"
+        className="modal-box w-[calc(100vw-1.5rem)] max-w-sm p-4 sm:p-5 space-y-4 bg-base-100 text-base-content border border-base-300 shadow-2xl modal-box-animate-in"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-day-title"
@@ -132,7 +132,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
             <Palette className="w-3.5 h-3.5 text-primary" />
             <span>Colores recomendados</span>
           </label>
-          <div className="grid grid-cols-5 gap-2 pt-0.5">
+          <div className="grid grid-cols-5 gap-1 sm:gap-2 pt-0.5">
             {PRESET_COLORS.map((c) => {
               const isSelected = selectedColor.toLowerCase() === c.hex.toLowerCase();
               return (

@@ -106,7 +106,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
       <div
         tabIndex={0}
         role="button"
-        className="btn btn-sm btn-outline border-base-300 w-full justify-between gap-1.5 font-medium"
+        className="btn btn-sm btn-outline border-base-300 w-full justify-between gap-1 text-xs px-2 sm:px-3 font-medium"
       >
         <span className="truncate">
           <span>{positionLabels[currentPosition]}</span>
@@ -114,7 +114,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
       </div>
       <div
         tabIndex={0}
-        className="dropdown-content z-[100] p-3 shadow-xl bg-base-100 rounded-box border border-base-300 w-44 mt-1"
+        className="dropdown-content z-[100] p-2.5 sm:p-3 shadow-xl bg-base-100 rounded-box border border-base-300 w-40 sm:w-44 mt-1"
       >
         <div className="text-[11px] font-bold text-base-content/70 mb-2 uppercase tracking-wider text-center">
           {title}
@@ -129,7 +129,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
                 type="button"
                 onClick={() => handleSelect(pos.id)}
                 title={isDisabled ? (disabledMessage || 'Posición no disponible') : pos.label}
-                className={`h-9 rounded flex items-center justify-center transition-all ${
+                className={`h-8 sm:h-9 rounded flex items-center justify-center transition-all ${
                   isDisabled
                     ? 'bg-base-100 opacity-30 cursor-not-allowed'
                     : isSelected
