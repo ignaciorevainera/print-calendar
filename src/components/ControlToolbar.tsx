@@ -73,6 +73,36 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   const middlePositions: DayNumberPosition[] = ['middle-left', 'center', 'middle-right'];
 
   const [tempYear, setTempYear] = useState<string>(String(year));
+  const [width, setWidth] = useState<number>(360);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+
+  const startDragging = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const newWidth = window.innerWidth - e.clientX;
+      if (newWidth >= 360 && newWidth <= 600) {
+        setWidth(newWidth);
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]);
 
   useEffect(() => {
     setTempYear(String(year));
@@ -85,7 +115,15 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   };
 
   return (
-    <aside className={`no-print w-80 h-auto md:h-screen sticky top-0 bg-base-100 border-l border-base-300 shadow-sm flex flex-col z-40 shrink-0 transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full w-0 opacity-0 pointer-events-none'}`}>
+    <aside
+      style={{ width: isOpen ? `${width}px` : '0px' }}
+      className={`no-print relative h-auto md:h-screen sticky top-0 bg-base-100 border-l border-base-300 shadow-sm flex flex-col z-40 shrink-0 ${isDragging ? 'transition-none' : 'transition-all duration-300 ease-in-out'} ${isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'}`}
+    >
+      <div
+        onMouseDown={startDragging}
+        className="absolute left-0 top-0 bottom-0 w-1.5 cursor-col-resize hover:bg-primary/40 active:bg-primary transition-colors z-50"
+        style={{ touchAction: 'none' }}
+      />
       <div className="p-4 border-b border-base-300 flex items-center justify-between gap-2 shrink-0 bg-base-100">
         <div className="flex items-center gap-2.5 min-w-0">
           <div className="p-2 bg-primary/10 text-primary rounded-lg border border-primary/20 flex items-center justify-center shrink-0">
