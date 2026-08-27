@@ -57,13 +57,14 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
   };
 
   const pages = chunkMonths(months, layout);
+  const minWidthClass = layout === "mensual" ? "min-w-[300px]" : "min-w-[640px]";
 
   return (
-    <div className="w-full flex flex-col items-center gap-8 mb-8 print:p-0 print:m-0 print:gap-0">
+    <div className="w-full flex flex-col items-center gap-8 mb-8 print:p-0 print:m-0 print:gap-0 overflow-x-auto pb-4 px-2 sm:px-0">
       {pages.map((pageMonths, pageIndex) => (
         <div
           key={`page-${pageIndex}`}
-          className={`page-a4 theme-${palette} ${fontClassMap[fontFamily]} relative w-full max-w-[1120px] aspect-[297/210] bg-white text-[var(--cal-text)] p-4 md:p-6 rounded-sm shadow-md print:shadow-none print:rounded-none print:max-w-none print:w-full print:h-full print:aspect-auto flex flex-col justify-between box-border border border-[var(--cal-border)] print:border-none`}
+          className={`page-a4 theme-${palette} ${fontClassMap[fontFamily]} ${minWidthClass} md:min-w-0 print:min-w-0 relative w-full max-w-[1120px] aspect-[297/210] bg-white text-[var(--cal-text)] p-4 md:p-6 rounded-sm shadow-md print:shadow-none print:rounded-none print:max-w-none print:w-full print:h-full print:aspect-auto flex flex-col justify-between box-border border border-[var(--cal-border)] print:border-none`}
           style={{ boxSizing: "border-box" }}
         >
           <div className="w-full mb-2 pb-1 border-b border-[var(--cal-border)] shrink-0 box-border flex justify-between items-center px-2">

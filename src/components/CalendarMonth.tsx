@@ -186,7 +186,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                           }
                         : undefined
                     }
-                    className={`w-full h-full min-h-0 m-0 rounded-xs flex cursor-pointer select-none leading-none box-border ${
+                    className={`w-full h-full min-h-0 m-0 rounded-xs flex cursor-pointer select-none leading-none box-border touch-manipulation ${
                       isMonthly
                         ? 'p-0 overflow-hidden'
                         : `${positionClassMap[dayNumberPosition]} ${sizeClassMap[dayNumberSize]}`
