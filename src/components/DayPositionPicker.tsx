@@ -89,7 +89,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
   };
 
   return (
-    <div className={`dropdown ${dropdownAlign}`}>
+    <div className={`dropdown dropdown-top ${dropdownAlign}`}>
       <div
         tabIndex={0}
         role="button"
