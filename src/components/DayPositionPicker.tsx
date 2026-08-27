@@ -31,6 +31,7 @@ interface DayPositionPickerProps {
   title?: string;
   onShowToast?: (text: string, type?: 'success' | 'info' | 'error') => void;
   pickerType?: 'number' | 'note';
+  align?: 'start' | 'end';
   disabledPositions?: DayNumberPosition[];
   disabledMessage?: string;
   oppositeElementPosition?: DayNumberPosition;
@@ -42,6 +43,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
   title = 'Posición (3×3)',
   onShowToast,
   pickerType = 'number',
+  align,
   disabledPositions,
   disabledMessage,
   oppositeElementPosition: propOppositePosition,
@@ -50,6 +52,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
 
   const currentPosition = value ?? dayNumberPosition;
   const oppositeElementPosition = propOppositePosition ?? (pickerType === 'number' ? dayNotePosition : dayNumberPosition);
+  const dropdownAlign = align ? `dropdown-${align}` : (pickerType === 'number' ? 'dropdown-start' : 'dropdown-end');
 
   const handleSelect = (pos: DayNumberPosition) => {
     if (disabledPositions?.includes(pos)) {
@@ -86,7 +89,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
   };
 
   return (
-    <div className="dropdown dropdown-end">
+    <div className={`dropdown ${dropdownAlign}`}>
       <div
         tabIndex={0}
         role="button"
@@ -99,7 +102,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
       </div>
       <div
         tabIndex={0}
-        className="dropdown-content z-50 p-3 shadow-xl bg-base-100 rounded-box border border-base-300 w-44 mt-1"
+        className="dropdown-content z-[100] p-3 shadow-xl bg-base-100 rounded-box border border-base-300 w-44 mt-1"
       >
         <div className="text-[11px] font-bold text-base-content/70 mb-2 uppercase tracking-wider text-center">
           {title}
