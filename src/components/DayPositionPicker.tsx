@@ -1,7 +1,7 @@
 import React from 'react';
 import { useCalendarStore } from '../store/useCalendarStore';
 import { DayNumberPosition } from '../types';
-import { LayoutGrid } from 'lucide-react';
+
 
 const POSITIONS: { id: DayNumberPosition; label: string }[][] = [
   [
@@ -20,6 +20,19 @@ const POSITIONS: { id: DayNumberPosition; label: string }[][] = [
     { id: 'bottom-right', label: '↘ Inferior Derecha' },
   ],
 ];
+
+const positionLabels: Record<DayNumberPosition, string> = {
+  'top-left': 'Sup. Izquierda',
+  'top-center': 'Sup. Centro',
+  'top-right': 'Sup. Derecha',
+  'middle-left': 'Centro Izquierda',
+  'center': 'Centro',
+  'middle-right': 'Centro Derecha',
+  'bottom-left': 'Inf. Izquierda',
+  'bottom-center': 'Inf. Centro',
+  'bottom-right': 'Inf. Derecha',
+};
+
 
 interface DayPositionPickerProps {
   value?: DayNumberPosition;
@@ -95,9 +108,8 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
         role="button"
         className="btn btn-sm btn-outline border-base-300 w-full justify-between gap-1.5 font-medium"
       >
-        <span className="flex items-center gap-1.5 truncate">
-          <LayoutGrid className="w-3.5 h-3.5 text-base-content/60" />
-          <span className="capitalize">{currentPosition.replace('-', ' ')}</span>
+        <span className="truncate">
+          <span>{positionLabels[currentPosition]}</span>
         </span>
       </div>
       <div
