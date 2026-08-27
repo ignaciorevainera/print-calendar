@@ -89,7 +89,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   }
 
   return (
-    <aside className="no-print w-80 h-screen sticky top-0 bg-base-100 border-r border-base-300 shadow-sm flex flex-col overflow-hidden z-40 shrink-0">
+    <aside className="no-print w-80 h-auto md:h-screen sticky top-0 bg-base-100 border-l border-base-300 shadow-sm flex flex-col overflow-hidden z-40 shrink-0">
       <div className="p-4 border-b border-base-300 flex items-center justify-between gap-2 shrink-0 bg-base-100">
         <div className="flex items-center gap-2.5 min-w-0">
           <div className="p-2 bg-primary/10 text-primary rounded-lg border border-primary/20 flex items-center justify-center shrink-0">

@@ -152,17 +152,8 @@ export default function App() {
         </button>
       )}
 
-      <ControlToolbar
-        isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
-        onPrint={handlePrint}
-        onClearSelectedDays={handleClearSelectedDays}
-        onOpenHolidaysModal={() => setIsHolidaysModalOpen(true)}
-        onShowToast={showToast}
-      />
-
       {/* Área Principal de Visualización del Calendario */}
-      <main className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 print:p-0 print:w-full">
+      <main className="flex-1 min-w-0 flex flex-col items-center justify-center p-3 sm:p-6 print:p-0 print:w-full">
         <CalendarCanvas
           months={visibleMonthsData}
           onSelectDay={handleOpenDayModal}
@@ -179,6 +170,15 @@ export default function App() {
           </div>
         </footer>
       </main>
+
+      <ControlToolbar
+        isOpen={sidebarOpen}
+        onToggle={() => setSidebarOpen(!sidebarOpen)}
+        onPrint={handlePrint}
+        onClearSelectedDays={handleClearSelectedDays}
+        onOpenHolidaysModal={() => setIsHolidaysModalOpen(true)}
+        onShowToast={showToast}
+      />
 
       {/* Modal para cargar festivos desde API externa */}
       <HolidaysModal
