@@ -122,15 +122,15 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
 
   return (
     <aside
-      style={{ width: `${width}px` }}
-      className={`no-print h-auto md:h-screen sticky top-0 bg-base-100 border-l border-base-300 shadow-sm flex flex-col z-40 shrink-0 ${isDragging ? 'transition-none' : 'transition-all duration-300 ease-in-out'} translate-x-0 opacity-100`}
+      style={{ "--sidebar-width": `${width}px` } as React.CSSProperties}
+      className={`no-print w-full md:w-[var(--sidebar-width)] h-auto md:h-screen sticky top-0 bg-base-100 border-t md:border-t-0 md:border-l border-base-300 shadow-sm flex flex-col z-40 shrink-0 ${isDragging ? 'transition-none' : 'transition-all duration-300 ease-in-out'}`}
     >
       <div
         onMouseDown={startDragging}
-        className="absolute left-0 top-0 bottom-0 w-1.5 cursor-col-resize hover:bg-primary/40 active:bg-primary transition-colors z-50"
+        className="hidden md:block absolute left-0 top-0 bottom-0 w-1.5 cursor-col-resize hover:bg-primary/40 active:bg-primary transition-colors z-50"
         style={{ touchAction: 'none' }}
       />
-      <div className="p-4 border-b border-base-300 flex items-center justify-between gap-2 shrink-0 bg-base-100">
+      <div className="p-3 sm:p-4 border-b border-base-300 flex items-center justify-between gap-2 shrink-0 bg-base-100">
         <div className="flex items-center gap-2.5 min-w-0">
           <div className="p-2 bg-primary/10 text-primary rounded-lg border border-primary/20 flex items-center justify-center shrink-0">
             <CalendarDays className="w-5 h-5" />
@@ -472,7 +472,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
         </div>
       </div>
 
-      <div className="p-4 border-t border-base-300 bg-base-100 shrink-0 flex flex-col gap-2">
+      <div className="p-3 sm:p-4 border-t border-base-300 bg-base-100 shrink-0 flex flex-col gap-2">
         <button
           type="button"
           id="btn-open-holidays-modal"

@@ -179,11 +179,11 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen flex flex-col md:flex-row bg-slate-100 selection:bg-blue-100 relative overflow-hidden print:h-auto print:overflow-visible">
+    <div className="min-h-screen md:h-screen flex flex-col md:flex-row bg-slate-100 selection:bg-blue-100 relative overflow-x-hidden md:overflow-hidden print:h-auto print:overflow-visible">
 
 
       {/* Área Principal de Visualización del Calendario */}
-      <main className="flex-1 min-w-0 flex flex-col items-center justify-center p-3 sm:p-6 print:p-0 print:w-full print:overflow-visible overflow-auto">
+      <main className="flex-1 min-w-0 flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 print:p-0 print:w-full print:overflow-visible overflow-auto">
         <CalendarCanvas
           months={visibleMonthsData}
           onSelectDay={handleOpenDayModal}
