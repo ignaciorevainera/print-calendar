@@ -20,6 +20,8 @@ const MONTH_NAMES = [
 ];
 
 interface ControlToolbarProps {
+  isOpen?: boolean;
+  onToggle?: () => void;
   onPrint: () => void;
   onClearSelectedDays: () => void;
   onOpenHolidaysModal: () => void;

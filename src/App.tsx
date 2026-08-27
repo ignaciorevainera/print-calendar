@@ -6,7 +6,7 @@ import { ControlToolbar } from './components/ControlToolbar';
 import { CalendarCanvas } from './components/CalendarCanvas';
 import { DayColorModal } from './components/DayColorModal';
 import { HolidaysModal } from './components/HolidaysModal';
-import { Info, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Info, CheckCircle2, AlertCircle, SlidersHorizontal } from 'lucide-react';
 
 export default function App() {
   const {
@@ -17,6 +17,7 @@ export default function App() {
     monthRange
   } = useCalendarStore();
 
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [isHolidaysModalOpen, setIsHolidaysModalOpen] = useState<boolean>(false);
   const [activeDayModal, setActiveDayModal] = useState<{
     dayKey: string;
@@ -139,8 +140,21 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-100 selection:bg-blue-100">
+    <div className="min-h-screen flex flex-col md:flex-row bg-slate-100 selection:bg-blue-100 relative">
+      {!sidebarOpen && (
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="fixed top-4 right-4 z-40 no-print btn btn-sm btn-circle btn-primary shadow-lg"
+          title="Abrir panel de control"
+          aria-label="Abrir panel de control"
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+        </button>
+      )}
+
       <ControlToolbar
+        isOpen={sidebarOpen}
+        onToggle={() => setSidebarOpen(!sidebarOpen)}
         onPrint={handlePrint}
         onClearSelectedDays={handleClearSelectedDays}
         onOpenHolidaysModal={() => setIsHolidaysModalOpen(true)}
@@ -148,7 +162,7 @@ export default function App() {
       />
 
       {/* Área Principal de Visualización del Calendario */}
-      <main className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 print:p-0">
+      <main className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 print:p-0 print:w-full">
         <CalendarCanvas
           months={visibleMonthsData}
           onSelectDay={handleOpenDayModal}
