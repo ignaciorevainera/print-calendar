@@ -1,30 +1,37 @@
-import React, { useState, useMemo } from 'react';
-import { MarkedDaysMap } from './types';
-import { useCalendarStore, hasHolidayOrLabelMarked } from './store/useCalendarStore';
-import { generateYearData } from './utils/calendarHelper';
-import { ControlToolbar } from './components/ControlToolbar';
-import { CalendarCanvas } from './components/CalendarCanvas';
-import { DayColorModal } from './components/DayColorModal';
-import { HolidaysModal } from './components/HolidaysModal';
-import { Info, CheckCircle2, AlertCircle, SlidersHorizontal } from 'lucide-react';
+import React, { useState, useMemo } from "react";
+import { MarkedDaysMap } from "./types";
+import {
+  useCalendarStore,
+  hasHolidayOrLabelMarked,
+} from "./store/useCalendarStore";
+import { generateYearData } from "./utils/calendarHelper";
+import { ControlToolbar } from "./components/ControlToolbar";
+import { CalendarCanvas } from "./components/CalendarCanvas";
+import { DayColorModal } from "./components/DayColorModal";
+import { HolidaysModal } from "./components/HolidaysModal";
+import {
+  Info,
+  CheckCircle2,
+  AlertCircle,
+  SlidersHorizontal,
+} from "lucide-react";
 
 export default function App() {
-  const {
-    year,
-    weekStart,
-    markedDays,
-    setMarkedDays,
-    monthRange
-  } = useCalendarStore();
+  const { year, weekStart, markedDays, setMarkedDays, monthRange } =
+    useCalendarStore();
 
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-  const [isHolidaysModalOpen, setIsHolidaysModalOpen] = useState<boolean>(false);
+  const [isHolidaysModalOpen, setIsHolidaysModalOpen] =
+    useState<boolean>(false);
   const [activeDayModal, setActiveDayModal] = useState<{
     dayKey: string;
     dayNumber: number;
     monthName: string;
   } | null>(null);
-  const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'info' | 'error'; text: string } | null>(null);
+  const [toastMessage, setToastMessage] = useState<{
+    type: "success" | "info" | "error";
+    text: string;
+  } | null>(null);
 
   const monthsData = useMemo(() => {
     return generateYearData(year, weekStart);
@@ -37,7 +44,10 @@ export default function App() {
     });
   }, [monthsData, monthRange.start, monthRange.end]);
 
-  const showToast = (text: string, type: 'success' | 'info' | 'error' = 'info') => {
+  const showToast = (
+    text: string,
+    type: "success" | "info" | "error" = "info",
+  ) => {
     setToastMessage({ type, text });
     setTimeout(() => {
       setToastMessage((current) => (current?.text === text ? null : current));
@@ -48,53 +58,80 @@ export default function App() {
     const hasHolidaysOrLabels = hasHolidayOrLabelMarked(nextMarkedDays);
     if (!hasHolidaysOrLabels) return;
 
-    const { dayNumberPosition, dayNotePosition, setDayNumberPosition, setDayNotePosition } = useCalendarStore.getState();
-    let message = '';
+    const {
+      dayNumberPosition,
+      dayNotePosition,
+      setDayNumberPosition,
+      setDayNotePosition,
+    } = useCalendarStore.getState();
+    let message = "";
 
-    const isMiddleRow = (pos: string) => pos.startsWith('middle') || pos === 'center';
+    const isMiddleRow = (pos: string) =>
+      pos.startsWith("middle") || pos === "center";
 
     if (isMiddleRow(dayNumberPosition)) {
-      setDayNumberPosition('top-right');
-      message += 'Número de día movido a superior derecha. ';
+      setDayNumberPosition("top-right");
+      message += "Número de día movido a superior derecha. ";
     }
     if (isMiddleRow(dayNotePosition)) {
-      setDayNotePosition('bottom-left');
-      message += 'Nota movida a inferior izquierda. ';
+      setDayNotePosition("bottom-left");
+      message += "Nota movida a inferior izquierda. ";
     }
 
     if (message) {
-      showToast(`${message}Los festivos o etiquetas ocupan la fila central.`, 'info');
+      showToast(
+        `${message}Los festivos o etiquetas ocupan la fila central.`,
+        "info",
+      );
     }
   };
 
-  const handleOpenDayModal = (dayKey: string, dayNumber: number, monthName: string) => {
+  const handleOpenDayModal = (
+    dayKey: string,
+    dayNumber: number,
+    monthName: string,
+  ) => {
     setActiveDayModal({ dayKey, dayNumber, monthName });
   };
 
-  const handleConfirmMarkDay = (color: string, label?: string, note?: string) => {
+  const handleConfirmMarkDay = (
+    color: string,
+    label?: string,
+    note?: string,
+  ) => {
     if (!activeDayModal) return;
     const { dayKey, dayNumber, monthName } = activeDayModal;
-    
+
     let updatedMarkedDays: MarkedDaysMap = {};
     setMarkedDays((prev) => {
       const existing = prev[dayKey];
-      const nextLabel = label !== undefined ? (label.trim() !== '' ? label.trim() : undefined) : existing?.label;
-      const nextNote = note !== undefined ? (note.trim() !== '' ? note.trim() : undefined) : existing?.note;
+      const nextLabel =
+        label !== undefined
+          ? label.trim() !== ""
+            ? label.trim()
+            : undefined
+          : existing?.label;
+      const nextNote =
+        note !== undefined
+          ? note.trim() !== ""
+            ? note.trim()
+            : undefined
+          : existing?.note;
 
       const next = {
         ...prev,
-        [dayKey]: { 
+        [dayKey]: {
           color,
           label: nextLabel,
           note: nextNote,
-          isHoliday: existing?.isHoliday
-        }
+          isHoliday: existing?.isHoliday,
+        },
       };
       updatedMarkedDays = next;
       return next;
     });
-    
-    showToast(`Día ${dayNumber} de ${monthName} guardado`, 'success');
+
+    showToast(`Día ${dayNumber} de ${monthName} guardado`, "success");
     checkAndResetMiddlePositions(updatedMarkedDays);
     setActiveDayModal(null);
   };
@@ -102,27 +139,27 @@ export default function App() {
   const handleRemoveMarkDay = () => {
     if (!activeDayModal) return;
     const { dayKey, dayNumber } = activeDayModal;
-    
+
     setMarkedDays((prev) => {
       const next = { ...prev };
       delete next[dayKey];
       return next;
     });
 
-    showToast(`Marca del día ${dayNumber} eliminada`, 'info');
+    showToast(`Marca del día ${dayNumber} eliminada`, "info");
     setActiveDayModal(null);
   };
 
   const handleClearSelectedDays = () => {
     setMarkedDays({});
-    showToast('Todas las fechas marcadas han sido eliminadas', 'info');
+    showToast("Todas las fechas marcadas han sido eliminadas", "info");
   };
 
   const handleApplyHolidays = (
-    holidaysMap: MarkedDaysMap, 
-    append: boolean, 
-    countryLabel: string, 
-    count: number
+    holidaysMap: MarkedDaysMap,
+    append: boolean,
+    countryLabel: string,
+    count: number,
   ) => {
     let updatedMarkedDays: MarkedDaysMap = {};
     setMarkedDays((prev) => {
@@ -131,7 +168,10 @@ export default function App() {
       return next;
     });
 
-    showToast(`Se han cargado ${count} festivos de ${countryLabel} en el calendario`, 'success');
+    showToast(
+      `Se han cargado ${count} festivos de ${countryLabel} en el calendario`,
+      "success",
+    );
     checkAndResetMiddlePositions(updatedMarkedDays);
   };
 
@@ -140,11 +180,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-slate-100 selection:bg-blue-100 relative">
+    <div className="h-screen flex flex-col md:flex-row bg-slate-100 selection:bg-blue-100 relative overflow-hidden print:h-auto print:overflow-visible">
       {!sidebarOpen && (
         <button
           onClick={() => setSidebarOpen(true)}
-          className="fixed top-4 right-4 z-40 no-print btn btn-sm btn-circle btn-primary shadow-lg"
+          className="fixed top-4 right-4 z-40 no-print btn btn-sm btn-circle btn-primary shadow-lg modal-box-animate-in"
           title="Abrir panel de control"
           aria-label="Abrir panel de control"
         >
@@ -153,20 +193,25 @@ export default function App() {
       )}
 
       {/* Área Principal de Visualización del Calendario */}
-      <main className="flex-1 min-w-0 flex flex-col items-center justify-center p-3 sm:p-6 print:p-0 print:w-full">
+      <main className="flex-1 min-w-0 flex flex-col items-center justify-center p-3 sm:p-6 print:p-0 print:w-full print:overflow-visible overflow-auto">
         <CalendarCanvas
           months={visibleMonthsData}
           onSelectDay={handleOpenDayModal}
         />
 
         {/* Guía rápida inferior (no-print) */}
-        <footer className="no-print w-full max-w-[1120px] pb-6 pt-2 px-4 text-center text-xs text-slate-500 flex flex-wrap items-center justify-between gap-2 font-medium">
+        <footer className="no-print w-full max-w-280 text-center text-xs text-slate-500 flex flex-wrap items-center justify-between gap-2 font-medium">
           <div className="flex items-center gap-1.5">
             <Info className="w-4 h-4 text-slate-400" />
-            <span>Haz clic en cualquier día para elegir su color o usa «Festivos Oficiales (API)» para cargar festivos nacionales y autonómicos.</span>
+            <span>
+              Haz clic en cualquier día para elegir su color o usa «Festivos
+              Oficiales (API)» para cargar festivos nacionales y autonómicos.
+            </span>
           </div>
           <div>
-            <span>Diseñado para hoja A4 horizontal (297 × 210 mm) · Año {year}</span>
+            <span>
+              Diseñado para hoja A4 horizontal (297 × 210 mm) · Año {year}
+            </span>
           </div>
         </footer>
       </main>
@@ -207,14 +252,14 @@ export default function App() {
         <div className="toast toast-center toast-bottom z-50 no-print">
           <div
             className={`alert text-xs font-semibold py-2 px-4 shadow-xl border ${
-              toastMessage.type === 'success'
-                ? 'alert-success text-white'
-                : toastMessage.type === 'error'
-                ? 'alert-error text-white'
-                : 'alert-neutral text-white'
+              toastMessage.type === "success"
+                ? "alert-success text-white"
+                : toastMessage.type === "error"
+                  ? "alert-error text-white"
+                  : "alert-neutral text-white"
             }`}
           >
-            {toastMessage.type === 'success' ? (
+            {toastMessage.type === "success" ? (
               <CheckCircle2 className="w-4 h-4 text-white" />
             ) : (
               <AlertCircle className="w-4 h-4 text-white" />

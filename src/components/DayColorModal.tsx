@@ -78,14 +78,14 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
   return (
     <div
       id="day-color-modal-backdrop"
-      className="modal modal-open no-print"
+      className="modal modal-open no-print modal-animate-in"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
         id="day-color-modal-card"
-        className="modal-box max-w-sm p-5 space-y-4 bg-base-100 text-base-content border border-base-300 shadow-2xl"
+        className="modal-box max-w-sm p-5 space-y-4 bg-base-100 text-base-content border border-base-300 shadow-2xl modal-box-animate-in"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-day-title"

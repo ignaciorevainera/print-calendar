@@ -190,14 +190,14 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
   return (
     <div
       id="holidays-modal-backdrop"
-      className="modal modal-open no-print"
+      className="modal modal-open no-print modal-animate-in"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
         id="holidays-modal-card"
-        className="modal-box max-w-2xl p-0 flex flex-col max-h-[90vh] overflow-hidden bg-base-100 text-base-content border border-base-300 shadow-2xl"
+        className="modal-box max-w-2xl p-0 flex flex-col max-h-[90vh] overflow-hidden bg-base-100 text-base-content border border-base-300 shadow-2xl modal-box-animate-in"
         role="dialog"
         aria-modal="true"
         aria-labelledby="holidays-modal-title"
