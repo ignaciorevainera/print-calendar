@@ -1,6 +1,6 @@
-# Calendario 2027 Minimalista A4
+# Calendario A4
 
-Calendario anual 2027 minimalista e interactivo para imprimir y exportar a PDF en formato A4 horizontal. Permite marcar días con colores, añadir notas y etiquetas, y cargar festivos nacionales/autonómicos desde la API externa de Nager.Date.
+Calendario anual interactivo para imprimir y exportar a PDF en formato A4 horizontal, para cualquier año y rango de meses. Permite marcar días con colores, añadir notas y etiquetas, y cargar festivos nacionales/autonómicos desde la API externa de Nager.Date.
 
 ## Características
 
