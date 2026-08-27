@@ -60,7 +60,7 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
   const minWidthClass = layout === "mensual" ? "min-w-[300px]" : "min-w-[640px]";
 
   return (
-    <div className="w-full flex flex-col items-center gap-8 mb-8 print:p-0 print:m-0 print:gap-0 overflow-x-auto pb-4 px-2 sm:px-0">
+    <div className="w-full flex flex-col items-start md:items-center gap-8 mb-8 print:p-0 print:m-0 print:gap-0 overflow-x-auto pb-4 px-2 sm:px-0">
       {pages.map((pageMonths, pageIndex) => (
         <div
           key={`page-${pageIndex}`}
