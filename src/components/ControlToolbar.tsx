@@ -84,11 +84,16 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   useEffect(() => {
     if (!isDragging) return;
 
+    const originalCursor = document.body.style.cursor;
+    const originalUserSelect = document.body.style.userSelect;
+
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+
     const handleMouseMove = (e: MouseEvent) => {
       const newWidth = window.innerWidth - e.clientX;
-      if (newWidth >= 360 && newWidth <= 600) {
-        setWidth(newWidth);
-      }
+      const clampedWidth = Math.max(360, Math.min(600, newWidth));
+      setWidth(clampedWidth);
     };
 
     const handleMouseUp = () => {
@@ -99,6 +104,8 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     window.addEventListener('mouseup', handleMouseUp);
 
     return () => {
+      document.body.style.cursor = originalCursor;
+      document.body.style.userSelect = originalUserSelect;
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
