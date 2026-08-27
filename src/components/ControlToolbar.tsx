@@ -117,7 +117,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   return (
     <aside
       style={{ width: isOpen ? `${width}px` : '0px' }}
-      className={`no-print relative h-auto md:h-screen sticky top-0 bg-base-100 border-l border-base-300 shadow-sm flex flex-col z-40 shrink-0 ${isDragging ? 'transition-none' : 'transition-all duration-300 ease-in-out'} ${isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'}`}
+      className={`no-print h-auto md:h-screen sticky top-0 bg-base-100 border-l border-base-300 shadow-sm flex flex-col z-40 shrink-0 ${isDragging ? 'transition-none' : 'transition-all duration-300 ease-in-out'} ${isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'}`}
     >
       <div
         onMouseDown={startDragging}
