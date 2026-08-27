@@ -114,7 +114,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3.5 min-h-0">
-        <div className="collapse collapse-arrow bg-base-200/40 border border-base-300/60 rounded-xl relative focus-within:z-30 transition-[z-index]">
+        <div className="collapse collapse-arrow collapse-visible-dropdowns bg-base-200/40 border border-base-300/60 rounded-xl relative focus-within:z-30 transition-[z-index]">
           <input type="checkbox" defaultChecked />
           <div className="collapse-title font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none min-h-0 py-3 px-4">
             <Palette className="w-3.5 h-3.5 text-base-content/50" />
@@ -187,7 +187,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
           </div>
         </div>
 
-        <div className="collapse collapse-arrow bg-base-200/40 border border-base-300/60 rounded-xl relative focus-within:z-30 transition-[z-index]">
+        <div className="collapse collapse-arrow collapse-visible-dropdowns bg-base-200/40 border border-base-300/60 rounded-xl relative focus-within:z-30 transition-[z-index]">
           <input type="checkbox" defaultChecked />
           <div className="collapse-title font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none min-h-0 py-3 px-4">
             <CalendarDays className="w-3.5 h-3.5 text-base-content/50" />
@@ -330,7 +330,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
           </div>
         </div>
 
-        <div className="collapse collapse-arrow bg-base-200/40 border border-base-300/60 rounded-xl relative focus-within:z-30 transition-[z-index]">
+        <div className="collapse collapse-arrow collapse-visible-dropdowns bg-base-200/40 border border-base-300/60 rounded-xl relative focus-within:z-30 transition-[z-index]">
           <input type="checkbox" defaultChecked />
           <div className="collapse-title font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none min-h-0 py-3 px-4">
             <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/50" />
