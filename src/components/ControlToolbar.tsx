@@ -6,12 +6,12 @@ import {
   Printer, 
   Palette, 
   CalendarDays, 
-  Type, 
   Sparkles, 
   Eraser, 
   Globe2, 
   SlidersHorizontal,
-  RotateCcw
+  RotateCcw,
+  X
 } from 'lucide-react';
 
 const MONTH_NAMES = [
@@ -29,6 +29,8 @@ interface ControlToolbarProps {
 }
 
 export const ControlToolbar: React.FC<ControlToolbarProps> = ({
+  isOpen = true,
+  onToggle,
   onPrint,
   onClearSelectedDays,
   onOpenHolidaysModal,
@@ -82,308 +84,279 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     setTempYear(String(validYear));
   };
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
-    <header className="no-print bg-base-100 border-b border-base-300 shadow-xs sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-4 py-3">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-primary/10 text-primary rounded-lg border border-primary/20 flex items-center justify-center">
-              <CalendarDays className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-base font-bold text-base-content leading-tight">
-                Calendario {year} Minimalista
-              </h1>
-              <p className="text-xs text-base-content/70 font-medium">
-                Formato A4 Horizontal · Imprimible & Exportable
-              </p>
-            </div>
+    <aside className="no-print w-80 h-screen sticky top-0 bg-base-100 border-r border-base-300 shadow-sm flex flex-col overflow-hidden z-40 shrink-0">
+      <div className="p-4 border-b border-base-300 flex items-center justify-between gap-2 shrink-0 bg-base-100">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="p-2 bg-primary/10 text-primary rounded-lg border border-primary/20 flex items-center justify-center shrink-0">
+            <CalendarDays className="w-5 h-5" />
           </div>
+          <div className="min-w-0">
+            <h1 className="text-sm font-bold text-base-content leading-tight truncate">
+              Calendario {year}
+            </h1>
+            <p className="text-[11px] text-base-content/70 font-medium truncate">
+              A4 Horizontal · Imprimible
+            </p>
+          </div>
+        </div>
+        {onToggle && (
+          <button
+            type="button"
+            onClick={onToggle}
+            className="btn btn-sm btn-ghost btn-square text-base-content/70 hover:text-base-content shrink-0"
+            title="Ocultar panel"
+            aria-label="Ocultar panel"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
-            <button
-              type="button"
-              id="btn-open-holidays-modal"
-              onClick={onOpenHolidaysModal}
-              className="btn btn-sm btn-outline btn-primary gap-1.5"
-              title="Buscar y cargar festivos oficiales desde API externa"
-            >
-              <Globe2 className="w-4 h-4" />
-              <span>Festivos Oficiales (API)</span>
-            </button>
+      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3.5 min-h-0">
+        <div className="collapse collapse-arrow bg-base-200/40 border border-base-300/60 rounded-xl">
+          <input type="checkbox" defaultChecked />
+          <div className="collapse-title font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none min-h-0 py-3 px-4">
+            <Palette className="w-3.5 h-3.5 text-base-content/50" />
+            <span>Diseño General</span>
+          </div>
+          <div className="collapse-content px-4 pb-4 flex flex-col gap-3 text-xs">
+            <div className="flex flex-col gap-1">
+              <label className="font-semibold text-base-content/85">Paleta de colores</label>
+              <select
+                id="select-palette"
+                value={palette}
+                onChange={(e) => setPalette(e.target.value as PaletteKey)}
+                className="select select-bordered select-sm w-full font-medium"
+              >
+                <option value="gris">Gris Minimalista</option>
+                <option value="monocromo">Monocromo / Negro</option>
+                <option value="azul">Azul Ejecutivo</option>
+                <option value="oliva">Verde Oliva</option>
+                <option value="terracota">Terracota</option>
+              </select>
+            </div>
 
-            <button
-              type="button"
-              id="btn-clear-all-days"
-              onClick={onClearSelectedDays}
-              disabled={selectedCount === 0}
-              className="btn btn-sm btn-outline btn-error gap-1.5"
-              title={
-                selectedCount > 0
-                  ? `Desmarcar todos los días marcados (${selectedCount})`
-                  : 'No hay ningún día marcado actualmente'
-              }
-            >
-              <Eraser className="w-3.5 h-3.5" />
-              <span>Desmarcar todos</span>
-              {selectedCount > 0 && (
-                <span className="badge badge-sm badge-error text-white font-mono text-[10px] font-bold">
-                  {selectedCount}
-                </span>
-              )}
-            </button>
+            <div className="flex flex-col gap-1">
+              <label className="font-semibold text-base-content/85">Tipografía</label>
+              <select
+                id="select-font"
+                value={fontFamily}
+                onChange={(e) => setFontFamily(e.target.value as FontFamilyKey)}
+                className="select select-bordered select-sm w-full font-medium"
+              >
+                <option value="jakarta">Plus Jakarta Sans</option>
+                <option value="inter">Inter</option>
+                <option value="playfair">Playfair Display</option>
+                <option value="roboto">Roboto</option>
+                <option value="lora">Lora</option>
+                <option value="fira">Fira Code</option>
+                <option value="jetbrains">JetBrains Mono</option>
+              </select>
+            </div>
 
-            <button
-              type="button"
-              id="btn-print-browser"
-              onClick={onPrint}
-              className="btn btn-sm btn-primary gap-1.5 text-white shadow-xs"
-            >
-              <Printer className="w-4 h-4" />
-              <span>Imprimir / Guardar PDF</span>
-            </button>
+            <div className="flex flex-col gap-1">
+              <label className="font-semibold text-base-content/85">Formato / Layout</label>
+              <select
+                id="select-layout"
+                value={layout}
+                onChange={(e) => setLayout(e.target.value as LayoutType)}
+                className="select select-bordered select-sm w-full font-medium"
+              >
+                <option value="anual">Anual (12 meses)</option>
+                <option value="semestral">Semestral (6 meses)</option>
+                <option value="trimestral">Trimestral (3 meses)</option>
+                <option value="mensual">Mensual (1 mes)</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="font-semibold text-base-content/85">Tamaño de encabezado</label>
+              <select
+                id="select-header-size"
+                value={headerTitleSize}
+                onChange={(e) => setHeaderTitleSize(e.target.value as HeaderTitleSize)}
+                className="select select-bordered select-sm w-full font-medium"
+              >
+                <option value="sm">Pequeño</option>
+                <option value="md">Normal</option>
+                <option value="lg">Grande</option>
+                <option value="xl">Extra Grande</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-4 pt-3 border-t border-base-300 text-xs">
-          {/* Grupo 1: Diseño General */}
-          <div className="flex-1 min-w-[280px] bg-base-200/20 p-3 rounded-lg border border-base-300/50 flex flex-col gap-2.5">
-            <div className="font-bold text-base-content/65 uppercase tracking-wider text-[10px] flex items-center gap-1.5 select-none">
-              <Palette className="w-3.5 h-3.5 text-base-content/50" />
-              <span>Diseño General</span>
-            </div>
-            <div className="grid grid-cols-2 gap-3 mt-1">
-              <div className="flex flex-col gap-1">
-                <label className="font-semibold text-base-content/85">Paleta de colores</label>
-                <select
-                  id="select-palette"
-                  value={palette}
-                  onChange={(e) => setPalette(e.target.value as PaletteKey)}
-                  className="select select-bordered select-sm w-full font-medium"
-                >
-                  <option value="gris">Gris Minimalista</option>
-                  <option value="monocromo">Monocromo / Negro</option>
-                  <option value="azul">Azul Ejecutivo</option>
-                  <option value="oliva">Verde Oliva</option>
-                  <option value="terracota">Terracota</option>
-                </select>
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="font-semibold text-base-content/85">Tipografía</label>
-                <select
-                  id="select-font"
-                  value={fontFamily}
-                  onChange={(e) => setFontFamily(e.target.value as FontFamilyKey)}
-                  className="select select-bordered select-sm w-full font-medium"
-                >
-                  <option value="jakarta">Plus Jakarta Sans</option>
-                  <option value="inter">Inter</option>
-                  <option value="playfair">Playfair Display</option>
-                  <option value="roboto">Roboto</option>
-                  <option value="lora">Lora</option>
-                  <option value="fira">Fira Code</option>
-                  <option value="jetbrains">JetBrains Mono</option>
-                </select>
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="font-semibold text-base-content/85">Formato / Layout</label>
-                <select
-                  id="select-layout"
-                  value={layout}
-                  onChange={(e) => setLayout(e.target.value as LayoutType)}
-                  className="select select-bordered select-sm w-full font-medium"
-                >
-                  <option value="anual">Anual (12 meses)</option>
-                  <option value="semestral">Semestral (6 meses)</option>
-                  <option value="trimestral">Trimestral (3 meses)</option>
-                  <option value="mensual">Mensual (1 mes)</option>
-                </select>
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="font-semibold text-base-content/85">Tamaño de encabezado</label>
-                <select
-                  id="select-header-size"
-                  value={headerTitleSize}
-                  onChange={(e) => setHeaderTitleSize(e.target.value as HeaderTitleSize)}
-                  className="select select-bordered select-sm w-full font-medium"
-                >
-                  <option value="sm">Pequeño</option>
-                  <option value="md">Normal</option>
-                  <option value="lg">Grande</option>
-                  <option value="xl">Extra Grande</option>
-                </select>
-              </div>
-            </div>
+        <div className="collapse collapse-arrow bg-base-200/40 border border-base-300/60 rounded-xl">
+          <input type="checkbox" defaultChecked />
+          <div className="collapse-title font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none min-h-0 py-3 px-4">
+            <CalendarDays className="w-3.5 h-3.5 text-base-content/50" />
+            <span>Contenido y Periodo</span>
           </div>
-
-          {/* Grupo 2: Contenido y Rango */}
-          <div className="flex-1 min-w-[280px] bg-base-200/20 p-3 rounded-lg border border-base-300/50 flex flex-col gap-2.5">
-            <div className="font-bold text-base-content/65 uppercase tracking-wider text-[10px] flex items-center gap-1.5 select-none">
-              <CalendarDays className="w-3.5 h-3.5 text-base-content/50" />
-              <span>Contenido y Periodo</span>
-            </div>
-            <div className="grid grid-cols-2 gap-3 mt-1">
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center justify-between">
-                  <label className="font-semibold text-base-content/85">Año</label>
-                  {year !== new Date().getFullYear() && (
-                    <button
-                      type="button"
-                      id="btn-reset-year"
-                      onClick={() => setYear(new Date().getFullYear())}
-                      className="text-[10px] font-bold text-primary hover:underline cursor-pointer flex items-center gap-0.5"
-                      title={`Restablecer al año actual (${new Date().getFullYear()})`}
-                    >
-                      <RotateCcw className="w-2.5 h-2.5" />
-                      Hoy ({new Date().getFullYear()})
-                    </button>
-                  )}
-                </div>
-                <div className="flex items-center gap-1">
+          <div className="collapse-content px-4 pb-4 flex flex-col gap-3 text-xs">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center justify-between">
+                <label className="font-semibold text-base-content/85">Año</label>
+                {year !== new Date().getFullYear() && (
                   <button
                     type="button"
-                    onClick={() => setYear(Math.max(1900, year - 1))}
-                    disabled={year <= 1900}
-                    className="btn btn-sm btn-square btn-bordered text-xs font-bold"
-                    title="Año anterior"
-                    aria-label="Año anterior"
+                    id="btn-reset-year"
+                    onClick={() => setYear(new Date().getFullYear())}
+                    className="text-[10px] font-bold text-primary hover:underline cursor-pointer flex items-center gap-0.5"
+                    title={`Restablecer al año actual (${new Date().getFullYear()})`}
                   >
-                    ‹
+                    <RotateCcw className="w-2.5 h-2.5" />
+                    Hoy ({new Date().getFullYear()})
                   </button>
-                  <input
-                    id="input-year"
-                    type="number"
-                    min={1900}
-                    max={2100}
-                    value={tempYear}
-                    onChange={(e) => setTempYear(e.target.value)}
-                    onBlur={handleYearCommit}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        handleYearCommit();
-                      }
-                    }}
-                    className="input input-bordered input-sm w-full text-center !px-1 font-bold text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setYear(Math.min(2100, year + 1))}
-                    disabled={year >= 2100}
-                    className="btn btn-sm btn-square btn-bordered text-xs font-bold"
-                    title="Año siguiente"
-                    aria-label="Año siguiente"
-                  >
-                    ›
-                  </button>
-                </div>
+                )}
               </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="font-semibold text-base-content/85">Subtítulo opcional</label>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => setYear(Math.max(1900, year - 1))}
+                  disabled={year <= 1900}
+                  className="btn btn-sm btn-square btn-bordered text-xs font-bold"
+                  title="Año anterior"
+                  aria-label="Año anterior"
+                >
+                  ‹
+                </button>
                 <input
-                  id="input-subtitle"
-                  type="text"
-                  placeholder={`Ej: ${year} · Planificador anual`}
-                  value={subtitle}
-                  onChange={(e) => setSubtitle(e.target.value)}
-                  maxLength={45}
-                  className="input input-bordered input-sm w-full font-medium"
+                  id="input-year"
+                  type="number"
+                  min={1900}
+                  max={2100}
+                  value={tempYear}
+                  onChange={(e) => setTempYear(e.target.value)}
+                  onBlur={handleYearCommit}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleYearCommit();
+                    }
+                  }}
+                  className="input input-bordered input-sm w-full text-center !px-1 font-bold text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
+                <button
+                  type="button"
+                  onClick={() => setYear(Math.min(2100, year + 1))}
+                  disabled={year >= 2100}
+                  className="btn btn-sm btn-square btn-bordered text-xs font-bold"
+                  title="Año siguiente"
+                  aria-label="Año siguiente"
+                >
+                  ›
+                </button>
               </div>
+            </div>
 
-              <div className="flex flex-col gap-1 col-span-2">
-                <label className="font-semibold text-base-content/85">Rango de meses</label>
-                <div className="flex gap-1.5 items-center w-full">
-                  <select
-                    id="select-range-start"
-                    value={monthRange.start}
-                    onChange={(e) => {
-                      const start = parseInt(e.target.value);
-                      const end = monthRange.end < start ? start : monthRange.end;
-                      setMonthRange({ start, end });
-                    }}
-                    className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
+            <div className="flex flex-col gap-1">
+              <label className="font-semibold text-base-content/85">Subtítulo opcional</label>
+              <input
+                id="input-subtitle"
+                type="text"
+                placeholder={`Ej: ${year} · Planificador anual`}
+                value={subtitle}
+                onChange={(e) => setSubtitle(e.target.value)}
+                maxLength={45}
+                className="input input-bordered input-sm w-full font-medium"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="font-semibold text-base-content/85">Rango de meses</label>
+              <div className="flex gap-1.5 items-center w-full">
+                <select
+                  id="select-range-start"
+                  value={monthRange.start}
+                  onChange={(e) => {
+                    const start = parseInt(e.target.value);
+                    const end = monthRange.end < start ? start : monthRange.end;
+                    setMonthRange({ start, end });
+                  }}
+                  className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
+                >
+                  {MONTH_NAMES.map((name, i) => (
+                    <option key={i + 1} value={i + 1}>{name}</option>
+                  ))}
+                </select>
+                <span className="text-base-content/50 font-bold shrink-0">a</span>
+                <select
+                  id="select-range-end"
+                  value={monthRange.end}
+                  onChange={(e) => {
+                    const end = parseInt(e.target.value);
+                    const start = monthRange.start > end ? end : monthRange.start;
+                    setMonthRange({ start, end });
+                  }}
+                  className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
+                >
+                  {MONTH_NAMES.map((name, i) => (
+                    <option key={i + 1} value={i + 1}>{name}</option>
+                  ))}
+                </select>
+                <div className="dropdown dropdown-end shrink-0">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-sm btn-ghost btn-circle"
+                    title="Accesos rápidos de meses"
                   >
-                    {MONTH_NAMES.map((name, i) => (
-                      <option key={i + 1} value={i + 1}>{name}</option>
-                    ))}
-                  </select>
-                  <span className="text-base-content/50 font-bold shrink-0">a</span>
-                  <select
-                    id="select-range-end"
-                    value={monthRange.end}
-                    onChange={(e) => {
-                      const end = parseInt(e.target.value);
-                      const start = monthRange.start > end ? end : monthRange.start;
-                      setMonthRange({ start, end });
-                    }}
-                    className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
-                  >
-                    {MONTH_NAMES.map((name, i) => (
-                      <option key={i + 1} value={i + 1}>{name}</option>
-                    ))}
-                  </select>
-                  <div className="dropdown dropdown-end shrink-0">
-                    <div
-                      tabIndex={0}
-                      role="button"
-                      className="btn btn-sm btn-ghost btn-circle"
-                      title="Accesos rápidos de meses"
-                    >
-                      <SlidersHorizontal className="w-3.5 h-3.5" />
-                    </div>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content z-50 menu p-2 shadow-lg bg-base-100 rounded-box border border-base-300 w-36 text-xs mt-1"
-                    >
-                      <li>
-                        <button type="button" onClick={() => setMonthRange({ start: 1, end: 12 })}>
-                          Todo el año
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const currentMonth = new Date().getMonth() + 1;
-                            setMonthRange({ start: currentMonth, end: currentMonth });
-                          }}
-                        >
-                          Mes actual
-                        </button>
-                      </li>
-                    </ul>
+                    <SlidersHorizontal className="w-3.5 h-3.5" />
                   </div>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content z-50 menu p-2 shadow-lg bg-base-100 rounded-box border border-base-300 w-36 text-xs mt-1"
+                  >
+                    <li>
+                      <button type="button" onClick={() => setMonthRange({ start: 1, end: 12 })}>
+                        Todo el año
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentMonth = new Date().getMonth() + 1;
+                          setMonthRange({ start: currentMonth, end: currentMonth });
+                        }}
+                      >
+                        Mes actual
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Grupo 3: Personalización del Día */}
-          <div className="flex-1 min-w-[280px] bg-base-200/20 p-3 rounded-lg border border-base-300/50 flex flex-col gap-2.5">
-            <div className="font-bold text-base-content/65 uppercase tracking-wider text-[10px] flex items-center gap-1.5 select-none">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/50" />
-              <span>Ajustes del Día y Semana</span>
+        <div className="collapse collapse-arrow bg-base-200/40 border border-base-300/60 rounded-xl">
+          <input type="checkbox" defaultChecked />
+          <div className="collapse-title font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none min-h-0 py-3 px-4">
+            <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/50" />
+            <span>Ajustes del Día y Semana</span>
+          </div>
+          <div className="collapse-content px-4 pb-4 flex flex-col gap-3 text-xs">
+            <div className="flex flex-col gap-1">
+              <label className="font-semibold text-base-content/85">Tamaño del mes</label>
+              <select
+                id="select-month-size"
+                value={monthTitleSize}
+                onChange={(e) => setMonthTitleSize(e.target.value as MonthTitleSize)}
+                className="select select-bordered select-sm w-full font-medium"
+              >
+                <option value="sm">Pequeño</option>
+                <option value="md">Normal</option>
+                <option value="lg">Grande</option>
+                <option value="xl">Extra Grande</option>
+              </select>
             </div>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-2 mt-1">
-              <div className="flex flex-col gap-1 col-span-2">
-                <label className="font-semibold text-base-content/85">Tamaño del mes</label>
-                <select
-                  id="select-month-size"
-                  value={monthTitleSize}
-                  onChange={(e) => setMonthTitleSize(e.target.value as MonthTitleSize)}
-                  className="select select-bordered select-sm w-full font-medium"
-                >
-                  <option value="sm">Pequeño</option>
-                  <option value="md">Normal</option>
-                  <option value="lg">Grande</option>
-                  <option value="xl">Extra Grande</option>
-                </select>
-              </div>
 
+            <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col gap-1">
                 <label className="font-semibold text-base-content/85">Tamaño de número</label>
                 <select
@@ -412,7 +385,9 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   <option value="lg">Grande</option>
                 </select>
               </div>
+            </div>
 
+            <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col gap-1">
                 <label className="font-semibold text-base-content/85">Alineación número</label>
                 <DayPositionPicker
@@ -440,44 +415,86 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   oppositeElementPosition={dayNumberPosition}
                 />
               </div>
+            </div>
 
-              <div className="flex flex-col justify-center gap-0.5 pt-1">
-                <label className="flex items-center justify-between cursor-pointer">
-                  <span className="font-semibold text-base-content/80 flex items-center gap-1 text-[11px]">
-                    Semana inicia:
-                    <span className="badge badge-sm badge-neutral font-mono text-[9px] font-semibold">
-                      {weekStart === 'monday' ? 'Lun' : 'Dom'}
-                    </span>
+            <div className="flex flex-col gap-2 pt-1 border-t border-base-300/40">
+              <label className="flex items-center justify-between cursor-pointer">
+                <span className="font-semibold text-base-content/80 flex items-center gap-1 text-[11px]">
+                  Semana inicia:
+                  <span className="badge badge-sm badge-neutral font-mono text-[9px] font-semibold">
+                    {weekStart === 'monday' ? 'Lun' : 'Dom'}
                   </span>
-                  <input
-                    id="toggle-week-start"
-                    type="checkbox"
-                    checked={weekStart === 'sunday'}
-                    onChange={(e) => setWeekStart(e.target.checked ? 'sunday' : 'monday')}
-                    className="toggle toggle-sm toggle-primary"
-                  />
-                </label>
-              </div>
+                </span>
+                <input
+                  id="toggle-week-start"
+                  type="checkbox"
+                  checked={weekStart === 'sunday'}
+                  onChange={(e) => setWeekStart(e.target.checked ? 'sunday' : 'monday')}
+                  className="toggle toggle-sm toggle-primary"
+                />
+              </label>
 
-              <div className="flex flex-col justify-center gap-0.5 pt-1">
-                <label className="flex items-center justify-between cursor-pointer">
-                  <span className="font-semibold text-base-content/80 flex items-center gap-1 text-[11px]">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                    Fines de semana
-                  </span>
-                  <input
-                    id="toggle-highlight-weekends"
-                    type="checkbox"
-                    checked={highlightWeekends}
-                    onChange={(e) => setHighlightWeekends(e.target.checked)}
-                    className="toggle toggle-sm toggle-primary"
-                  />
-                </label>
-              </div>
+              <label className="flex items-center justify-between cursor-pointer">
+                <span className="font-semibold text-base-content/80 flex items-center gap-1 text-[11px]">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  Fines de semana
+                </span>
+                <input
+                  id="toggle-highlight-weekends"
+                  type="checkbox"
+                  checked={highlightWeekends}
+                  onChange={(e) => setHighlightWeekends(e.target.checked)}
+                  className="toggle toggle-sm toggle-primary"
+                />
+              </label>
             </div>
           </div>
         </div>
       </div>
-    </header>
+
+      <div className="p-4 border-t border-base-300 bg-base-100 shrink-0 flex flex-col gap-2">
+        <button
+          type="button"
+          id="btn-open-holidays-modal"
+          onClick={onOpenHolidaysModal}
+          className="btn btn-sm btn-outline btn-primary w-full gap-1.5"
+          title="Buscar y cargar festivos oficiales desde API externa"
+        >
+          <Globe2 className="w-4 h-4" />
+          <span>Festivos Oficiales (API)</span>
+        </button>
+
+        <button
+          type="button"
+          id="btn-clear-all-days"
+          onClick={onClearSelectedDays}
+          disabled={selectedCount === 0}
+          className="btn btn-sm btn-outline btn-error w-full gap-1.5"
+          title={
+            selectedCount > 0
+              ? `Desmarcar todos los días marcados (${selectedCount})`
+              : 'No hay ningún día marcado actualmente'
+          }
+        >
+          <Eraser className="w-3.5 h-3.5" />
+          <span>Desmarcar todos</span>
+          {selectedCount > 0 && (
+            <span className="badge badge-sm badge-error text-white font-mono text-[10px] font-bold">
+              {selectedCount}
+            </span>
+          )}
+        </button>
+
+        <button
+          type="button"
+          id="btn-print-browser"
+          onClick={onPrint}
+          className="btn btn-sm btn-primary w-full gap-1.5 text-white shadow-xs"
+        >
+          <Printer className="w-4 h-4" />
+          <span>Imprimir / Guardar PDF</span>
+        </button>
+      </div>
+    </aside>
   );
 };
