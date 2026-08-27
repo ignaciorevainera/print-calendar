@@ -142,3 +142,15 @@
 .modal-box-animate-in {
   animation: modal-pop 200ms ease-out forwards;
 }
+
+.collapse:has(> input:checked) {
+  overflow: visible;
+}
+
+.collapse:has(> input:checked) .collapse-content {
+  overflow: visible;
+}
+
+.collapse:focus-within {
+  z-index: 30;
+}
