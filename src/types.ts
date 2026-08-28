@@ -77,3 +77,6 @@ export interface MonthRange {
   start: number; // 1 to 12
   end: number;   // 1 to 12
 }
+
+export type CalendarLocale = 'es' | 'en' | 'pt' | 'fr';
+
