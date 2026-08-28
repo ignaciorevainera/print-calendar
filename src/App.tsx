@@ -12,7 +12,7 @@ import { HolidaysModal } from "./components/HolidaysModal";
 import { Info, CheckCircle2, AlertCircle } from "lucide-react";
 
 export default function App() {
-  const { year, weekStart, markedDays, setMarkedDays, monthRange } =
+  const { year, weekStart, markedDays, setMarkedDays, monthRange, locale } =
     useCalendarStore();
 
   const [isHolidaysModalOpen, setIsHolidaysModalOpen] =
@@ -62,8 +62,8 @@ export default function App() {
   }, []);
 
   const monthsData = useMemo(() => {
-    return generateYearData(year, weekStart);
-  }, [year, weekStart]);
+    return generateYearData(year, weekStart, locale);
+  }, [year, weekStart, locale]);
 
   const visibleMonthsData = useMemo(() => {
     return monthsData.filter((m) => {

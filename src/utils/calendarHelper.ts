@@ -1,4 +1,5 @@
-import { MonthInfo, WeekStart, LayoutType } from '../types';
+import { MonthInfo, WeekStart, LayoutType, CalendarLocale } from '../types';
+import { getMonthNames } from './i18n';
 
 export const SPANISH_MONTH_NAMES = [
   'ENERO',
@@ -28,8 +29,9 @@ export function isWeekendIndex(index: number, weekStart: WeekStart): boolean {
   }
 }
 
-export function generateYearData(year: number = 2027, weekStart: WeekStart = 'monday'): MonthInfo[] {
+export function generateYearData(year: number = 2027, weekStart: WeekStart = 'monday', locale: CalendarLocale = 'es'): MonthInfo[] {
   const months: MonthInfo[] = [];
+  const monthNames = getMonthNames(locale);
 
   for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
     const firstDayDate = new Date(year, monthIndex, 1);
@@ -79,8 +81,8 @@ export function generateYearData(year: number = 2027, weekStart: WeekStart = 'mo
 
     months.push({
       monthIndex,
-      name: SPANISH_MONTH_NAMES[monthIndex],
-      shortName: SPANISH_MONTH_NAMES[monthIndex].substring(0, 3),
+      name: monthNames[monthIndex],
+      shortName: monthNames[monthIndex].substring(0, 3),
       daysInMonth: totalDays,
       startDayOfWeek: jsDayOfWeek,
       weeks

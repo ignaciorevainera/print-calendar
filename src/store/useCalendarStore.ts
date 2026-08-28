@@ -12,7 +12,8 @@ import {
   DayNumberPosition, 
   MonthRange,
   HeaderTitleSize,
-  MonthTitleSize 
+  MonthTitleSize,
+  CalendarLocale
 } from '../types';
 
 export const hasHolidayOrLabelMarked = (markedDays: MarkedDaysMap): boolean => {
@@ -49,6 +50,7 @@ interface CalendarState {
   dayNumberPosition: DayNumberPosition;
   dayNotePosition: DayNumberPosition;
   monthRange: MonthRange;
+  locale: CalendarLocale;
   setYear: (year: number) => void;
   setPalette: (palette: PaletteKey) => void;
   setFontFamily: (fontFamily: FontFamilyKey) => void;
@@ -64,6 +66,7 @@ interface CalendarState {
   setDayNumberPosition: (position: DayNumberPosition, onBlocked?: () => void, onDeflected?: (newNotePos: DayNumberPosition) => void) => void;
   setDayNotePosition: (position: DayNumberPosition, onBlocked?: () => void, onDeflected?: (newNumPos: DayNumberPosition) => void) => void;
   setMonthRange: (range: MonthRange) => void;
+  setLocale: (locale: CalendarLocale) => void;
 }
 
 export const useCalendarStore = create<CalendarState>()(
@@ -85,6 +88,7 @@ export const useCalendarStore = create<CalendarState>()(
         dayNumberPosition: 'center',
         dayNotePosition: 'bottom-left',
         monthRange: { start: 1, end: 12 },
+        locale: 'es',
         setYear: (year) => set({ year }),
         setPalette: (palette) => set({ palette }),
         setFontFamily: (fontFamily) => set({ fontFamily }),
@@ -127,6 +131,7 @@ export const useCalendarStore = create<CalendarState>()(
           set({ dayNotePosition });
         },
         setMonthRange: (monthRange) => set({ monthRange }),
+        setLocale: (locale) => set({ locale }),
       }),
       {
         name: 'print-calendar-storage',
@@ -139,7 +144,7 @@ export const useCalendarStore = create<CalendarState>()(
           setYear, setPalette, setFontFamily, setWeekStart, setHighlightWeekends,
           setSubtitle, setMarkedDays, setLayout, setDayNumberSize, setDayTextSize,
           setHeaderTitleSize, setMonthTitleSize, setDayNumberPosition, setDayNotePosition,
-          setMonthRange,
+          setMonthRange, setLocale,
           ...rest
         } = state;
         return rest;

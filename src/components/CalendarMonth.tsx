@@ -1,6 +1,7 @@
 import React from 'react';
 import { MonthInfo, WeekStart, MarkedDaysMap, DayNumberPosition, DayNumberSize, DayTextSize, MonthTitleSize } from '../types';
-import { DAYS_MONDAY_START, DAYS_SUNDAY_START, isWeekendIndex } from '../utils/calendarHelper';
+import { isWeekendIndex } from '../utils/calendarHelper';
+import { getDayLetters } from '../utils/i18n';
 import { useCalendarStore } from '../store/useCalendarStore';
 
 const monthTitleSizeMap: Record<MonthTitleSize, string> = {
@@ -103,8 +104,9 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
   const dayNumberPosition = useCalendarStore((state) => state.dayNumberPosition);
   const dayNotePosition = useCalendarStore((state) => state.dayNotePosition);
   const layout = useCalendarStore((state) => state.layout);
+  const locale = useCalendarStore((state) => state.locale);
   const isMonthly = layout === 'mensual';
-  const dayHeaders = weekStart === 'monday' ? DAYS_MONDAY_START : DAYS_SUNDAY_START;
+  const dayHeaders = getDayLetters(locale, weekStart);
 
   return (
     <div 
