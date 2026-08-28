@@ -10,7 +10,9 @@ import {
   Eraser, 
   Globe2, 
   SlidersHorizontal,
-  RotateCcw
+  RotateCcw,
+  Undo2,
+  Redo2
 } from 'lucide-react';
 
 const MONTH_NAMES = [
@@ -66,6 +68,18 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     setMonthRange,
     markedDays
   } = useCalendarStore();
+
+  const temporalStore = useCalendarStore.temporal;
+  const canUndo = React.useSyncExternalStore(
+    temporalStore.subscribe,
+    () => temporalStore.getState().pastStates.length > 0
+  );
+  const canRedo = React.useSyncExternalStore(
+    temporalStore.subscribe,
+    () => temporalStore.getState().futureStates.length > 0
+  );
+  const undo = () => temporalStore.getState().undo();
+  const redo = () => temporalStore.getState().redo();
 
   const selectedCount = Object.keys(markedDays).length;
   const hasHolidaysOrLabels = hasHolidayOrLabelMarked(markedDays);
@@ -483,6 +497,29 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
           <Globe2 className="w-4 h-4" />
           <span>Festivos Oficiales (API)</span>
         </button>
+
+        <div className="flex gap-2 w-full">
+          <button
+            type="button"
+            onClick={undo}
+            disabled={!canUndo}
+            className="btn btn-sm btn-outline flex-1 gap-1"
+            title="Deshacer (Ctrl+Z)"
+          >
+            <Undo2 className="w-4 h-4 shrink-0" />
+            <span>Deshacer</span>
+          </button>
+          <button
+            type="button"
+            onClick={redo}
+            disabled={!canRedo}
+            className="btn btn-sm btn-outline flex-1 gap-1"
+            title="Rehacer (Ctrl+Y)"
+          >
+            <Redo2 className="w-4 h-4 shrink-0" />
+            <span>Rehacer</span>
+          </button>
+        </div>
 
         <button
           type="button"

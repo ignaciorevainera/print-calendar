@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { MarkedDaysMap } from "./types";
 import {
   useCalendarStore,
@@ -9,16 +9,11 @@ import { ControlToolbar } from "./components/ControlToolbar";
 import { CalendarCanvas } from "./components/CalendarCanvas";
 import { DayColorModal } from "./components/DayColorModal";
 import { HolidaysModal } from "./components/HolidaysModal";
-import {
-  Info,
-  CheckCircle2,
-  AlertCircle,
-} from "lucide-react";
+import { Info, CheckCircle2, AlertCircle } from "lucide-react";
 
 export default function App() {
   const { year, weekStart, markedDays, setMarkedDays, monthRange } =
     useCalendarStore();
-
 
   const [isHolidaysModalOpen, setIsHolidaysModalOpen] =
     useState<boolean>(false);
@@ -31,6 +26,40 @@ export default function App() {
     type: "success" | "info" | "error";
     text: string;
   } | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        e.target instanceof HTMLSelectElement ||
+        (e.target instanceof HTMLElement && e.target.isContentEditable)
+      ) {
+        return;
+      }
+
+      const isModifier = e.ctrlKey || e.metaKey;
+      if (!isModifier) return;
+
+      if (e.key.toLowerCase() === "z") {
+        if (e.shiftKey) {
+          e.preventDefault();
+          useCalendarStore.temporal.getState().redo();
+        } else {
+          e.preventDefault();
+          useCalendarStore.temporal.getState().undo();
+        }
+      } else if (e.key.toLowerCase() === "y") {
+        e.preventDefault();
+        useCalendarStore.temporal.getState().redo();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const monthsData = useMemo(() => {
     return generateYearData(year, weekStart);
@@ -180,8 +209,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen md:h-screen flex flex-col md:flex-row bg-slate-100 selection:bg-blue-100 relative overflow-x-hidden md:overflow-hidden print:h-auto print:overflow-visible">
-
-
       {/* Área Principal de Visualización del Calendario */}
       <main className="flex-1 min-w-0 flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 print:p-0 print:w-full print:overflow-visible overflow-auto">
         <CalendarCanvas
@@ -192,7 +219,7 @@ export default function App() {
         {/* Guía rápida inferior (no-print) */}
         <footer className="no-print w-full max-w-280 text-center text-xs text-slate-500 flex flex-wrap items-center justify-between gap-2 font-medium">
           <div className="flex items-center gap-1.5">
-            <Info className="w-4 h-4 text-slate-400" />
+            <Info className="size-4 text-slate-400" />
             <span>
               Haz clic en cualquier día para elegir su color o usa «Festivos
               Oficiales (API)» para cargar festivos nacionales y autonómicos.
