@@ -200,13 +200,17 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               </select>
             </div>
 
-            <div className="flex flex-col gap-1">
-              <label className="font-semibold text-base-content/85">Idioma del calendario</label>
+            <label className="form-control w-full">
+              <div className="label pb-1">
+                <span className="label-text text-xs font-semibold flex items-center gap-1.5 select-none">
+                  <Globe2 className="w-3.5 h-3.5 shrink-0 text-base-content/70" />
+                  Idioma del calendario
+                </span>
+              </div>
               <select
-                id="select-locale"
+                className="select select-bordered select-sm w-full font-medium"
                 value={locale}
                 onChange={(e) => setLocale(e.target.value as CalendarLocale)}
-                className="select select-bordered select-sm w-full font-medium"
               >
                 {LOCALE_OPTIONS.map((opt) => (
                   <option key={opt.id} value={opt.id}>
@@ -214,7 +218,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   </option>
                 ))}
               </select>
-            </div>
+            </label>
 
             <div className="flex flex-col gap-1">
               <label className="font-semibold text-base-content/85">Formato / Layout</label>
