@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize, DayNumberPosition, HeaderTitleSize, MonthTitleSize } from '../types';
+import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize, DayNumberPosition, HeaderTitleSize, MonthTitleSize, CalendarLocale } from '../types';
 import { useCalendarStore, hasHolidayOrLabelMarked } from '../store/useCalendarStore';
 import { DayPositionPicker } from './DayPositionPicker';
+import { LOCALE_OPTIONS, getMonthNames } from '../utils/i18n';
 import { 
   Printer, 
   Palette, 
@@ -14,11 +15,6 @@ import {
   Undo2,
   Redo2
 } from 'lucide-react';
-
-const MONTH_NAMES = [
-  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-];
 
 interface ControlToolbarProps {
   isOpen?: boolean;
@@ -66,8 +62,12 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     setDayNotePosition,
     monthRange,
     setMonthRange,
-    markedDays
+    markedDays,
+    locale,
+    setLocale
   } = useCalendarStore();
+
+  const monthLabels = getMonthNames(locale);
 
   const temporalStore = useCalendarStore.temporal;
   const canUndo = React.useSyncExternalStore(
@@ -201,6 +201,22 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </div>
 
             <div className="flex flex-col gap-1">
+              <label className="font-semibold text-base-content/85">Idioma del calendario</label>
+              <select
+                id="select-locale"
+                value={locale}
+                onChange={(e) => setLocale(e.target.value as CalendarLocale)}
+                className="select select-bordered select-sm w-full font-medium"
+              >
+                {LOCALE_OPTIONS.map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-1">
               <label className="font-semibold text-base-content/85">Formato / Layout</label>
               <select
                 id="select-layout"
@@ -317,8 +333,10 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   }}
                   className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
                 >
-                  {MONTH_NAMES.map((name, i) => (
-                    <option key={i + 1} value={i + 1}>{name}</option>
+                  {monthLabels.map((name, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      {name.charAt(0) + name.slice(1).toLowerCase()}
+                    </option>
                   ))}
                 </select>
                 <span className="text-base-content/50 font-bold shrink-0">a</span>
@@ -332,8 +350,10 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   }}
                   className="select select-bordered select-sm flex-1 font-medium min-w-0 text-xs"
                 >
-                  {MONTH_NAMES.map((name, i) => (
-                    <option key={i + 1} value={i + 1}>{name}</option>
+                  {monthLabels.map((name, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      {name.charAt(0) + name.slice(1).toLowerCase()}
+                    </option>
                   ))}
                 </select>
                 <div className="dropdown dropdown-end shrink-0">
