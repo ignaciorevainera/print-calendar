@@ -64,7 +64,9 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     setMonthRange,
     markedDays,
     locale,
-    setLocale
+    setLocale,
+    showPageNumber,
+    setShowPageNumber
   } = useCalendarStore();
 
   const monthLabels = getMonthNames(locale);
@@ -247,6 +249,8 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 <option value="md">Normal</option>
                 <option value="lg">Grande</option>
                 <option value="xl">Extra Grande</option>
+                <option value="2xl">2X Grande</option>
+                <option value="3xl">3X Grande</option>
               </select>
             </div>
         </div>
@@ -412,6 +416,8 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 <option value="md">Normal</option>
                 <option value="lg">Grande</option>
                 <option value="xl">Extra Grande</option>
+                <option value="2xl">2X Grande</option>
+                <option value="3xl">3X Grande</option>
               </select>
             </div>
 
@@ -428,6 +434,8 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   <option value="md">Normal</option>
                   <option value="lg">Grande</option>
                   <option value="xl">Extra Grande</option>
+                  <option value="2xl">2X Grande</option>
+                  <option value="3xl">3X Grande</option>
                 </select>
               </div>
 
@@ -503,6 +511,19 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   type="checkbox"
                   checked={highlightWeekends}
                   onChange={(e) => setHighlightWeekends(e.target.checked)}
+                  className="toggle toggle-sm toggle-primary"
+                />
+              </label>
+
+              <label className="flex items-center justify-between cursor-pointer">
+                <span className="font-semibold text-base-content/80 flex items-center gap-1 text-[11px]">
+                  Mostrar núm. página
+                </span>
+                <input
+                  id="toggle-show-page-number"
+                  type="checkbox"
+                  checked={showPageNumber}
+                  onChange={(e) => setShowPageNumber(e.target.checked)}
                   className="toggle toggle-sm toggle-primary"
                 />
               </label>
