@@ -50,7 +50,6 @@ interface CalendarState {
   dayNumberPosition: DayNumberPosition;
   dayNotePosition: DayNumberPosition;
   dayNoteBold: boolean;
-  dayNoteItalic: boolean;
   monthRange: MonthRange;
   locale: CalendarLocale;
   showPageNumber: boolean;
@@ -69,7 +68,6 @@ interface CalendarState {
   setDayNumberPosition: (position: DayNumberPosition, onBlocked?: () => void, onDeflected?: (newNotePos: DayNumberPosition) => void) => void;
   setDayNotePosition: (position: DayNumberPosition, onBlocked?: () => void, onDeflected?: (newNumPos: DayNumberPosition) => void) => void;
   setDayNoteBold: (bold: boolean) => void;
-  setDayNoteItalic: (italic: boolean) => void;
   setMonthRange: (range: MonthRange) => void;
   setLocale: (locale: CalendarLocale) => void;
   setShowPageNumber: (show: boolean) => void;
@@ -94,7 +92,6 @@ export const useCalendarStore = create<CalendarState>()(
         dayNumberPosition: 'center',
         dayNotePosition: 'bottom-left',
         dayNoteBold: false,
-        dayNoteItalic: false,
         monthRange: { start: 1, end: 12 },
         locale: 'es',
         showPageNumber: true,
@@ -140,7 +137,6 @@ export const useCalendarStore = create<CalendarState>()(
           set({ dayNotePosition });
         },
         setDayNoteBold: (dayNoteBold) => set({ dayNoteBold }),
-        setDayNoteItalic: (dayNoteItalic) => set({ dayNoteItalic }),
         setMonthRange: (monthRange) => set({ monthRange }),
         setLocale: (locale) => set({ locale }),
         setShowPageNumber: (showPageNumber) => set({ showPageNumber }),
@@ -156,7 +152,7 @@ export const useCalendarStore = create<CalendarState>()(
           setYear, setPalette, setFontFamily, setWeekStart, setHighlightWeekends,
           setSubtitle, setMarkedDays, setLayout, setDayNumberSize, setDayTextSize,
           setHeaderTitleSize, setMonthTitleSize, setDayNumberPosition, setDayNotePosition,
-          setDayNoteBold, setDayNoteItalic,
+          setDayNoteBold,
           setMonthRange, setLocale, setShowPageNumber,
           ...rest
         } = state;

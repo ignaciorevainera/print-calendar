@@ -14,8 +14,7 @@ import {
   RotateCcw,
   Undo2,
   Redo2,
-  Bold,
-  Italic
+  Bold
 } from 'lucide-react';
 
 interface ControlToolbarProps {
@@ -72,9 +71,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   } = useCalendarStore();
 
   const dayNoteBold = useCalendarStore((state) => state.dayNoteBold);
-  const dayNoteItalic = useCalendarStore((state) => state.dayNoteItalic);
   const setDayNoteBold = useCalendarStore((state) => state.setDayNoteBold);
-  const setDayNoteItalic = useCalendarStore((state) => state.setDayNoteItalic);
 
   const monthLabels = getMonthNames(locale);
 
@@ -453,26 +450,16 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               <div className="flex flex-col gap-1">
                 <div className="flex justify-between items-center">
                   <label className="font-semibold text-base-content/85">Tamaño de notas</label>
-                  <div className="join border border-base-300">
                     <button
                       type="button"
-                      className={`join-item btn btn-xs px-1.5 ${dayNoteBold ? 'btn-neutral' : 'btn-ghost'}`}
+                      className={`btn btn-xs px-2 border border-base-300 ${dayNoteBold ? 'btn-neutral' : 'btn-ghost bg-base-100'}`}
                       onClick={() => setDayNoteBold(!dayNoteBold)}
                       title="Negrita"
                       aria-label="Negrita"
                     >
-                      <Bold className="w-3 h-3" />
+                      <Bold className="w-3 h-3 mr-1" />
+                      Negrita
                     </button>
-                    <button
-                      type="button"
-                      className={`join-item btn btn-xs px-1.5 ${dayNoteItalic ? 'btn-neutral' : 'btn-ghost'}`}
-                      onClick={() => setDayNoteItalic(!dayNoteItalic)}
-                      title="Cursiva"
-                      aria-label="Cursiva"
-                    >
-                      <Italic className="w-3 h-3" />
-                    </button>
-                  </div>
                 </div>
                 <select
                   id="select-day-text-size"

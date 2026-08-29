@@ -115,7 +115,6 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
   const dayNumberPosition = useCalendarStore((state) => state.dayNumberPosition);
   const dayNotePosition = useCalendarStore((state) => state.dayNotePosition);
   const dayNoteBold = useCalendarStore((state) => state.dayNoteBold);
-  const dayNoteItalic = useCalendarStore((state) => state.dayNoteItalic);
   const layout = useCalendarStore((state) => state.layout);
   const locale = useCalendarStore((state) => state.locale);
   const isMonthly = layout === 'mensual';
@@ -278,7 +277,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                             <span
                               className={`${noteSizeMap[dayTextSize]} ${noteTextAlignMap[cellNotePos]} ${
                                 dayNoteBold ? 'font-bold' : 'font-normal'
-                              } ${dayNoteItalic ? 'italic' : 'not-italic'} ${
+                              } ${
                                 textColor === '#0f172a' ? 'text-slate-900' : 'text-white/95'
                               } whitespace-pre-line overflow-hidden w-full break-words`}
                             >
