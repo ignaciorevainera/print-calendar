@@ -150,7 +150,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   return (
     <aside
       style={{ "--sidebar-width": `${width}px` } as React.CSSProperties}
-      className={`no-print w-full md:w-[var(--sidebar-width)] h-auto md:h-screen sticky top-0 bg-base-100 border-t md:border-t-0 md:border-l border-base-300 shadow-sm flex flex-col z-40 shrink-0 ${isDragging ? 'transition-none' : 'transition-all duration-300 ease-in-out'}`}
+      className={`no-print w-full md:w-(--sidebar-width) h-auto md:h-screen sticky top-0 bg-base-100 border-t md:border-t-0 md:border-l border-base-300 shadow-sm flex flex-col z-40 shrink-0 ${isDragging ? 'transition-none' : 'transition-all duration-300 ease-in-out'}`}
     >
       <div
         onMouseDown={startDragging}
@@ -310,7 +310,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                       handleYearCommit();
                     }
                   }}
-                  className="input input-bordered input-sm w-full text-center !px-1 font-bold text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="input input-bordered input-sm w-full text-center px-1! font-bold text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <button
                   type="button"
@@ -385,7 +385,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   </div>
                   <ul
                     tabIndex={0}
-                    className="dropdown-content z-[100] menu p-2 shadow-lg bg-base-100 rounded-box border border-base-300 w-36 text-xs mt-1"
+                    className="dropdown-content z-100 menu p-2 shadow-lg bg-base-100 rounded-box border border-base-300 w-36 text-xs mt-1"
                   >
                     <li>
                       <button type="button" onClick={() => setMonthRange({ start: 1, end: 12 })}>
@@ -432,7 +432,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
 
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col gap-1">
-                <label className="font-semibold text-base-content/85">Tamaño de número</label>
+                <label className="font-semibold text-base-content/85 h-6 flex items-center">Tamaño de número</label>
                 <select
                   id="select-day-size"
                   value={dayNumberSize}
@@ -448,11 +448,11 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               </div>
 
               <div className="flex flex-col gap-1">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center h-6">
                   <label className="font-semibold text-base-content/85">Tamaño de notas</label>
                     <button
                       type="button"
-                      className={`btn btn-xs px-2 border border-base-300 ${dayNoteBold ? 'btn-neutral' : 'btn-ghost bg-base-100'}`}
+                      className={`btn btn-xs px-2 shadow-none ${dayNoteBold ? 'btn-neutral text-white border-transparent' : 'btn-ghost bg-base-100 border-base-300'}`}
                       onClick={() => setDayNoteBold(!dayNoteBold)}
                       title="Negrita"
                       aria-label="Negrita"
