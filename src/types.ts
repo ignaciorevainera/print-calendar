@@ -74,7 +74,16 @@ export type MonthTitleSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
 export type DayNumberSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
-export type DayTextSize = 'sm' | 'md' | 'lg';
+export type DayTextSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+
+export const SIZE_OPTIONS: { id: HeaderTitleSize; name: string }[] = [
+  { id: 'sm', name: 'Pequeño' },
+  { id: 'md', name: 'Normal' },
+  { id: 'lg', name: 'Grande' },
+  { id: 'xl', name: 'Extra Grande' },
+  { id: '2xl', name: '2X Grande' },
+  { id: '3xl', name: '3X Grande' },
+];
 
 export type DayNumberPosition =
   | 'top-left'
