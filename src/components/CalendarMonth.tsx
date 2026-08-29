@@ -39,12 +39,18 @@ const labelSizeMap: Record<DayTextSize, string> = {
   sm: 'text-[8px] md:text-[9px] px-1 py-0.5',
   md: 'text-[9px] md:text-[10px] px-1 py-0.5',
   lg: 'text-[10px] md:text-[11px] px-1.5 py-0.5',
+  xl: 'text-[11px] md:text-[12px] px-1.5 py-0.5',
+  '2xl': 'text-[12px] md:text-[14px] px-2 py-0.5',
+  '3xl': 'text-[14px] md:text-[16px] px-2.5 py-0.5',
 };
 
 const noteSizeMap: Record<DayTextSize, string> = {
   sm: 'text-[7.5px] md:text-[8.5px] leading-tight line-clamp-5',
   md: 'text-[9px] md:text-[10px] leading-tight line-clamp-4',
   lg: 'text-[10px] md:text-[11px] leading-snug line-clamp-3',
+  xl: 'text-[11px] md:text-[12.5px] leading-snug line-clamp-2',
+  '2xl': 'text-[12px] md:text-[14px] leading-normal line-clamp-2',
+  '3xl': 'text-[14px] md:text-[16px] leading-normal line-clamp-1',
 };
 
 const noteTextAlignMap: Record<DayNumberPosition, string> = {
@@ -108,6 +114,8 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
   const monthTitleSize = useCalendarStore((state) => state.monthTitleSize);
   const dayNumberPosition = useCalendarStore((state) => state.dayNumberPosition);
   const dayNotePosition = useCalendarStore((state) => state.dayNotePosition);
+  const dayNoteBold = useCalendarStore((state) => state.dayNoteBold);
+  const dayNoteItalic = useCalendarStore((state) => state.dayNoteItalic);
   const layout = useCalendarStore((state) => state.layout);
   const locale = useCalendarStore((state) => state.locale);
   const isMonthly = layout === 'mensual';
@@ -268,7 +276,9 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                             className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden flex ${positionClassMap[cellNotePos]}`}
                           >
                             <span
-                              className={`${noteSizeMap[dayTextSize]} ${noteTextAlignMap[cellNotePos]} font-normal ${
+                              className={`${noteSizeMap[dayTextSize]} ${noteTextAlignMap[cellNotePos]} ${
+                                dayNoteBold ? 'font-bold' : 'font-normal'
+                              } ${dayNoteItalic ? 'italic' : 'not-italic'} ${
                                 textColor === '#0f172a' ? 'text-slate-900' : 'text-white/95'
                               } whitespace-pre-line overflow-hidden w-full break-words`}
                             >
