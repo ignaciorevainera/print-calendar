@@ -264,7 +264,12 @@ export default function App() {
 
       {/* Toast Notification with DaisyUI toast + alert */}
       {toastMessage && (
-        <div className="toast toast-center toast-bottom z-50 no-print">
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="toast toast-center toast-bottom z-50 no-print"
+        >
           <div
             className={`alert text-xs font-semibold py-2 px-4 shadow-xl border ${
               toastMessage.type === "success"
@@ -275,9 +280,9 @@ export default function App() {
             }`}
           >
             {toastMessage.type === "success" ? (
-              <CheckCircle2 className="w-4 h-4 text-white" />
+              <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
             ) : (
-              <AlertCircle className="w-4 h-4 text-white" />
+              <AlertCircle className="w-4 h-4 text-white shrink-0" />
             )}
             <span>{toastMessage.text}</span>
           </div>
