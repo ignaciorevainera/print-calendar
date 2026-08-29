@@ -20,11 +20,25 @@ export type WeekStart = 'monday' | 'sunday';
 
 export type LayoutType = 'anual' | 'semestral' | 'trimestral' | 'mensual';
 
+export type RecurrencePattern =
+  | 'none'
+  | 'weekday_month'
+  | 'weekday_year'
+  | 'day_of_month'
+  | 'custom_range';
+
+export interface RecurrenceOptions {
+  pattern: RecurrencePattern;
+  endDate?: string;
+  overwriteExisting: boolean;
+}
+
 export interface MarkedDayInfo {
   color: string;
   label?: string;
   note?: string;
   isHoliday?: boolean;
+  seriesId?: string;
 }
 
 export type MarkedDaysMap = Record<string, MarkedDayInfo>;
