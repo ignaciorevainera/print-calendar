@@ -1,10 +1,12 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { MarkedDaysMap } from "./types";
+import { MarkedDaysMap, RecurrenceOptions } from "./types";
 import {
   useCalendarStore,
   hasHolidayOrLabelMarked,
 } from "./store/useCalendarStore";
 import { generateYearData } from "./utils/calendarHelper";
+import { calculateRecurringDays } from "./utils/recurrenceHelper";
+import { getMonthNames } from "./utils/i18n";
 import { ControlToolbar } from "./components/ControlToolbar";
 import { CalendarCanvas } from "./components/CalendarCanvas";
 import { DayColorModal } from "./components/DayColorModal";
@@ -126,42 +128,95 @@ export default function App() {
     color: string,
     label?: string,
     note?: string,
+    recurrence?: RecurrenceOptions,
   ) => {
     if (!activeDayModal) return;
     const { dayKey, dayNumber, monthName } = activeDayModal;
+    const monthNames = getMonthNames(locale);
+    const monthIndex = monthNames.indexOf(monthName);
 
-    let updatedMarkedDays: MarkedDaysMap = {};
-    setMarkedDays((prev) => {
-      const existing = prev[dayKey];
-      const nextLabel =
-        label !== undefined
-          ? label.trim() !== ""
-            ? label.trim()
-            : undefined
-          : existing?.label;
-      const nextNote =
-        note !== undefined
-          ? note.trim() !== ""
-            ? note.trim()
-            : undefined
-          : existing?.note;
+    if (recurrence && recurrence.pattern !== "none") {
+      const seriesId = `series_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+      const targetKeys = calculateRecurringDays(
+        year,
+        monthIndex,
+        dayNumber,
+        recurrence,
+        markedDays,
+      );
 
-      const next = {
-        ...prev,
-        [dayKey]: {
-          color,
-          label: nextLabel,
-          note: nextNote,
-          isHoliday: existing?.isHoliday,
-        },
-      };
-      updatedMarkedDays = next;
-      return next;
-    });
+      let updatedMarkedDays: MarkedDaysMap = {};
+      setMarkedDays((prev) => {
+        const updates: MarkedDaysMap = {};
+        for (const key of targetKeys) {
+          const existing = prev[key];
+          const nextLabel =
+            label !== undefined
+              ? label.trim() !== ""
+                ? label.trim()
+                : undefined
+              : existing?.label;
+          const nextNote =
+            note !== undefined
+              ? note.trim() !== ""
+                ? note.trim()
+                : undefined
+              : existing?.note;
 
-    showToast(`Día ${dayNumber} de ${monthName} guardado`, "success");
-    checkAndResetMiddlePositions(updatedMarkedDays);
-    setActiveDayModal(null);
+          updates[key] = {
+            color,
+            label: nextLabel,
+            note: nextNote,
+            seriesId,
+            isHoliday: existing?.isHoliday,
+          };
+        }
+
+        const next = {
+          ...prev,
+          ...updates,
+        };
+        updatedMarkedDays = next;
+        return next;
+      });
+
+      showToast(`Se han marcado ${targetKeys.length} días`, "success");
+      checkAndResetMiddlePositions(updatedMarkedDays);
+      setActiveDayModal(null);
+    } else {
+      let updatedMarkedDays: MarkedDaysMap = {};
+      setMarkedDays((prev) => {
+        const existing = prev[dayKey];
+        const nextLabel =
+          label !== undefined
+            ? label.trim() !== ""
+              ? label.trim()
+              : undefined
+            : existing?.label;
+        const nextNote =
+          note !== undefined
+            ? note.trim() !== ""
+              ? note.trim()
+              : undefined
+            : existing?.note;
+
+        const next = {
+          ...prev,
+          [dayKey]: {
+            color,
+            label: nextLabel,
+            note: nextNote,
+            isHoliday: existing?.isHoliday,
+          },
+        };
+        updatedMarkedDays = next;
+        return next;
+      });
+
+      showToast(`Día ${dayNumber} de ${monthName} guardado`, "success");
+      checkAndResetMiddlePositions(updatedMarkedDays);
+      setActiveDayModal(null);
+    }
   };
 
   const handleRemoveMarkDay = () => {
@@ -175,6 +230,23 @@ export default function App() {
     });
 
     showToast(`Marca del día ${dayNumber} eliminada`, "info");
+    setActiveDayModal(null);
+  };
+
+  const handleRemoveSeries = (seriesId: string) => {
+    let count = 0;
+    setMarkedDays((prev) => {
+      const next: MarkedDaysMap = {};
+      for (const [key, value] of Object.entries(prev)) {
+        if (value.seriesId === seriesId) {
+          count++;
+        } else {
+          next[key] = value;
+        }
+      }
+      return next;
+    });
+    showToast(`Serie eliminada (${count} días)`, "info");
     setActiveDayModal(null);
   };
 
@@ -258,6 +330,7 @@ export default function App() {
           currentMark={markedDays[activeDayModal.dayKey]}
           onConfirm={handleConfirmMarkDay}
           onRemove={handleRemoveMarkDay}
+          onRemoveSeries={handleRemoveSeries}
           onClose={() => setActiveDayModal(null)}
         />
       )}
