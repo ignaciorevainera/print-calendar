@@ -259,22 +259,29 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
                   )}
                 </div>
 
-                <select
-                  id="select-country"
-                  value={selectedCountryCode}
-                  onChange={(e) => {
-                    setSelectedCountryCode(e.target.value);
-                    setScopeFilter('all');
-                  }}
-                  disabled={isLoadingCountries}
-                  className="select select-bordered select-sm w-full text-xs font-semibold"
-                >
-                  {filteredCountries.map((c) => (
-                    <option key={c.countryCode} value={c.countryCode}>
-                      {c.spanishName || c.name} ({c.countryCode})
-                    </option>
-                  ))}
-                </select>
+                {filteredCountries.length === 0 ? (
+                  <div className="p-2.5 rounded-lg bg-base-200 border border-base-300 text-xs text-base-content/80 flex items-center gap-2 select-none">
+                    <AlertCircle className="w-4 h-4 text-warning shrink-0" />
+                    <span>No se encontraron países para «{countrySearch}»</span>
+                  </div>
+                ) : (
+                  <select
+                    id="select-country"
+                    value={selectedCountryCode}
+                    onChange={(e) => {
+                      setSelectedCountryCode(e.target.value);
+                      setScopeFilter('all');
+                    }}
+                    disabled={isLoadingCountries}
+                    className="select select-bordered select-sm w-full text-xs font-semibold"
+                  >
+                    {filteredCountries.map((c) => (
+                      <option key={c.countryCode} value={c.countryCode}>
+                        {c.spanishName || c.name} ({c.countryCode})
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
             </div>
 
@@ -469,7 +476,7 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
             type="button"
             id="btn-confirm-apply-holidays"
             onClick={handleApply}
-            disabled={isLoadingHolidays || displayedHolidays.length === 0}
+            disabled={isLoadingHolidays || displayedHolidays.length === 0 || filteredCountries.length === 0 || !selectedCountryCode}
             className="btn btn-sm btn-primary gap-1.5 text-white"
           >
             <Check className="w-4 h-4 shrink-0" />
