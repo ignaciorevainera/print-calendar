@@ -225,7 +225,16 @@ export default function App() {
 
     setMarkedDays((prev) => {
       const next = { ...prev };
-      delete next[dayKey];
+      if (next[dayKey]?.isHoliday) {
+        next[dayKey] = {
+          color: '',
+          label: '',
+          note: '',
+          isHoliday: true,
+        };
+      } else {
+        delete next[dayKey];
+      }
       return next;
     });
 
@@ -234,19 +243,29 @@ export default function App() {
   };
 
   const handleRemoveSeries = (seriesId: string) => {
-    let count = 0;
+    let finalCount = 0;
     setMarkedDays((prev) => {
+      let count = 0;
       const next: MarkedDaysMap = {};
       for (const [key, value] of Object.entries(prev)) {
         if (value.seriesId === seriesId) {
           count++;
+          if (value.isHoliday) {
+            next[key] = {
+              color: '',
+              label: '',
+              note: '',
+              isHoliday: true,
+            };
+          }
         } else {
           next[key] = value;
         }
       }
+      finalCount = count;
       return next;
     });
-    showToast(`Serie eliminada (${count} días)`, "info");
+    showToast(`Serie eliminada (${finalCount} días)`, "info");
     setActiveDayModal(null);
   };
 
