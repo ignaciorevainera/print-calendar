@@ -9,6 +9,8 @@ const headerTitleSizeMap: Record<HeaderTitleSize, string> = {
   md: "text-sm md:text-base",
   lg: "text-base md:text-lg",
   xl: "text-lg md:text-xl",
+  "2xl": "text-xl md:text-2xl",
+  "3xl": "text-2xl md:text-3xl",
 };
 
 const headerSubtitleSizeMap: Record<HeaderTitleSize, string> = {
@@ -16,6 +18,8 @@ const headerSubtitleSizeMap: Record<HeaderTitleSize, string> = {
   md: "text-xs md:text-sm",
   lg: "text-sm md:text-base",
   xl: "text-base md:text-lg",
+  "2xl": "text-lg md:text-xl",
+  "3xl": "text-xl md:text-2xl",
 };
 
 interface CalendarCanvasProps {
@@ -37,6 +41,7 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
     markedDays,
     layout,
     headerTitleSize,
+    showPageNumber,
   } = useCalendarStore();
 
   const fontClassMap: Record<FontFamilyKey, string> = {
@@ -82,7 +87,7 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
                 </span>
               )}
             </div>
-            {pages.length > 1 && (
+            {pages.length > 1 && showPageNumber && (
               <span className="text-[10px] text-[var(--cal-muted)] font-mono">
                 Pag. {pageIndex + 1}/{pages.length}
               </span>

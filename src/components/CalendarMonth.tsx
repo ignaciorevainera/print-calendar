@@ -9,7 +9,9 @@ const monthTitleSizeMap: Record<MonthTitleSize, string> = {
   sm: 'text-[9px] md:text-[10px]',
   md: 'text-[11px] md:text-[12px]',
   lg: 'text-[13px] md:text-[14px]',
-  xl: 'text-[15px] md:text-[16px]'
+  xl: 'text-[15px] md:text-[16px]',
+  '2xl': 'text-[17px] md:text-[18px]',
+  '3xl': 'text-[19px] md:text-[20px]',
 };
 
 const positionClassMap: Record<DayNumberPosition, string> = {
@@ -29,6 +31,8 @@ const sizeClassMap: Record<DayNumberSize, string> = {
   md: 'text-[10px] md:text-[11px]',
   lg: 'text-[12px] md:text-[14px]',
   xl: 'text-[15px] md:text-[17px]',
+  '2xl': 'text-[18px] md:text-[20px]',
+  '3xl': 'text-[21px] md:text-[24px]',
 };
 
 const labelSizeMap: Record<DayTextSize, string> = {
