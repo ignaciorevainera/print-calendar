@@ -108,6 +108,42 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
   const locale = useCalendarStore((state) => state.locale);
   const isMonthly = layout === 'mensual';
   const dayHeaders = getDayLetters(locale, weekStart);
+  const [focusedDay, setFocusedDay] = React.useState<number>(1);
+
+  const handleDayKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, day: number) => {
+    let targetDay: number | null = null;
+    const maxDay = month.daysInMonth;
+
+    switch (e.key) {
+      case 'ArrowRight':
+        if (day < maxDay) targetDay = day + 1;
+        break;
+      case 'ArrowLeft':
+        if (day > 1) targetDay = day - 1;
+        break;
+      case 'ArrowDown':
+        if (day + 7 <= maxDay) targetDay = day + 7;
+        break;
+      case 'ArrowUp':
+        if (day - 7 >= 1) targetDay = day - 7;
+        break;
+      case 'Home':
+        targetDay = 1;
+        break;
+      case 'End':
+        targetDay = maxDay;
+        break;
+      default:
+        return;
+    }
+
+    if (targetDay !== null) {
+      e.preventDefault();
+      setFocusedDay(targetDay);
+      const targetBtn = document.getElementById(`btn-day-${month.monthIndex + 1}-${targetDay}`);
+      targetBtn?.focus();
+    }
+  };
 
   return (
     <div 
@@ -180,7 +216,10 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                   <button
                     type="button"
                     id={`btn-day-${month.monthIndex + 1}-${day}`}
+                    tabIndex={focusedDay === day ? 0 : -1}
                     onClick={() => onSelectDay && onSelectDay(dayKey, day, month.name)}
+                    onKeyDown={(e) => handleDayKeyDown(e, day)}
+                    onFocus={() => setFocusedDay(day)}
                     title={dayTitle}
                     style={
                       isSelected && markInfo?.color
