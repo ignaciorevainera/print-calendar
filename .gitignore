@@ -10,3 +10,5 @@ coverage/
 skills-lock.json
 .superpowers/
 .gemini/
+docs/
+docs/*
