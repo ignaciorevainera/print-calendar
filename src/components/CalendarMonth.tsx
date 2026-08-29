@@ -1,6 +1,7 @@
 import React from 'react';
 import { MonthInfo, WeekStart, MarkedDaysMap, DayNumberPosition, DayNumberSize, DayTextSize, MonthTitleSize } from '../types';
 import { isWeekendIndex } from '../utils/calendarHelper';
+import { getContrastTextColor } from '../utils/colorHelper';
 import { getDayLetters } from '../utils/i18n';
 import { useCalendarStore } from '../store/useCalendarStore';
 
@@ -162,6 +163,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
               const dayKey = `${month.monthIndex + 1}-${day}`;
               const markInfo = markedDays ? markedDays[dayKey] : undefined;
               const isSelected = Boolean(markInfo);
+              const textColor = isSelected && markInfo?.color ? getContrastTextColor(markInfo.color) : undefined;
               const cellNotePos = resolveNotePosition(dayNumberPosition, dayNotePosition, Boolean(markInfo?.isHoliday || markInfo?.label));
 
               const dayTitle = isSelected
@@ -184,7 +186,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                       isSelected && markInfo?.color
                         ? {
                             backgroundColor: markInfo.color,
-                            color: '#ffffff'
+                            color: textColor
                           }
                         : undefined
                     }
@@ -211,7 +213,9 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                         </div>
                         {isSelected && markInfo?.label && (
                           <div className="col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 flex items-center justify-center p-0.5 pointer-events-none">
-                            <span className={`inline-block w-full text-center font-bold rounded bg-black/20 text-white truncate max-w-full ${labelSizeMap[dayTextSize]}`}>
+                            <span className={`inline-block w-full text-center font-bold rounded truncate max-w-full ${
+                              textColor === '#0f172a' ? 'text-slate-900 bg-black/10' : 'text-white bg-black/20'
+                            } ${labelSizeMap[dayTextSize]}`}>
                               {markInfo.label}
                             </span>
                           </div>
@@ -221,7 +225,9 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                             className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden flex ${positionClassMap[cellNotePos]}`}
                           >
                             <span
-                              className={`${noteSizeMap[dayTextSize]} ${noteTextAlignMap[cellNotePos]} font-normal text-white/95 whitespace-pre-line overflow-hidden w-full break-words`}
+                              className={`${noteSizeMap[dayTextSize]} ${noteTextAlignMap[cellNotePos]} font-normal ${
+                                textColor === '#0f172a' ? 'text-slate-900' : 'text-white/95'
+                              } whitespace-pre-line overflow-hidden w-full break-words`}
                             >
                               {markInfo.note}
                             </span>

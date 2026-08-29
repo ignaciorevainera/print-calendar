@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Check, Trash2, X, Palette } from 'lucide-react';
 import { MarkedDayInfo } from '../types';
+import { getContrastTextColor } from '../utils/colorHelper';
 
 export const PRESET_COLORS = [
   { name: 'Azul Ejecutivo', hex: '#2563eb' },
@@ -74,6 +75,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
   if (!isOpen) return null;
 
   const isAlreadyMarked = Boolean(currentMark);
+  const previewTextColor = getContrastTextColor(selectedColor);
 
   return (
     <div
@@ -119,8 +121,8 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
             </p>
           </div>
           <div
-            className="w-9 h-9 rounded-md flex items-center justify-center text-sm font-bold text-white shadow-sm ring-2 ring-base-100 transition-colors"
-            style={{ backgroundColor: selectedColor }}
+            className="w-9 h-9 rounded-md flex items-center justify-center text-sm font-bold shadow-sm ring-2 ring-base-100 transition-colors"
+            style={{ backgroundColor: selectedColor, color: previewTextColor }}
           >
             {dayNumber}
           </div>
@@ -147,7 +149,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
                   }`}
                   style={{ backgroundColor: c.hex }}
                 >
-                  {isSelected && <Check className="w-4 h-4 text-white" />}
+                  {isSelected && <Check className="w-4 h-4" style={{ color: getContrastTextColor(c.hex) }} />}
                 </button>
               );
             })}
