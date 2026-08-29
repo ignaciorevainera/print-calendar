@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize, DayNumberPosition, HeaderTitleSize, MonthTitleSize, CalendarLocale } from '../types';
+import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize, DayNumberPosition, HeaderTitleSize, MonthTitleSize, CalendarLocale, SIZE_OPTIONS } from '../types';
 import { useCalendarStore, hasHolidayOrLabelMarked } from '../store/useCalendarStore';
 import { DayPositionPicker } from './DayPositionPicker';
 import { LOCALE_OPTIONS, getMonthNames } from '../utils/i18n';
@@ -13,7 +13,9 @@ import {
   SlidersHorizontal,
   RotateCcw,
   Undo2,
-  Redo2
+  Redo2,
+  Bold,
+  Italic
 } from 'lucide-react';
 
 interface ControlToolbarProps {
@@ -56,6 +58,10 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     setDayNumberSize,
     dayTextSize,
     setDayTextSize,
+    dayNoteBold,
+    dayNoteItalic,
+    setDayNoteBold,
+    setDayNoteItalic,
     dayNumberPosition,
     setDayNumberPosition,
     dayNotePosition,
@@ -86,6 +92,13 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   const selectedCount = Object.keys(markedDays).length;
   const hasHolidaysOrLabels = hasHolidayOrLabelMarked(markedDays);
   const middlePositions: DayNumberPosition[] = ['middle-left', 'center', 'middle-right'];
+
+  const visibleMonthsCount = monthRange.end - monthRange.start + 1;
+  let chunkSize = 12;
+  if (layout === 'semestral') chunkSize = 6;
+  if (layout === 'trimestral') chunkSize = 3;
+  if (layout === 'mensual') chunkSize = 1;
+  const isSinglePage = Math.ceil(visibleMonthsCount / chunkSize) === 1;
 
   const [tempYear, setTempYear] = useState<string>(String(year));
   const [width, setWidth] = useState<number>(360);
@@ -245,12 +258,11 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 onChange={(e) => setHeaderTitleSize(e.target.value as HeaderTitleSize)}
                 className="select select-bordered select-sm w-full font-medium"
               >
-                <option value="sm">Pequeño</option>
-                <option value="md">Normal</option>
-                <option value="lg">Grande</option>
-                <option value="xl">Extra Grande</option>
-                <option value="2xl">2X Grande</option>
-                <option value="3xl">3X Grande</option>
+                {SIZE_OPTIONS.map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.name}
+                  </option>
+                ))}
               </select>
             </div>
         </div>
@@ -412,12 +424,11 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 onChange={(e) => setMonthTitleSize(e.target.value as MonthTitleSize)}
                 className="select select-bordered select-sm w-full font-medium"
               >
-                <option value="sm">Pequeño</option>
-                <option value="md">Normal</option>
-                <option value="lg">Grande</option>
-                <option value="xl">Extra Grande</option>
-                <option value="2xl">2X Grande</option>
-                <option value="3xl">3X Grande</option>
+                {SIZE_OPTIONS.map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -430,26 +441,49 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   onChange={(e) => setDayNumberSize(e.target.value as DayNumberSize)}
                   className="select select-bordered select-sm w-full font-medium"
                 >
-                  <option value="sm">Pequeño</option>
-                  <option value="md">Normal</option>
-                  <option value="lg">Grande</option>
-                  <option value="xl">Extra Grande</option>
-                  <option value="2xl">2X Grande</option>
-                  <option value="3xl">3X Grande</option>
+                  {SIZE_OPTIONS.map((opt) => (
+                    <option key={opt.id} value={opt.id}>
+                      {opt.name}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="font-semibold text-base-content/85">Tamaño de notas</label>
+                <div className="flex justify-between items-center">
+                  <label className="font-semibold text-base-content/85">Tamaño de notas</label>
+                  <div className="join border border-base-300">
+                    <button
+                      type="button"
+                      className={`join-item btn btn-xs px-1.5 ${dayNoteBold ? 'btn-neutral' : 'btn-ghost'}`}
+                      onClick={() => setDayNoteBold(!dayNoteBold)}
+                      title="Negrita"
+                      aria-label="Negrita"
+                    >
+                      <Bold className="w-3 h-3" />
+                    </button>
+                    <button
+                      type="button"
+                      className={`join-item btn btn-xs px-1.5 ${dayNoteItalic ? 'btn-neutral' : 'btn-ghost'}`}
+                      onClick={() => setDayNoteItalic(!dayNoteItalic)}
+                      title="Cursiva"
+                      aria-label="Cursiva"
+                    >
+                      <Italic className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
                 <select
                   id="select-day-text-size"
                   value={dayTextSize}
                   onChange={(e) => setDayTextSize(e.target.value as DayTextSize)}
                   className="select select-bordered select-sm w-full font-medium"
                 >
-                  <option value="sm">Pequeño</option>
-                  <option value="md">Normal</option>
-                  <option value="lg">Grande</option>
+                  {SIZE_OPTIONS.map((opt) => (
+                    <option key={opt.id} value={opt.id}>
+                      {opt.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -515,7 +549,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 />
               </label>
 
-              <label className="flex items-center justify-between cursor-pointer">
+              <label className={`flex items-center justify-between cursor-pointer ${isSinglePage ? 'opacity-40 cursor-not-allowed select-none' : ''}`}>
                 <span className="font-semibold text-base-content/80 flex items-center gap-1 text-[11px]">
                   Mostrar núm. página
                 </span>
@@ -524,6 +558,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   type="checkbox"
                   checked={showPageNumber}
                   onChange={(e) => setShowPageNumber(e.target.checked)}
+                  disabled={isSinglePage}
                   className="toggle toggle-sm toggle-primary"
                 />
               </label>
