@@ -51,6 +51,7 @@ interface CalendarState {
   dayNotePosition: DayNumberPosition;
   monthRange: MonthRange;
   locale: CalendarLocale;
+  showPageNumber: boolean;
   setYear: (year: number) => void;
   setPalette: (palette: PaletteKey) => void;
   setFontFamily: (fontFamily: FontFamilyKey) => void;
@@ -67,6 +68,7 @@ interface CalendarState {
   setDayNotePosition: (position: DayNumberPosition, onBlocked?: () => void, onDeflected?: (newNumPos: DayNumberPosition) => void) => void;
   setMonthRange: (range: MonthRange) => void;
   setLocale: (locale: CalendarLocale) => void;
+  setShowPageNumber: (show: boolean) => void;
 }
 
 export const useCalendarStore = create<CalendarState>()(
@@ -89,6 +91,7 @@ export const useCalendarStore = create<CalendarState>()(
         dayNotePosition: 'bottom-left',
         monthRange: { start: 1, end: 12 },
         locale: 'es',
+        showPageNumber: true,
         setYear: (year) => set({ year }),
         setPalette: (palette) => set({ palette }),
         setFontFamily: (fontFamily) => set({ fontFamily }),
@@ -132,6 +135,7 @@ export const useCalendarStore = create<CalendarState>()(
         },
         setMonthRange: (monthRange) => set({ monthRange }),
         setLocale: (locale) => set({ locale }),
+        setShowPageNumber: (showPageNumber) => set({ showPageNumber }),
       }),
       {
         name: 'print-calendar-storage',
@@ -144,7 +148,7 @@ export const useCalendarStore = create<CalendarState>()(
           setYear, setPalette, setFontFamily, setWeekStart, setHighlightWeekends,
           setSubtitle, setMarkedDays, setLayout, setDayNumberSize, setDayTextSize,
           setHeaderTitleSize, setMonthTitleSize, setDayNumberPosition, setDayNotePosition,
-          setMonthRange, setLocale,
+          setMonthRange, setLocale, setShowPageNumber,
           ...rest
         } = state;
         return rest;

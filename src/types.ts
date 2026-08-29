@@ -54,11 +54,11 @@ export interface MonthInfo {
   weeks: (number | null)[][];
 }
 
-export type HeaderTitleSize = 'sm' | 'md' | 'lg' | 'xl';
+export type HeaderTitleSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
-export type MonthTitleSize = 'sm' | 'md' | 'lg' | 'xl';
+export type MonthTitleSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
-export type DayNumberSize = 'sm' | 'md' | 'lg' | 'xl';
+export type DayNumberSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
 export type DayTextSize = 'sm' | 'md' | 'lg';
 
