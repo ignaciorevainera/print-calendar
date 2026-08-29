@@ -58,10 +58,6 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     setDayNumberSize,
     dayTextSize,
     setDayTextSize,
-    dayNoteBold,
-    dayNoteItalic,
-    setDayNoteBold,
-    setDayNoteItalic,
     dayNumberPosition,
     setDayNumberPosition,
     dayNotePosition,
@@ -74,6 +70,11 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     showPageNumber,
     setShowPageNumber
   } = useCalendarStore();
+
+  const dayNoteBold = useCalendarStore((state) => state.dayNoteBold);
+  const dayNoteItalic = useCalendarStore((state) => state.dayNoteItalic);
+  const setDayNoteBold = useCalendarStore((state) => state.setDayNoteBold);
+  const setDayNoteItalic = useCalendarStore((state) => state.setDayNoteItalic);
 
   const monthLabels = getMonthNames(locale);
 
