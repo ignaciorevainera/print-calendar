@@ -3,6 +3,7 @@ import { MonthInfo, FontFamilyKey, HeaderTitleSize } from "../types";
 import { CalendarMonth } from "./CalendarMonth";
 import { useCalendarStore } from "../store/useCalendarStore";
 import { chunkMonths } from "../utils/calendarHelper";
+import { getContrastTextColor } from "../utils/colorHelper";
 
 const headerTitleSizeMap: Record<HeaderTitleSize, string> = {
   sm: "text-xs md:text-sm",
@@ -42,7 +43,12 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
     layout,
     headerTitleSize,
     showPageNumber,
+    calendarBgColor,
   } = useCalendarStore();
+
+  const computedBg = calendarBgColor || "var(--cal-bg)";
+  const isCustomBg = Boolean(calendarBgColor);
+  const customContrast = isCustomBg ? getContrastTextColor(calendarBgColor) : undefined;
 
   const fontClassMap: Record<FontFamilyKey, string> = {
     jakarta: 'font-["Plus_Jakarta_Sans",sans-serif]',
@@ -69,8 +75,20 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
       {pages.map((pageMonths, pageIndex) => (
         <div
           key={`page-${pageIndex}`}
-          className={`page-a4 theme-${palette} ${fontClassMap[fontFamily]} ${minWidthClass} md:min-w-0 print:min-w-0 relative w-full max-w-[1120px] aspect-[297/210] bg-white text-[var(--cal-text)] p-4 md:p-6 rounded-sm shadow-md print:shadow-none print:rounded-none print:max-w-none print:w-full print:h-full print:aspect-auto flex flex-col justify-between box-border border border-[var(--cal-border)] print:border-none`}
-          style={{ boxSizing: "border-box" }}
+          className={`page-a4 theme-${palette} ${fontClassMap[fontFamily]} ${minWidthClass} md:min-w-0 print:min-w-0 relative w-full max-w-[1120px] aspect-[297/210] text-[var(--cal-text)] p-4 md:p-6 rounded-sm shadow-md print:shadow-none print:rounded-none print:max-w-none print:w-full print:h-full print:aspect-auto flex flex-col justify-between box-border border border-[var(--cal-border)] print:border-none`}
+          style={{
+            backgroundColor: computedBg,
+            boxSizing: "border-box",
+            ...(isCustomBg
+              ? {
+                  "--cal-text": customContrast,
+                  "--cal-muted": customContrast === "#ffffff" ? "#94a3b8" : "#475569",
+                  "--cal-accent": customContrast === "#ffffff" ? "#38bdf8" : "#1e40af",
+                  "--cal-border": customContrast === "#ffffff" ? "#334155" : "#cbd5e1",
+                  "--cal-grid-border": customContrast === "#ffffff" ? "#1e293b" : "#cbd5e1",
+                }
+              : {}),
+          } as React.CSSProperties}
         >
           <div className="w-full mb-2 pb-1 border-b border-[var(--cal-border)] shrink-0 box-border flex justify-between items-center px-2">
             <div className="flex items-baseline gap-2">
