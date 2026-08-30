@@ -1,4 +1,15 @@
-export type PaletteKey = 'gris' | 'monocromo' | 'azul' | 'oliva' | 'terracota';
+export type PaletteKey = 
+  | 'gris' 
+  | 'monocromo' 
+  | 'azul' 
+  | 'oliva' 
+  | 'terracota'
+  | 'esmeralda'
+  | 'purpura'
+  | 'rosa'
+  | 'amber'
+  | 'marino'
+  | 'nocturno';
 
 export interface PaletteOption {
   id: PaletteKey;

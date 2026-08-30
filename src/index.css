@@ -76,6 +76,78 @@
   --cal-badge: #c2410c;
 }
 
+.theme-esmeralda {
+  --cal-bg: #ffffff;
+  --cal-text: #064e3b;
+  --cal-muted: #0f766e;
+  --cal-accent: #047857;
+  --cal-border: #6ee7b7;
+  --cal-grid-border: #a7f3d0;
+  --cal-weekend: #065f46;
+  --cal-weekend-bg: #ecfdf5;
+  --cal-badge: #047857;
+}
+
+.theme-purpura {
+  --cal-bg: #ffffff;
+  --cal-text: #4c1d95;
+  --cal-muted: #6b21a8;
+  --cal-accent: #7e22ce;
+  --cal-border: #c084fc;
+  --cal-grid-border: #e9d5ff;
+  --cal-weekend: #5b21b6;
+  --cal-weekend-bg: #faf5ff;
+  --cal-badge: #7e22ce;
+}
+
+.theme-rosa {
+  --cal-bg: #ffffff;
+  --cal-text: #881337;
+  --cal-muted: #9d174d;
+  --cal-accent: #be185d;
+  --cal-border: #f472b6;
+  --cal-grid-border: #fbcfe8;
+  --cal-weekend: #9d174d;
+  --cal-weekend-bg: #fdf2f8;
+  --cal-badge: #be185d;
+}
+
+.theme-amber {
+  --cal-bg: #ffffff;
+  --cal-text: #78350f;
+  --cal-muted: #92400e;
+  --cal-accent: #b45309;
+  --cal-border: #fbbf24;
+  --cal-grid-border: #fde68a;
+  --cal-weekend: #92400e;
+  --cal-weekend-bg: #fffbeb;
+  --cal-badge: #b45309;
+}
+
+.theme-marino {
+  --cal-bg: #ffffff;
+  --cal-text: #1e3a8a;
+  --cal-muted: #1d4ed8;
+  --cal-accent: #2563eb;
+  --cal-border: #93c5fd;
+  --cal-grid-border: #bfdbfe;
+  --cal-weekend: #1e3a8a;
+  --cal-weekend-bg: #eff6ff;
+  --cal-badge: #1d4ed8;
+}
+
+.theme-nocturno {
+  --cal-bg: #0f172a;
+  --cal-text: #f8fafc;
+  --cal-muted: #94a3b8;
+  --cal-accent: #38bdf8;
+  --cal-border: #334155;
+  --cal-grid-border: #1e293b;
+  --cal-weekend: #e2e8f0;
+  --cal-weekend-bg: #1e293b;
+  --cal-badge: #38bdf8;
+}
+
 @media print {
   @page {
     size: A4 landscape;
