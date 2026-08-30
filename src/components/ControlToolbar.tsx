@@ -26,6 +26,16 @@ interface ControlToolbarProps {
   onShowToast?: (text: string, type?: 'success' | 'info' | 'error') => void;
 }
 
+const BG_PRESET_COLORS = [
+  { name: 'Blanco', hex: '#ffffff' },
+  { name: 'Crema', hex: '#fefce8' },
+  { name: 'Menta', hex: '#f0fdf4' },
+  { name: 'Lavanda', hex: '#faf5ff' },
+  { name: 'Hielo', hex: '#f0f9ff' },
+  { name: 'Gris', hex: '#f1f5f9' },
+  { name: 'Oscuro', hex: '#1e293b' }
+];
+
 export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   isOpen = true,
   onToggle,
@@ -67,7 +77,9 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     locale,
     setLocale,
     showPageNumber,
-    setShowPageNumber
+    setShowPageNumber,
+    calendarBgColor,
+    setCalendarBgColor
   } = useCalendarStore();
 
   const dayNoteBold = useCalendarStore((state) => state.dayNoteBold);
@@ -192,7 +204,60 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                 <option value="azul">Azul Ejecutivo</option>
                 <option value="oliva">Verde Oliva</option>
                 <option value="terracota">Terracota</option>
+                <option value="esmeralda">Verde Esmeralda</option>
+                <option value="purpura">Púrpura Elegante</option>
+                <option value="rosa">Rosa Salmón</option>
+                <option value="amber">Ámbar Cálido</option>
+                <option value="marino">Azul Marino</option>
+                <option value="nocturno">Tema Nocturno</option>
               </select>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <label className="font-semibold text-base-content/85">Fondo del calendario</label>
+                {calendarBgColor && (
+                  <button
+                    type="button"
+                    id="btn-reset-calendar-bg"
+                    onClick={() => setCalendarBgColor('')}
+                    className="text-[10px] font-bold text-primary hover:underline cursor-pointer flex items-center gap-0.5"
+                    title="Restablecer fondo por defecto"
+                  >
+                    <RotateCcw className="w-2.5 h-2.5" />
+                    Restablecer
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {BG_PRESET_COLORS.map((c) => {
+                  const isSelected = calendarBgColor.toLowerCase() === c.hex.toLowerCase();
+                  return (
+                    <button
+                      key={c.hex}
+                      type="button"
+                      id={`btn-bg-preset-${c.hex.replace('#', '')}`}
+                      onClick={() => setCalendarBgColor(c.hex)}
+                      title={`${c.name} (${c.hex})`}
+                      className={`w-6 h-6 rounded-full border border-base-300 transition-all cursor-pointer ${
+                        isSelected
+                          ? 'ring-2 ring-primary ring-offset-1 scale-110'
+                          : 'hover:scale-105'
+                      }`}
+                      style={{ backgroundColor: c.hex }}
+                      aria-label={c.name}
+                    />
+                  );
+                })}
+                <input
+                  id="input-calendar-bg-custom"
+                  type="color"
+                  value={calendarBgColor || '#ffffff'}
+                  onChange={(e) => setCalendarBgColor(e.target.value)}
+                  title="Color personalizado"
+                  className="w-6 h-6 rounded-full border border-base-300 cursor-pointer p-0 bg-transparent shrink-0"
+                />
+              </div>
             </div>
 
             <div className="flex flex-col gap-1">
