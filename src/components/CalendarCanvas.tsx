@@ -80,13 +80,23 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
             backgroundColor: computedBg,
             boxSizing: "border-box",
             ...(isCustomBg
-              ? {
-                  "--cal-text": customContrast,
-                  "--cal-muted": customContrast === "#ffffff" ? "#94a3b8" : "#475569",
-                  "--cal-accent": customContrast === "#ffffff" ? "#38bdf8" : "#1e40af",
-                  "--cal-border": customContrast === "#ffffff" ? "#334155" : "#cbd5e1",
-                  "--cal-grid-border": customContrast === "#ffffff" ? "#1e293b" : "#cbd5e1",
-                }
+              ? customContrast === "#ffffff"
+                ? {
+                    "--cal-text": "#ffffff",
+                    "--cal-muted": "#94a3b8",
+                    "--cal-accent": "#38bdf8",
+                    "--cal-border": "#334155",
+                    "--cal-grid-border": "#1e293b",
+                  }
+                : palette === "nocturno"
+                ? {
+                    "--cal-text": "#1e293b",
+                    "--cal-muted": "#64748b",
+                    "--cal-accent": "#1e40af",
+                    "--cal-border": "#cbd5e1",
+                    "--cal-grid-border": "#e2e8f0",
+                  }
+                : {}
               : {}),
           } as React.CSSProperties}
         >
