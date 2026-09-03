@@ -6,12 +6,12 @@ import { getDayLetters } from '../utils/i18n';
 import { useCalendarStore } from '../store/useCalendarStore';
 
 const monthTitleSizeMap: Record<MonthTitleSize, string> = {
-  sm: 'text-[9px] md:text-[10px]',
-  md: 'text-[11px] md:text-[12px]',
-  lg: 'text-[13px] md:text-[14px]',
-  xl: 'text-[15px] md:text-[16px]',
-  '2xl': 'text-[17px] md:text-[18px]',
-  '3xl': 'text-[19px] md:text-[20px]',
+  sm: 'text-[10px]',
+  md: 'text-[12px]',
+  lg: 'text-[14px]',
+  xl: 'text-[16px]',
+  '2xl': 'text-[18px]',
+  '3xl': 'text-[20px]',
 };
 
 const positionClassMap: Record<DayNumberPosition, string> = {
@@ -27,30 +27,30 @@ const positionClassMap: Record<DayNumberPosition, string> = {
 };
 
 const sizeClassMap: Record<DayNumberSize, string> = {
-  sm: 'text-[8px] md:text-[9px]',
-  md: 'text-[10px] md:text-[11px]',
-  lg: 'text-[12px] md:text-[14px]',
-  xl: 'text-[15px] md:text-[17px]',
-  '2xl': 'text-[18px] md:text-[20px]',
-  '3xl': 'text-[21px] md:text-[24px]',
+  sm: 'text-[9px]',
+  md: 'text-[11px]',
+  lg: 'text-[14px]',
+  xl: 'text-[17px]',
+  '2xl': 'text-[20px]',
+  '3xl': 'text-[24px]',
 };
 
 const labelSizeMap: Record<DayTextSize, string> = {
-  sm: 'text-[8px] md:text-[9px] px-1 py-0.5',
-  md: 'text-[9px] md:text-[10px] px-1 py-0.5',
-  lg: 'text-[10px] md:text-[11px] px-1.5 py-0.5',
-  xl: 'text-[11px] md:text-[12px] px-1.5 py-0.5',
-  '2xl': 'text-[12px] md:text-[14px] px-2 py-0.5',
-  '3xl': 'text-[14px] md:text-[16px] px-2.5 py-0.5',
+  sm: 'text-[9px] px-1 py-0.5',
+  md: 'text-[10px] px-1 py-0.5',
+  lg: 'text-[11px] px-1.5 py-0.5',
+  xl: 'text-[12px] px-1.5 py-0.5',
+  '2xl': 'text-[14px] px-2 py-0.5',
+  '3xl': 'text-[16px] px-2.5 py-0.5',
 };
 
 const noteSizeMap: Record<DayTextSize, string> = {
-  sm: 'text-[7.5px] md:text-[8.5px] leading-tight line-clamp-5',
-  md: 'text-[9px] md:text-[10px] leading-tight line-clamp-4',
-  lg: 'text-[10px] md:text-[11px] leading-snug line-clamp-3',
-  xl: 'text-[11px] md:text-[12.5px] leading-snug line-clamp-2',
-  '2xl': 'text-[12px] md:text-[14px] leading-normal line-clamp-2',
-  '3xl': 'text-[14px] md:text-[16px] leading-normal line-clamp-1',
+  sm: 'text-[8.5px] leading-tight line-clamp-5',
+  md: 'text-[10px] leading-tight line-clamp-4',
+  lg: 'text-[11px] leading-snug line-clamp-3',
+  xl: 'text-[12.5px] leading-snug line-clamp-2',
+  '2xl': 'text-[14px] leading-normal line-clamp-2',
+  '3xl': 'text-[16px] leading-normal line-clamp-1',
 };
 
 const noteTextAlignMap: Record<DayNumberPosition, string> = {
@@ -159,7 +159,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
   return (
     <div 
       id={`month-card-${month.monthIndex}`}
-      className="month-card flex flex-col p-1.5 md:p-2 rounded-sm border border-[var(--cal-grid-border)] bg-[var(--cal-bg)] transition-colors h-full w-full overflow-hidden box-border"
+      className="month-card flex flex-col p-2 rounded-sm border border-[var(--cal-grid-border)] bg-[var(--cal-bg)] transition-colors h-full w-full overflow-hidden box-border"
     >
       <div className="h-6 flex items-center justify-center border-b border-[var(--cal-border)] mb-1 pb-0.5 shrink-0">
         <h3 className={`font-bold tracking-wider text-[var(--cal-text)] uppercase select-none leading-none ${monthTitleSizeMap[monthTitleSize]}`}>
@@ -173,7 +173,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
           return (
             <div
               key={`${month.name}-header-${idx}`}
-              className={`w-[14.2857%] text-[9px] md:text-[10px] font-semibold text-center leading-4 select-none ${
+              className={`w-[14.2857%] text-[10px] font-semibold text-center leading-4 select-none ${
                 isWeekend && highlightWeekends
                   ? 'text-[var(--cal-accent)]'
                   : 'text-[var(--cal-muted)]'
