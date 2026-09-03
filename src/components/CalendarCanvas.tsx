@@ -6,21 +6,21 @@ import { chunkMonths } from "../utils/calendarHelper";
 import { getContrastTextColor } from "../utils/colorHelper";
 
 const headerTitleSizeMap: Record<HeaderTitleSize, string> = {
-  sm: "text-xs md:text-sm",
-  md: "text-sm md:text-base",
-  lg: "text-base md:text-lg",
-  xl: "text-lg md:text-xl",
-  "2xl": "text-xl md:text-2xl",
-  "3xl": "text-2xl md:text-3xl",
+  sm: "text-sm",
+  md: "text-base",
+  lg: "text-lg",
+  xl: "text-xl",
+  "2xl": "text-2xl",
+  "3xl": "text-3xl",
 };
 
 const headerSubtitleSizeMap: Record<HeaderTitleSize, string> = {
-  sm: "text-[10px] md:text-xs",
-  md: "text-xs md:text-sm",
-  lg: "text-sm md:text-base",
-  xl: "text-base md:text-lg",
-  "2xl": "text-lg md:text-xl",
-  "3xl": "text-xl md:text-2xl",
+  sm: "text-xs",
+  md: "text-sm",
+  lg: "text-base",
+  xl: "text-lg",
+  "2xl": "text-xl",
+  "3xl": "text-2xl",
 };
 
 interface CalendarCanvasProps {
@@ -61,21 +61,21 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
   };
 
   const gridClassMap: Record<typeof layout, string> = {
-    anual: "grid-cols-4 grid-rows-3 gap-2 md:gap-3",
-    semestral: "grid-cols-3 grid-rows-2 gap-3 md:gap-4",
-    trimestral: "grid-cols-3 grid-rows-1 gap-4 md:gap-6",
+    anual: "grid-cols-4 grid-rows-3 gap-3",
+    semestral: "grid-cols-3 grid-rows-2 gap-4",
+    trimestral: "grid-cols-3 grid-rows-1 gap-6",
     mensual: "grid-cols-1 grid-rows-1 gap-6",
   };
 
   const pages = chunkMonths(months, layout);
-  const minWidthClass = layout === "mensual" ? "min-w-[300px]" : "min-w-[640px]";
+  const minWidthClass = layout === "mensual" ? "min-w-[480px]" : "min-w-[960px]";
 
   return (
-    <div className="w-full flex flex-col items-start md:items-center gap-8 mb-8 print:p-0 print:m-0 print:gap-0 overflow-x-auto pb-4 px-2 sm:px-0">
+    <div className="w-full flex flex-col items-center gap-8 mb-8 print:p-0 print:m-0 print:gap-0 overflow-x-auto pb-4 px-2">
       {pages.map((pageMonths, pageIndex) => (
         <div
           key={`page-${pageIndex}`}
-          className={`page-a4 theme-${palette} ${fontClassMap[fontFamily]} ${minWidthClass} md:min-w-0 print:min-w-0 relative w-full max-w-[1120px] aspect-[297/210] text-[var(--cal-text)] p-4 md:p-6 rounded-sm shadow-md print:shadow-none print:rounded-none print:max-w-none print:w-full print:h-full print:aspect-auto flex flex-col justify-between box-border border border-[var(--cal-border)] print:border-none`}
+          className={`page-a4 theme-${palette} ${fontClassMap[fontFamily]} ${minWidthClass} print:min-w-0 relative w-full max-w-[1120px] aspect-[297/210] text-[var(--cal-text)] p-6 rounded-sm shadow-md print:shadow-none print:rounded-none print:max-w-none print:w-full print:h-full print:aspect-auto flex flex-col justify-between box-border border border-[var(--cal-border)] print:border-none`}
           style={{
             backgroundColor: computedBg,
             boxSizing: "border-box",
