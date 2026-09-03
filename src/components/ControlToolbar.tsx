@@ -249,14 +249,6 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                     />
                   );
                 })}
-                <input
-                  id="input-calendar-bg-custom"
-                  type="color"
-                  value={calendarBgColor || '#ffffff'}
-                  onChange={(e) => setCalendarBgColor(e.target.value)}
-                  title="Color personalizado"
-                  className="w-6 h-6 rounded-full border border-base-300 cursor-pointer p-0 bg-transparent shrink-0"
-                />
               </div>
             </div>
 
@@ -522,8 +514,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                       title="Negrita"
                       aria-label="Negrita"
                     >
-                      <Bold className="w-3 h-3 mr-1" />
-                      Negrita
+                      <Bold className="w-3.5 h-3.5" />
                     </button>
                 </div>
                 <select

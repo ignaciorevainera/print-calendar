@@ -262,7 +262,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                           </div>
                         </div>
                         {isSelected && markInfo?.label && (
-                          <div className="col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 flex items-center justify-center p-0.5 pointer-events-none">
+                          <div className="col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 hidden lg:flex print:flex items-center justify-center p-0.5 pointer-events-none">
                             <span className={`inline-block w-full text-center font-bold rounded truncate max-w-full ${
                               textColor === '#0f172a' ? 'text-slate-900 bg-black/10' : 'text-white bg-black/20'
                             } ${labelSizeMap[dayTextSize]}`}>
@@ -272,7 +272,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                         )}
                         {isSelected && markInfo?.note && (
                           <div
-                            className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden flex ${positionClassMap[cellNotePos]}`}
+                            className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden hidden lg:flex print:flex ${positionClassMap[cellNotePos]}`}
                           >
                             <span
                               className={`${noteSizeMap[dayTextSize]} ${noteTextAlignMap[cellNotePos]} ${

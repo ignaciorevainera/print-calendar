@@ -71,7 +71,7 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
   const minWidthClass = layout === "mensual" ? "min-w-[480px]" : "min-w-[960px]";
 
   return (
-    <div className="w-full flex flex-col items-center gap-8 mb-8 print:p-0 print:m-0 print:gap-0 overflow-x-auto pb-4 px-2">
+    <div className="w-full flex flex-col items-start lg:items-center gap-8 mb-8 print:p-0 print:m-0 print:gap-0 overflow-x-auto pb-4 px-2">
       {pages.map((pageMonths, pageIndex) => (
         <div
           key={`page-${pageIndex}`}
@@ -86,7 +86,9 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
                     "--cal-muted": "#94a3b8",
                     "--cal-accent": "#38bdf8",
                     "--cal-border": "#334155",
-                    "--cal-grid-border": "#1e293b",
+                    "--cal-grid-border": "#334155",
+                    "--cal-weekend": "#e2e8f0",
+                    "--cal-weekend-bg": "#1e293b",
                   }
                 : palette === "nocturno"
                 ? {
@@ -95,6 +97,8 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
                     "--cal-accent": "#1e40af",
                     "--cal-border": "#cbd5e1",
                     "--cal-grid-border": "#e2e8f0",
+                    "--cal-weekend": "#1e3a8a",
+                    "--cal-weekend-bg": "#f0f9ff",
                   }
                 : {}
               : {}),
