@@ -308,16 +308,16 @@ export default function App() {
         />
 
         {/* Guía rápida inferior (no-print) */}
-        <footer className="no-print w-full max-w-280 text-center text-xs text-slate-500 flex flex-wrap items-center justify-between gap-2 font-medium">
+        <footer className="no-print w-full max-w-280 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 font-medium">
           <div className="flex items-center gap-1.5">
-            <Info className="size-4 text-slate-400" />
-            <span>
+            <Info className="size-3.5 sm:size-4 shrink-0 text-slate-400" />
+            <span className="text-[clamp(9.5px,2.2vw,12px)]">
               Haz clic en cualquier día para elegir su color o usa «Festivos
               Oficiales (API)» para cargar festivos nacionales y autonómicos.
             </span>
           </div>
           <div>
-            <span>
+            <span className="text-[clamp(9.5px,2.2vw,12px)]">
               Diseñado para hoja A4 horizontal (297 × 210 mm) · Año {year}
             </span>
           </div>

@@ -187,12 +187,12 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
 
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3.5 min-h-0">
         <div className="bg-base-200/40 border border-base-300/60 rounded-xl p-4 flex flex-col gap-3 text-xs relative focus-within:z-30">
-          <div className="font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none pb-1.5 border-b border-base-300/40">
+          <div className="font-bold text-base-content/75 uppercase tracking-wider text-[clamp(9.5px,2vw,10.5px)] flex items-center gap-2 select-none pb-1.5 border-b border-base-300/40">
             <Palette className="w-3.5 h-3.5 text-base-content/50" />
             <span>Diseño General</span>
           </div>
             <div className="flex flex-col gap-1">
-              <label className="font-semibold text-base-content/85">Paleta de colores</label>
+              <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Paleta de colores</label>
               <select
                 id="select-palette"
                 value={palette}
@@ -215,7 +215,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
 
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between">
-                <label className="font-semibold text-base-content/85">Fondo del calendario</label>
+                <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Fondo del calendario</label>
                 {calendarBgColor && (
                   <button
                     type="button"
@@ -261,7 +261,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="font-semibold text-base-content/85">Tipografía</label>
+              <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Tipografía</label>
               <select
                 id="select-font"
                 value={fontFamily}
@@ -299,7 +299,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </label>
 
             <div className="flex flex-col gap-1">
-              <label className="font-semibold text-base-content/85">Formato / Layout</label>
+              <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Formato / Layout</label>
               <select
                 id="select-layout"
                 value={layout}
@@ -314,7 +314,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="font-semibold text-base-content/85">Tamaño de encabezado</label>
+              <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Tamaño de encabezado</label>
               <select
                 id="select-header-size"
                 value={headerTitleSize}
@@ -331,13 +331,13 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
         </div>
 
         <div className="bg-base-200/40 border border-base-300/60 rounded-xl p-4 flex flex-col gap-3 text-xs relative focus-within:z-30">
-          <div className="font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none pb-1.5 border-b border-base-300/40">
+          <div className="font-bold text-base-content/75 uppercase tracking-wider text-[clamp(9.5px,2vw,10.5px)] flex items-center gap-2 select-none pb-1.5 border-b border-base-300/40">
             <CalendarDays className="w-3.5 h-3.5 text-base-content/50" />
             <span>Contenido y Periodo</span>
           </div>
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
-                <label className="font-semibold text-base-content/85">Año</label>
+                <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Año</label>
                 {year !== new Date().getFullYear() && (
                   <button
                     type="button"
@@ -391,7 +391,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="font-semibold text-base-content/85">Subtítulo opcional</label>
+              <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Subtítulo opcional</label>
               <input
                 id="input-subtitle"
                 type="text"
@@ -404,7 +404,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="font-semibold text-base-content/85">Rango de meses</label>
+              <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Rango de meses</label>
               <div className="flex gap-1.5 items-center w-full">
                 <select
                   id="select-range-start"
@@ -475,12 +475,12 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
         </div>
 
         <div className="bg-base-200/40 border border-base-300/60 rounded-xl p-4 flex flex-col gap-3 text-xs relative focus-within:z-30">
-          <div className="font-bold text-base-content/75 uppercase tracking-wider text-[10.5px] flex items-center gap-2 select-none pb-1.5 border-b border-base-300/40">
+          <div className="font-bold text-base-content/75 uppercase tracking-wider text-[clamp(9.5px,2vw,10.5px)] flex items-center gap-2 select-none pb-1.5 border-b border-base-300/40">
             <SlidersHorizontal className="w-3.5 h-3.5 text-base-content/50" />
             <span>Ajustes del Día y Semana</span>
           </div>
             <div className="flex flex-col gap-1">
-              <label className="font-semibold text-base-content/85">Tamaño del mes</label>
+              <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Tamaño del mes</label>
               <select
                 id="select-month-size"
                 value={monthTitleSize}
@@ -497,7 +497,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
 
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col gap-1">
-                <label className="font-semibold text-base-content/85 h-6 flex items-center">Tamaño de número</label>
+                <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)] h-6 flex items-center">Tamaño de número</label>
                 <select
                   id="select-day-size"
                   value={dayNumberSize}
@@ -514,7 +514,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
 
               <div className="flex flex-col gap-1">
                 <div className="flex justify-between items-center h-6">
-                  <label className="font-semibold text-base-content/85">Tamaño de notas</label>
+                  <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Tamaño de notas</label>
                     <button
                       type="button"
                       className={`btn btn-xs px-2 shadow-none ${dayNoteBold ? 'btn-neutral text-white border-transparent' : 'btn-ghost bg-base-100 border-base-300'}`}
@@ -543,7 +543,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
 
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col gap-1">
-                <label className="font-semibold text-base-content/85">Alineación número</label>
+                <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Alineación número</label>
                 <DayPositionPicker
                   pickerType="number"
                   value={dayNumberPosition}
@@ -557,7 +557,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="font-semibold text-base-content/85">Alineación nota</label>
+                <label className="font-semibold text-base-content/85 text-[clamp(10px,2.5vw,13px)]">Alineación nota</label>
                 <DayPositionPicker
                   pickerType="note"
                   value={dayNotePosition}
