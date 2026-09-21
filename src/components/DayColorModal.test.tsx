@@ -2,11 +2,11 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { DayColorModal } from './DayColorModal';
 
-const renderModal = (onConfirm = vi.fn(), onClose = vi.fn()) => {
+const renderModal = (onConfirm = vi.fn(), onClose = vi.fn(), dayNumber = 1) => {
   render(
     <DayColorModal
       isOpen
-      dayNumber={1}
+      dayNumber={dayNumber}
       monthName="ENERO"
       year={2027}
       onConfirm={onConfirm}
@@ -50,5 +50,35 @@ describe('DayColorModal', () => {
     fireEvent.keyDown(document.body, { key: 'Escape' });
 
     expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('bloquea el guardado si la fecha fin es anterior al día inicial', () => {
+    const { onConfirm } = renderModal(vi.fn(), vi.fn(), 15);
+
+    fireEvent.change(screen.getByLabelText(/Repetir marcador/i), {
+      target: { value: 'custom_range' },
+    });
+    fireEvent.change(screen.getByLabelText(/Fecha fin/i), {
+      target: { value: '2027-01-05' },
+    });
+
+    expect(screen.getByText(/fecha fin es anterior/i)).toBeTruthy();
+    expect(
+      (screen.getByRole('button', { name: /Guardar/i }) as HTMLButtonElement).disabled,
+    ).toBe(true);
+    expect(onConfirm).not.toHaveBeenCalled();
+  });
+
+  it('permite guardar con fecha fin válida', () => {
+    renderModal(vi.fn(), vi.fn(), 15);
+
+    fireEvent.change(screen.getByLabelText(/Repetir marcador/i), {
+      target: { value: 'custom_range' },
+    });
+
+    expect(screen.queryByText(/fecha fin es anterior/i)).toBeNull();
+    expect(
+      (screen.getByRole('button', { name: /Guardar/i }) as HTMLButtonElement).disabled,
+    ).toBe(false);
   });
 });

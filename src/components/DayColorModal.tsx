@@ -71,6 +71,9 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
     markedDays
   ).length;
 
+  const startISO = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
+  const isEndBeforeStart = pattern === 'custom_range' && endDate < startISO;
+
   useEffect(() => {
     if (isOpen) {
       setSelectedColor(currentMark?.color || PRESET_COLORS[0].hex);
@@ -96,7 +99,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
       } else {
         const tagName = (e.target as HTMLElement)?.tagName;
         const isFormControl = tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT' || tagName === 'BUTTON';
-        if (e.key === 'Enter' && !e.shiftKey && !isFormControl && !confirmDeleteSeries) {
+        if (e.key === 'Enter' && !e.shiftKey && !isFormControl && !confirmDeleteSeries && !isEndBeforeStart) {
           e.preventDefault();
           onConfirm(selectedColor, dayLabel.trim(), dayNote.trim(), {
             pattern,
@@ -116,6 +119,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
     dayNote,
     pattern,
     endDate,
+    isEndBeforeStart,
     overwriteExisting,
     confirmDeleteSeries,
     onConfirm,
@@ -333,6 +337,11 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
                     min={`${year}-01-01`}
                     max={`${year}-12-31`}
                   />
+                  {isEndBeforeStart && (
+                    <p className="text-[11px] text-error font-semibold">
+                      La fecha fin es anterior al día inicial ({dayNumber} de {monthNames[monthIndex]}).
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -396,6 +405,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
                 <button
                   type="button"
                   id="btn-confirm-mark-color"
+                  disabled={isEndBeforeStart}
                   onClick={() =>
                     onConfirm(selectedColor, dayLabel.trim(), dayNote.trim(), {
                       pattern,
