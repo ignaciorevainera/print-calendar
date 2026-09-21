@@ -6,6 +6,7 @@ import {
 } from "./store/useCalendarStore";
 import { generateYearData } from "./utils/calendarHelper";
 import { calculateRecurringDays } from "./utils/recurrenceHelper";
+import { removeDayMark, removeSeriesMarks } from "./utils/markOperations";
 import { getMonthNames } from "./utils/i18n";
 import { ControlToolbar } from "./components/ControlToolbar";
 import { CalendarCanvas } from "./components/CalendarCanvas";
@@ -223,20 +224,7 @@ export default function App() {
     if (!activeDayModal) return;
     const { dayKey, dayNumber } = activeDayModal;
 
-    setMarkedDays((prev) => {
-      const next = { ...prev };
-      if (next[dayKey]?.isHoliday) {
-        next[dayKey] = {
-          color: '',
-          label: '',
-          note: '',
-          isHoliday: true,
-        };
-      } else {
-        delete next[dayKey];
-      }
-      return next;
-    });
+    setMarkedDays((prev) => removeDayMark(prev, dayKey));
 
     showToast(`Marca del día ${dayNumber} eliminada`, "info");
     setActiveDayModal(null);
@@ -245,25 +233,9 @@ export default function App() {
   const handleRemoveSeries = (seriesId: string) => {
     let finalCount = 0;
     setMarkedDays((prev) => {
-      let count = 0;
-      const next: MarkedDaysMap = {};
-      for (const [key, value] of Object.entries(prev)) {
-        if (value.seriesId === seriesId) {
-          count++;
-          if (value.isHoliday) {
-            next[key] = {
-              color: '',
-              label: '',
-              note: '',
-              isHoliday: true,
-            };
-          }
-        } else {
-          next[key] = value;
-        }
-      }
-      finalCount = count;
-      return next;
+      const result = removeSeriesMarks(prev, seriesId);
+      finalCount = result.removedCount;
+      return result.markedDays;
     });
     showToast(`Serie eliminada (${finalCount} días)`, "info");
     setActiveDayModal(null);
