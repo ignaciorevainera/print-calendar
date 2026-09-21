@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize, DayNumberPosition, HeaderTitleSize, MonthTitleSize, CalendarLocale, SIZE_OPTIONS } from '../types';
 import { useCalendarStore, hasHolidayOrLabelMarked } from '../store/useCalendarStore';
 import { DayPositionPicker } from './DayPositionPicker';
@@ -113,6 +113,18 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   const [tempYear, setTempYear] = useState<string>(String(year));
   const [width, setWidth] = useState<number>(360);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [armClear, setArmClear] = useState<boolean>(false);
+  const armClearTimer = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (armClearTimer.current !== null) window.clearTimeout(armClearTimer.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selectedCount === 0) setArmClear(false);
+  }, [selectedCount]);
 
   const startDragging = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -157,6 +169,18 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
     const validYear = Math.min(2100, Math.max(1900, parseInt(tempYear, 10) || new Date().getFullYear()));
     setYear(validYear);
     setTempYear(String(validYear));
+  };
+
+  const handleClearClick = () => {
+    if (!armClear) {
+      setArmClear(true);
+      if (armClearTimer.current !== null) window.clearTimeout(armClearTimer.current);
+      armClearTimer.current = window.setTimeout(() => setArmClear(false), 4000);
+      return;
+    }
+    if (armClearTimer.current !== null) window.clearTimeout(armClearTimer.current);
+    setArmClear(false);
+    onClearSelectedDays();
   };
 
   return (
@@ -648,17 +672,19 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
         <button
           type="button"
           id="btn-clear-all-days"
-          onClick={onClearSelectedDays}
+          onClick={handleClearClick}
           disabled={selectedCount === 0}
-          className="btn btn-sm btn-outline btn-error w-full gap-1.5"
+          className={`btn btn-sm w-full gap-1.5 ${armClear ? 'btn-error text-white' : 'btn-outline btn-error'}`}
           title={
             selectedCount > 0
-              ? `Desmarcar todos los días marcados (${selectedCount})`
+              ? armClear
+                ? 'Pulsa de nuevo para confirmar el borrado'
+                : `Desmarcar todos los días marcados (${selectedCount})`
               : 'No hay ningún día marcado actualmente'
           }
         >
           <Eraser className="w-3.5 h-3.5" />
-          <span>Desmarcar todos</span>
+          <span>{armClear ? '¿Confirmar borrado?' : 'Desmarcar todos'}</span>
           {selectedCount > 0 && (
             <span className="badge badge-sm badge-error text-white font-mono text-[10px] font-bold">
               {selectedCount}
