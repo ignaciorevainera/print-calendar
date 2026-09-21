@@ -94,8 +94,9 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
           onClose();
         }
       } else {
-        const isTextarea = (e.target as HTMLElement)?.tagName === 'TEXTAREA';
-        if (e.key === 'Enter' && !e.shiftKey && !isTextarea && !confirmDeleteSeries) {
+        const tagName = (e.target as HTMLElement)?.tagName;
+        const isFormControl = tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT';
+        if (e.key === 'Enter' && !e.shiftKey && !isFormControl && !confirmDeleteSeries) {
           e.preventDefault();
           onConfirm(selectedColor, dayLabel.trim(), dayNote.trim(), {
             pattern,
