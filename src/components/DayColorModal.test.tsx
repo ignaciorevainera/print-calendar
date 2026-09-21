@@ -35,6 +35,15 @@ describe('DayColorModal', () => {
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });
 
+  it('Enter con foco en un botón no dispara el guardado del teclado', () => {
+    const { onConfirm } = renderModal();
+    const saveButton = screen.getByRole('button', { name: /Guardar/i });
+
+    fireEvent.keyDown(saveButton, { key: 'Enter' });
+
+    expect(onConfirm).not.toHaveBeenCalled();
+  });
+
   it('Escape cierra el modal', () => {
     const { onClose } = renderModal();
 

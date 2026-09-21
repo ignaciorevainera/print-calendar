@@ -3,6 +3,10 @@ import { parseHolidayDate } from '../services/holidayApi';
 
 const LABEL_SEPARATOR = ' · ';
 
+export function countDistinctHolidayDays(holidays: HolidayItem[]): number {
+  return new Set(holidays.map((holiday) => parseHolidayDate(holiday.date).dayKey)).size;
+}
+
 export function buildHolidayMarks(holidays: HolidayItem[], color: string): MarkedDaysMap {
   const marks: MarkedDaysMap = {};
 

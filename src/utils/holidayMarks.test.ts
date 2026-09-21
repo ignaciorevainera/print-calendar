@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildHolidayMarks } from './holidayMarks';
+import { buildHolidayMarks, countDistinctHolidayDays } from './holidayMarks';
 import { HolidayItem } from '../types';
 
 const holiday = (date: string, localName: string): HolidayItem => ({
@@ -42,5 +42,21 @@ describe('buildHolidayMarks', () => {
       '#dc2626',
     );
     expect(Object.keys(marks).sort()).toEqual(['1-1', '12-25']);
+  });
+});
+
+describe('countDistinctHolidayDays', () => {
+  it('cuenta una sola vez los festivos que comparten fecha', () => {
+    expect(
+      countDistinctHolidayDays([
+        holiday('2027-05-01', 'Día del Trabajo'),
+        holiday('2027-05-01', 'Fiesta regional'),
+        holiday('2027-12-25', 'Navidad'),
+      ]),
+    ).toBe(2);
+  });
+
+  it('devuelve cero sin festivos', () => {
+    expect(countDistinctHolidayDays([])).toBe(0);
   });
 });

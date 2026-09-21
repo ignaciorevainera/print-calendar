@@ -20,6 +20,22 @@ describe('DayPositionPicker', () => {
     expect(onShowToast).toHaveBeenCalledWith('Mensaje personalizado', 'error');
   });
 
+  it('usa disabledMessage cuando el almacén bloquea la posición', () => {
+    const onShowToast = vi.fn();
+    render(
+      <DayPositionPicker
+        value="center"
+        onChange={(_pos, onBlocked) => onBlocked?.()}
+        onShowToast={onShowToast}
+        disabledMessage="Mensaje personalizado"
+      />,
+    );
+
+    fireEvent.click(screen.getByTitle('• Centro'));
+
+    expect(onShowToast).toHaveBeenCalledWith('Mensaje personalizado', 'error');
+  });
+
   it('emite el mensaje de deflexión con la etiqueta de la posición', () => {
     const onShowToast = vi.fn();
     render(

@@ -7,7 +7,7 @@ import {
 } from '../services/holidayApi';
 import { AvailableCountry, HolidayItem, MarkedDaysMap } from '../types';
 import { PRESET_COLORS } from './DayColorModal';
-import { buildHolidayMarks } from '../utils/holidayMarks';
+import { buildHolidayMarks, countDistinctHolidayDays } from '../utils/holidayMarks';
 import { 
   Globe2, 
   CalendarCheck, 
@@ -176,6 +176,8 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
     onApplyHolidays(newMarksMap, appendMode, finalLabel, appliedCount);
     onClose();
   };
+
+  const distinctDayCount = countDistinctHolidayDays(displayedHolidays);
 
   if (!isOpen) return null;
 
@@ -472,7 +474,7 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
             className="btn btn-sm btn-primary gap-1.5 text-white"
           >
             <Check className="w-4 h-4 shrink-0" />
-            <span className="truncate">Cargar {displayedHolidays.length} festivos<span className="hidden sm:inline"> en el calendario</span></span>
+            <span className="truncate">Cargar {distinctDayCount} {distinctDayCount === 1 ? 'día' : 'días'}<span className="hidden sm:inline"> en el calendario</span></span>
           </button>
         </div>
       </div>
