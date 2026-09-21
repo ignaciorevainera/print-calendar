@@ -287,7 +287,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                         )}
                       </div>
                     ) : markInfo?.label ? (
-                      <span className="flex flex-col w-full h-full min-h-0 min-w-0 leading-tight overflow-hidden">
+                      <span className="flex flex-col min-w-0 max-w-full leading-tight overflow-hidden">
                         <span className="shrink-0">{day}</span>
                         <span className="text-[8px] font-semibold truncate max-w-full opacity-90">
                           {markInfo.label}

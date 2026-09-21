@@ -82,6 +82,22 @@ describe('DayColorModal', () => {
     ).toBe(false);
   });
 
+  it('no marca error si la fecha fin está vacía', () => {
+    renderModal(vi.fn(), vi.fn(), 15);
+
+    fireEvent.change(screen.getByLabelText(/Repetir marcador/i), {
+      target: { value: 'custom_range' },
+    });
+    fireEvent.change(screen.getByLabelText(/Fecha fin/i), {
+      target: { value: '' },
+    });
+
+    expect(screen.queryByText(/fecha fin es anterior/i)).toBeNull();
+    expect(
+      (screen.getByRole('button', { name: /Guardar/i }) as HTMLButtonElement).disabled,
+    ).toBe(false);
+  });
+
   it('muestra el contador de la etiqueta al escribir', () => {
     renderModal();
 

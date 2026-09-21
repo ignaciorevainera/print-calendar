@@ -85,6 +85,7 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
 
     fetchHolidays(year, selectedCountryCode, controller.signal)
       .then((data) => {
+        if (controller.signal.aborted) return;
         setRawHolidays(data);
         setIsLoadingHolidays(false);
         setSelectedRegion('');

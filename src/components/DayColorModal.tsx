@@ -72,7 +72,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
   ).length;
 
   const startISO = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
-  const isEndBeforeStart = pattern === 'custom_range' && endDate < startISO;
+  const isEndBeforeStart = pattern === 'custom_range' && endDate !== '' && endDate < startISO;
 
   useEffect(() => {
     if (isOpen) {
