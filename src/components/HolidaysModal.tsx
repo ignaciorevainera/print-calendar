@@ -79,29 +79,25 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
   useEffect(() => {
     if (!isOpen || !selectedCountryCode) return;
 
-    let isMounted = true;
+    const controller = new AbortController();
     setIsLoadingHolidays(true);
     setErrorMessage(null);
 
-    fetchHolidays(year, selectedCountryCode)
+    fetchHolidays(year, selectedCountryCode, controller.signal)
       .then((data) => {
-        if (isMounted) {
-          setRawHolidays(data);
-          setIsLoadingHolidays(false);
-          // Reset region selection if current region is not in new country
-          setSelectedRegion('');
-        }
+        setRawHolidays(data);
+        setIsLoadingHolidays(false);
+        setSelectedRegion('');
       })
       .catch((err) => {
-        if (isMounted) {
-          setErrorMessage(err.message || `No se pudieron cargar los festivos de ${year} para este país.`);
-          setRawHolidays([]);
-          setIsLoadingHolidays(false);
-        }
+        if (controller.signal.aborted) return;
+        setErrorMessage(err.message || `No se pudieron cargar los festivos de ${year} para este país.`);
+        setRawHolidays([]);
+        setIsLoadingHolidays(false);
       });
 
     return () => {
-      isMounted = false;
+      controller.abort();
     };
   }, [isOpen, selectedCountryCode, year]);
 

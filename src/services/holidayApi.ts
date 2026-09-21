@@ -106,15 +106,30 @@ export async function fetchAvailableCountries(): Promise<AvailableCountry[]> {
   }
 }
 
+const holidaysCache = new Map<string, HolidayItem[]>();
+
+export function clearHolidaysCache(): void {
+  holidaysCache.clear();
+}
+
 /**
  * Fetches public holidays for a given year and country code
  */
-export async function fetchHolidays(year: number, countryCode: string): Promise<HolidayItem[]> {
-  const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
+export async function fetchHolidays(
+  year: number,
+  countryCode: string,
+  signal?: AbortSignal
+): Promise<HolidayItem[]> {
+  const cacheKey = `${year}-${countryCode}`;
+  const cached = holidaysCache.get(cacheKey);
+  if (cached) return cached;
+
+  const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`, { signal });
   if (!response.ok) {
     throw new Error(`No se pudieron obtener los festivos para ${countryCode} en ${year}`);
   }
   const data: HolidayItem[] = await response.json();
+  holidaysCache.set(cacheKey, data);
   return data;
 }
 

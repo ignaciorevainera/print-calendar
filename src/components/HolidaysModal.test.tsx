@@ -2,6 +2,7 @@ import { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HolidaysModal } from './HolidaysModal';
+import { clearHolidaysCache } from '../services/holidayApi';
 
 const mockFetch = vi.fn();
 
@@ -12,6 +13,7 @@ const mockCountries = [
 ];
 
 beforeEach(() => {
+  clearHolidaysCache();
   mockFetch.mockReset();
   mockFetch.mockImplementation(async (url: string) => {
     if (url.includes('AvailableCountries')) {
