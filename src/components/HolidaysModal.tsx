@@ -7,6 +7,7 @@ import {
 } from '../services/holidayApi';
 import { AvailableCountry, HolidayItem, MarkedDaysMap } from '../types';
 import { PRESET_COLORS } from './DayColorModal';
+import { buildHolidayMarks } from '../utils/holidayMarks';
 import { 
   Globe2, 
   CalendarCheck, 
@@ -165,23 +166,14 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
   const handleApply = () => {
     if (displayedHolidays.length === 0) return;
 
-    const newMarksMap: MarkedDaysMap = {};
-
-    displayedHolidays.forEach((h) => {
-      const parsed = parseHolidayDate(h.date);
-      if (parsed) {
-        newMarksMap[parsed.dayKey] = {
-          color: holidayColor,
-          label: h.localName || h.name
-        };
-      }
-    });
+    const newMarksMap = buildHolidayMarks(displayedHolidays, holidayColor);
+    const appliedCount = Object.keys(newMarksMap).length;
 
     const countryName = currentCountry?.spanishName || currentCountry?.name || selectedCountryCode;
     const regionName = selectedRegion ? ` (${formatSubdivisionName(selectedRegion)})` : '';
     const finalLabel = `${countryName}${regionName}`;
 
-    onApplyHolidays(newMarksMap, appendMode, finalLabel, displayedHolidays.length);
+    onApplyHolidays(newMarksMap, appendMode, finalLabel, appliedCount);
     onClose();
   };
 

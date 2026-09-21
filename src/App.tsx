@@ -288,7 +288,7 @@ export default function App() {
     });
 
     showToast(
-      `Se han cargado ${count} festivos de ${countryLabel} en el calendario`,
+      `Se han cargado ${count} días festivos de ${countryLabel} en el calendario`,
       "success",
     );
     checkAndResetMiddlePositions(updatedMarkedDays);
