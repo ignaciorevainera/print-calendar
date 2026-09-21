@@ -3,7 +3,7 @@ import { MonthInfo, FontFamilyKey, HeaderTitleSize } from "../types";
 import { CalendarMonth } from "./CalendarMonth";
 import { useCalendarStore } from "../store/useCalendarStore";
 import { chunkMonths } from "../utils/calendarHelper";
-import { getContrastTextColor } from "../utils/colorHelper";
+import { customCalendarOverrides } from "../utils/calendarTheme";
 
 const headerTitleSizeMap: Record<HeaderTitleSize, string> = {
   sm: "text-sm",
@@ -47,8 +47,6 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
   } = useCalendarStore();
 
   const computedBg = calendarBgColor || "var(--cal-bg)";
-  const isCustomBg = Boolean(calendarBgColor);
-  const customContrast = isCustomBg ? getContrastTextColor(calendarBgColor) : undefined;
 
   const fontClassMap: Record<FontFamilyKey, string> = {
     jakarta: 'font-["Plus_Jakarta_Sans",sans-serif]',
@@ -86,29 +84,7 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
           style={{
             backgroundColor: computedBg,
             boxSizing: "border-box",
-            ...(isCustomBg
-              ? customContrast === "#ffffff"
-                ? {
-                    "--cal-text": "#ffffff",
-                    "--cal-muted": "#94a3b8",
-                    "--cal-accent": "#38bdf8",
-                    "--cal-border": "#334155",
-                    "--cal-grid-border": "#334155",
-                    "--cal-weekend": "#e2e8f0",
-                    "--cal-weekend-bg": "#1e293b",
-                  }
-                : palette === "nocturno"
-                ? {
-                    "--cal-text": "#1e293b",
-                    "--cal-muted": "#64748b",
-                    "--cal-accent": "#1e40af",
-                    "--cal-border": "#cbd5e1",
-                    "--cal-grid-border": "#e2e8f0",
-                    "--cal-weekend": "#1e3a8a",
-                    "--cal-weekend-bg": "#f0f9ff",
-                  }
-                : {}
-              : {}),
+            ...customCalendarOverrides(calendarBgColor, palette),
           } as React.CSSProperties}
         >
           <div className="w-full mb-2 pb-1 border-b border-[var(--cal-border)] shrink-0 box-border flex justify-between items-center px-2">
