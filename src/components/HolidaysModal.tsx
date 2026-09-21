@@ -105,6 +105,15 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
     };
   }, [isOpen, selectedCountryCode, year]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   // Extract available regions / subdivisions from holiday data
   const availableRegions = useMemo(() => {
     const regionSet = new Set<string>();
