@@ -21,7 +21,7 @@ export function customCalendarOverrides(
   if (palette === 'nocturno') {
     return {
       '--cal-bg': calendarBgColor,
-      '--cal-text': '#1e3a8a',
+      '--cal-text': '#1e293b',
       '--cal-muted': '#64748b',
       '--cal-accent': '#1e40af',
       '--cal-border': '#cbd5e1',

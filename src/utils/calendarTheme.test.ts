@@ -22,6 +22,6 @@ describe('customCalendarOverrides', () => {
   it('usa variables nocturno sobre fondo claro con paleta nocturno', () => {
     const overrides = customCalendarOverrides('#fefce8', 'nocturno');
     expect(overrides['--cal-bg']).toBe('#fefce8');
-    expect(overrides['--cal-text']).toBe('#1e3a8a');
+    expect(overrides['--cal-text']).toBe('#1e293b');
   });
 });
