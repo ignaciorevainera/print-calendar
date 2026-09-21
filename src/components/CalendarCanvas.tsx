@@ -61,10 +61,17 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
   };
 
   const gridClassMap: Record<typeof layout, string> = {
-    anual: "grid-cols-4 grid-rows-3 gap-3",
-    semestral: "grid-cols-3 grid-rows-2 gap-4",
-    trimestral: "grid-cols-3 grid-rows-1 gap-6",
-    mensual: "grid-cols-1 grid-rows-1 gap-6",
+    anual: "grid-rows-3 gap-3",
+    semestral: "grid-rows-2 gap-4",
+    trimestral: "grid-rows-1 gap-6",
+    mensual: "grid-rows-1 gap-6",
+  };
+
+  const gridBaseColsMap: Record<typeof layout, number> = {
+    anual: 4,
+    semestral: 3,
+    trimestral: 3,
+    mensual: 1,
   };
 
   const pages = chunkMonths(months, layout);
@@ -127,7 +134,11 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
           </div>
 
           <div
+            data-testid={`calendar-grid-${pageIndex}`}
             className={`grid ${gridClassMap[layout]} flex-1 h-full w-full min-h-0 box-border`}
+            style={{
+              gridTemplateColumns: `repeat(${Math.min(pageMonths.length, gridBaseColsMap[layout])}, minmax(0, 1fr))`,
+            }}
           >
             {pageMonths.map((month) => (
               <CalendarMonth
