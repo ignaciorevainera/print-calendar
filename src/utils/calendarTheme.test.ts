@@ -7,10 +7,16 @@ describe('customCalendarOverrides', () => {
   });
 
   it('aplica contraste oscuro sobre fondo oscuro', () => {
-    const overrides = customCalendarOverrides('#1e293b', 'gris');
-    expect(overrides['--cal-bg']).toBe('#1e293b');
-    expect(overrides['--cal-text']).toBe('#ffffff');
-    expect(overrides['--cal-weekend-bg']).toBe('#1e293b');
+    expect(customCalendarOverrides('#1e293b', 'gris')).toEqual({
+      '--cal-bg': '#1e293b',
+      '--cal-text': '#ffffff',
+      '--cal-muted': '#94a3b8',
+      '--cal-accent': '#38bdf8',
+      '--cal-border': '#334155',
+      '--cal-grid-border': '#334155',
+      '--cal-weekend': '#e2e8f0',
+      '--cal-weekend-bg': '#1e293b',
+    });
   });
 
   it('propaga el fondo a las tarjetas con paleta clara', () => {
@@ -20,8 +26,15 @@ describe('customCalendarOverrides', () => {
   });
 
   it('usa variables nocturno sobre fondo claro con paleta nocturno', () => {
-    const overrides = customCalendarOverrides('#fefce8', 'nocturno');
-    expect(overrides['--cal-bg']).toBe('#fefce8');
-    expect(overrides['--cal-text']).toBe('#1e293b');
+    expect(customCalendarOverrides('#fefce8', 'nocturno')).toEqual({
+      '--cal-bg': '#fefce8',
+      '--cal-text': '#1e293b',
+      '--cal-muted': '#64748b',
+      '--cal-accent': '#1e40af',
+      '--cal-border': '#cbd5e1',
+      '--cal-grid-border': '#e2e8f0',
+      '--cal-weekend': '#1e3a8a',
+      '--cal-weekend-bg': '#f0f9ff',
+    });
   });
 });

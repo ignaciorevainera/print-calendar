@@ -22,4 +22,15 @@ describe('CalendarCanvas', () => {
     const grid = screen.getByTestId('calendar-grid-0');
     expect(grid.style.gridTemplateColumns).toContain('repeat(4,');
   });
+
+  it('propaga el fondo personalizado a la página mediante variables CSS', () => {
+    useCalendarStore.setState({ layout: 'anual', calendarBgColor: '#fefce8' });
+    const year = generateYearData(2027, 'monday', 'es');
+    const { container } = render(<CalendarCanvas months={year} onSelectDay={() => {}} />);
+
+    const page = container.querySelector('.page-a4') as HTMLElement;
+    expect(page.style.getPropertyValue('--cal-bg')).toBe('#fefce8');
+
+    useCalendarStore.setState({ calendarBgColor: '' });
+  });
 });
