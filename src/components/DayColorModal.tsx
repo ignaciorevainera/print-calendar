@@ -285,6 +285,9 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
                   maxLength={30}
                   className="input input-bordered input-sm w-full"
                 />
+                <p className="text-[10px] text-base-content/60 font-medium text-right">
+                  {dayLabel.length}/30
+                </p>
               </div>
 
               <div className="space-y-1">
@@ -300,6 +303,9 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
                   maxLength={250}
                   className="textarea textarea-bordered textarea-sm w-full text-xs"
                 />
+                <p className="text-[10px] text-base-content/60 font-medium text-right">
+                  {dayNote.length}/250
+                </p>
               </div>
             </div>
 

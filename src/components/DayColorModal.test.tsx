@@ -81,4 +81,24 @@ describe('DayColorModal', () => {
       (screen.getByRole('button', { name: /Guardar/i }) as HTMLButtonElement).disabled,
     ).toBe(false);
   });
+
+  it('muestra el contador de la etiqueta al escribir', () => {
+    renderModal();
+
+    fireEvent.change(screen.getByLabelText(/Etiqueta o motivo/i), {
+      target: { value: 'Cumpleaños' },
+    });
+
+    expect(screen.getByText('10/30')).toBeTruthy();
+  });
+
+  it('muestra el contador de la nota al escribir', () => {
+    renderModal();
+
+    fireEvent.change(screen.getByLabelText(/Nota o texto descriptivo/i), {
+      target: { value: 'Hola' },
+    });
+
+    expect(screen.getByText('4/250')).toBeTruthy();
+  });
 });
