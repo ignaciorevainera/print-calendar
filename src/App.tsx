@@ -15,7 +15,7 @@ import { HolidaysModal } from "./components/HolidaysModal";
 import { Info, CheckCircle2, AlertCircle } from "lucide-react";
 
 export default function App() {
-  const { year, weekStart, markedDays, setMarkedDays, monthRange, locale } =
+  const { year, weekStart, markedDays, setMarkedDays, monthRange, locale, palette } =
     useCalendarStore();
 
   const [isHolidaysModalOpen, setIsHolidaysModalOpen] =
@@ -271,7 +271,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen md:h-screen flex flex-col md:flex-row bg-slate-100 selection:bg-blue-100 relative overflow-x-hidden md:overflow-hidden print:h-auto print:overflow-visible">
+    <div
+      data-theme={palette === 'nocturno' ? 'dark' : 'light'}
+      className="min-h-screen md:h-screen flex flex-col md:flex-row bg-slate-100 selection:bg-blue-100 relative overflow-x-hidden md:overflow-hidden print:h-auto print:overflow-visible"
+    >
       {/* Área Principal de Visualización del Calendario */}
       <main className="flex-1 min-w-0 flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 print:p-0 print:w-full print:overflow-visible overflow-auto">
         <CalendarCanvas
@@ -332,7 +335,7 @@ export default function App() {
           role="status"
           aria-live="polite"
           aria-atomic="true"
-          className="toast toast-center toast-bottom z-50 no-print"
+          className="toast toast-end toast-bottom z-50 no-print"
         >
           <div
             className={`alert text-xs font-semibold py-2 px-4 shadow-xl border ${
