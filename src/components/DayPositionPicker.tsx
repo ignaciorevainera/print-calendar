@@ -1,6 +1,7 @@
 import React from 'react';
 import { useCalendarStore } from '../store/useCalendarStore';
 import { DayNumberPosition } from '../types';
+import { POSITION_LABELS, deflectionMessage } from '../utils/positionMessages';
 
 
 const POSITIONS: { id: DayNumberPosition; label: string }[][] = [
@@ -20,18 +21,6 @@ const POSITIONS: { id: DayNumberPosition; label: string }[][] = [
     { id: 'bottom-right', label: '↘ Inferior Derecha' },
   ],
 ];
-
-const positionLabels: Record<DayNumberPosition, string> = {
-  'top-left': 'Sup. Izquierda',
-  'top-center': 'Sup. Centro',
-  'top-right': 'Sup. Derecha',
-  'middle-left': 'Centro Izquierda',
-  'center': 'Centro',
-  'middle-right': 'Centro Derecha',
-  'bottom-left': 'Inf. Izquierda',
-  'bottom-center': 'Inf. Centro',
-  'bottom-right': 'Inf. Derecha',
-};
 
 
 interface DayPositionPickerProps {
@@ -87,7 +76,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
         handleBlocked,
         (deflectedPos) => {
           const area = pickerType === 'number' ? 'nota' : 'número';
-          onShowToast?.(`Posición de ${area} desplazada a ${deflectedPos.replace('-', ' ')} para evitar colisiones en la fila inferior`, 'info');
+          onShowToast?.(deflectionMessage(area, deflectedPos), 'info');
         }
       );
     } else {
@@ -95,7 +84,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
         pos,
         handleBlocked,
         (deflectedPos) => {
-          onShowToast?.(`Posición de nota desplazada a ${deflectedPos.replace('-', ' ')} para evitar colisiones en la fila inferior`, 'info');
+          onShowToast?.(deflectionMessage('nota', deflectedPos), 'info');
         }
       );
     }
@@ -109,7 +98,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
         className="btn btn-sm btn-outline border-base-300 w-full justify-between gap-1 text-xs px-2 sm:px-3 font-medium"
       >
         <span className="truncate">
-          <span>{positionLabels[currentPosition]}</span>
+          <span>{POSITION_LABELS[currentPosition]}</span>
         </span>
       </div>
       <div
