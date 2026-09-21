@@ -69,11 +69,11 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
 
   const handleSelect = (pos: DayNumberPosition) => {
     if (disabledPositions?.includes(pos)) {
-      if (pos === oppositeElementPosition) {
-        onShowToast?.('No se puede colocar la nota y el número en el mismo cuadrante', 'error');
-      } else {
-        onShowToast?.('No se puede usar la fila central porque hay días festivos cargados en el calendario', 'error');
-      }
+      const fallbackMessage =
+        pos === oppositeElementPosition
+          ? 'No se puede colocar la nota y el número en el mismo cuadrante'
+          : 'No se puede usar la fila central porque hay días festivos cargados en el calendario';
+      onShowToast?.(disabledMessage ?? fallbackMessage, 'error');
       return;
     }
 
