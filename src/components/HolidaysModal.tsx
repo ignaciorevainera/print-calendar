@@ -139,6 +139,14 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
     );
   }, [countries, countrySearch]);
 
+  useEffect(() => {
+    if (filteredCountries.length === 0) return;
+    if (!filteredCountries.some((c) => c.countryCode === selectedCountryCode)) {
+      setSelectedCountryCode(filteredCountries[0].countryCode);
+      setScopeFilter('all');
+    }
+  }, [filteredCountries, selectedCountryCode]);
+
   // Filtered holidays to be applied and previewed
   const displayedHolidays = useMemo(() => {
     return rawHolidays.filter((h) => {
