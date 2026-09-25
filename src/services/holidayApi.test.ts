@@ -27,6 +27,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   vi.unstubAllGlobals();
 });
 
@@ -81,20 +82,37 @@ describe('fetchAvailableCountries', () => {
     expect(result).toEqual(FALLBACK_COUNTRIES);
   });
 
+  it('reintenta la lista predeterminada tras dos fallos', async () => {
+    mockFetch.mockResolvedValue({ ok: false, status: 500, json: async () => [] });
+
+    const first = await fetchAvailableCountries();
+    const second = await fetchAvailableCountries();
+
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+    expect(first).toEqual(FALLBACK_COUNTRIES);
+    expect(second).toEqual(FALLBACK_COUNTRIES);
+  });
+
   it('aborta la petición tras 10 segundos y usa la lista predeterminada', async () => {
     vi.useFakeTimers();
+    let receivedSignal: AbortSignal | undefined;
     mockFetch.mockImplementation(
-      (_url: string, init?: RequestInit) =>
-        new Promise((_resolve, reject) => {
+      (_url: string, init?: RequestInit) => {
+        receivedSignal = init?.signal;
+        return new Promise((_resolve, reject) => {
           init?.signal?.addEventListener('abort', () => reject(new Error('aborted')));
-        }),
+        });
+      },
     );
 
     const promise = fetchAvailableCountries();
-    await vi.advanceTimersByTimeAsync(10_000);
+    await vi.advanceTimersByTimeAsync(9_999);
+    expect(receivedSignal?.aborted).toBe(false);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(receivedSignal?.aborted).toBe(true);
+
     const result = await promise;
 
     expect(result).toEqual(FALLBACK_COUNTRIES);
-    vi.useRealTimers();
   });
 });
