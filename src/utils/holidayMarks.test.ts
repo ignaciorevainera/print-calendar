@@ -43,6 +43,15 @@ describe('buildHolidayMarks', () => {
     );
     expect(Object.keys(marks).sort()).toEqual(['1-1', '12-25']);
   });
+
+  it('omite festivos con fecha malformada', () => {
+    const marks = buildHolidayMarks(
+      [holiday('sin-fecha', 'Navidad'), holiday('2027-01-01', 'Año Nuevo')],
+      '#dc2626',
+    );
+
+    expect(Object.keys(marks)).toEqual(['1-1']);
+  });
 });
 
 describe('countDistinctHolidayDays', () => {
@@ -58,5 +67,11 @@ describe('countDistinctHolidayDays', () => {
 
   it('devuelve cero sin festivos', () => {
     expect(countDistinctHolidayDays([])).toBe(0);
+  });
+
+  it('no cuenta las fechas malformadas', () => {
+    expect(
+      countDistinctHolidayDays([holiday('2027-13-01', 'Imposible'), holiday('2027-01-01', 'Año Nuevo')]),
+    ).toBe(1);
   });
 });
