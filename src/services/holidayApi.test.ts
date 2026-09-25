@@ -115,4 +115,30 @@ describe('fetchAvailableCountries', () => {
 
     expect(result).toEqual(FALLBACK_COUNTRIES);
   });
+
+  it('propaga una señal externa pendiente y usa la lista predeterminada al abortar', async () => {
+    let receivedSignal: AbortSignal | undefined;
+    mockFetch.mockImplementation(
+      (_url: string, init?: RequestInit) => {
+        receivedSignal = init?.signal;
+        return new Promise((_resolve, reject) => {
+          init?.signal?.addEventListener('abort', () => reject(new Error('abortado')));
+        });
+      },
+    );
+    const controller = new AbortController();
+
+    const promise = fetchAvailableCountries(controller.signal);
+    expect(receivedSignal?.aborted).toBe(false);
+    controller.abort();
+    expect(receivedSignal?.aborted).toBe(true);
+
+    await expect(promise).resolves.toEqual(FALLBACK_COUNTRIES);
+  });
+
+  it('usa la lista predeterminada cuando la petición falla por error de red', async () => {
+    mockFetch.mockRejectedValue(new Error('error de red'));
+
+    await expect(fetchAvailableCountries()).resolves.toEqual(FALLBACK_COUNTRIES);
+  });
 });

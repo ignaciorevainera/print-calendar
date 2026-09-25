@@ -3,7 +3,8 @@ import {
   fetchAvailableCountries, 
   fetchHolidays, 
   parseHolidayDate, 
-  formatSubdivisionName 
+  formatSubdivisionName,
+  isValidHolidayDate
 } from '../services/holidayApi';
 import { AvailableCountry, HolidayItem, MarkedDaysMap } from '../types';
 import { PRESET_COLORS } from './DayColorModal';
@@ -152,18 +153,20 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
 
   // Filtered holidays to be applied and previewed
   const displayedHolidays = useMemo(() => {
-    return rawHolidays.filter((h) => {
-      if (scopeFilter === 'national') {
-        return h.global === true || !h.counties || h.counties.length === 0;
-      }
-      if (scopeFilter === 'region' && selectedRegion) {
-        return (
-          h.global === true ||
-          (h.counties && h.counties.includes(selectedRegion))
-        );
-      }
-      return true; // 'all'
-    });
+    return rawHolidays
+      .filter((h) => isValidHolidayDate(h.date))
+      .filter((h) => {
+        if (scopeFilter === 'national') {
+          return h.global === true || !h.counties || h.counties.length === 0;
+        }
+        if (scopeFilter === 'region' && selectedRegion) {
+          return (
+            h.global === true ||
+            (h.counties && h.counties.includes(selectedRegion))
+          );
+        }
+        return true; // 'all'
+      });
   }, [rawHolidays, scopeFilter, selectedRegion]);
 
   // Selected country display name
@@ -182,9 +185,11 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
     return `${parsed.day} de ${monthNames[parsed.monthIndex]}`;
   };
 
+  const distinctDayCount = countDistinctHolidayDays(displayedHolidays);
+
   // Confirm and Apply Holidays to main Calendar State
   const handleApply = () => {
-    if (displayedHolidays.length === 0) return;
+    if (distinctDayCount === 0) return;
 
     const newMarksMap = buildHolidayMarks(displayedHolidays, holidayColor);
     const appliedCount = Object.keys(newMarksMap).length;
@@ -196,8 +201,6 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
     onApplyHolidays(newMarksMap, appendMode, finalLabel, appliedCount);
     onClose();
   };
-
-  const distinctDayCount = countDistinctHolidayDays(displayedHolidays);
 
   if (!isOpen) return null;
 
@@ -490,7 +493,7 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
             type="button"
             id="btn-confirm-apply-holidays"
             onClick={handleApply}
-            disabled={isLoadingHolidays || displayedHolidays.length === 0 || filteredCountries.length === 0 || !selectedCountryCode}
+            disabled={isLoadingHolidays || distinctDayCount === 0 || filteredCountries.length === 0 || !selectedCountryCode}
             className="btn btn-sm btn-primary gap-1.5 text-white"
           >
             <Check className="w-4 h-4 shrink-0" />
