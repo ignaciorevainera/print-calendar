@@ -69,13 +69,13 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
     const handleBlocked = () => {
       onShowToast?.(disabledMessage ?? 'No se puede usar la fila central porque hay días festivos cargados en el calendario', 'error');
     };
+    const area = pickerType === 'number' && onChange ? 'nota' : 'número';
     
     if (onChange) {
       onChange(
         pos,
         handleBlocked,
         (deflectedPos) => {
-          const area = pickerType === 'number' ? 'nota' : 'número';
           onShowToast?.(deflectionMessage(area, deflectedPos), 'info');
         }
       );
@@ -84,7 +84,7 @@ export const DayPositionPicker: React.FC<DayPositionPickerProps> = ({
         pos,
         handleBlocked,
         (deflectedPos) => {
-          onShowToast?.(deflectionMessage('nota', deflectedPos), 'info');
+          onShowToast?.(deflectionMessage(area, deflectedPos), 'info');
         }
       );
     }

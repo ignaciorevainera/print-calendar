@@ -112,7 +112,7 @@ describe('DayPositionPicker', () => {
     );
   });
 
-  it('anuncia el ajuste de la nota al escribir en el almacén', () => {
+  it('anuncia el ajuste del número al escribir en el almacén', () => {
     const onShowToast = vi.fn();
     useCalendarStore.setState({ dayNumberPosition: 'center', dayNotePosition: 'bottom-left' });
     render(<DayPositionPicker onShowToast={onShowToast} />);
@@ -120,7 +120,7 @@ describe('DayPositionPicker', () => {
     fireEvent.click(screen.getByTitle('↙ Inferior Izquierda'));
 
     expect(onShowToast).toHaveBeenCalledWith(
-      'Posición de nota ajustada a Sup. Derecha para evitar colisión',
+      'Posición de número ajustada a Sup. Derecha para evitar colisión',
       'info',
     );
   });
