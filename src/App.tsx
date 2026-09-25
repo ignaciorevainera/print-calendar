@@ -7,6 +7,7 @@ import { generateYearData } from "./utils/calendarHelper";
 import { calculateRecurringDays } from "./utils/recurrenceHelper";
 import { removeDayMark, removeSeriesMarks } from "./utils/markOperations";
 import { getMonthNames } from "./utils/i18n";
+import { monthIndexFromName } from "./utils/monthIndex";
 import { ControlToolbar } from "./components/ControlToolbar";
 import { CalendarCanvas } from "./components/CalendarCanvas";
 import { DayColorModal } from "./components/DayColorModal";
@@ -120,9 +121,9 @@ export default function App() {
     if (!activeDayModal) return;
     const { dayKey, dayNumber, monthName } = activeDayModal;
     const monthNames = getMonthNames(locale);
-    const monthIndex = monthNames.indexOf(monthName);
+    const monthIndex = monthIndexFromName(monthName, monthNames);
 
-    if (recurrence && recurrence.pattern !== "none") {
+    if (recurrence && recurrence.pattern !== "none" && monthIndex !== null) {
       const seriesId = `series_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
       const targetKeys = calculateRecurringDays(
         year,

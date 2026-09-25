@@ -5,6 +5,7 @@ import { getContrastTextColor } from '../utils/colorHelper';
 import { calculateRecurringDays } from '../utils/recurrenceHelper';
 import { useCalendarStore } from '../store/useCalendarStore';
 import { getMonthNames } from '../utils/i18n';
+import { monthIndexFromName } from '../utils/monthIndex';
 
 export const PRESET_COLORS = [
   { name: 'Azul Ejecutivo', hex: '#2563eb' },
@@ -57,8 +58,7 @@ export const DayColorModal: React.FC<DayColorModalProps> = ({
   const [confirmDeleteSeries, setConfirmDeleteSeries] = useState<boolean>(false);
 
   const monthNames = getMonthNames(locale);
-  const rawMonthIndex = monthNames.indexOf(monthName);
-  const monthIndex = rawMonthIndex !== -1 ? rawMonthIndex : 0;
+  const monthIndex = monthIndexFromName(monthName, monthNames) ?? 0;
 
   const targetDate = new Date(year, monthIndex, dayNumber);
   const weekdayName = targetDate.toLocaleDateString(locale, { weekday: 'long' });
