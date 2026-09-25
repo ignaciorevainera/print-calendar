@@ -37,4 +37,14 @@ describe('removeSeriesMarks', () => {
     expect(result.removedCount).toBe(1);
     expect(result.markedDays).toEqual({});
   });
+
+  it('conserva el mapa y reporta cero cuando la serie no existe', () => {
+    const original: MarkedDaysMap = { '1-1': { color: '#2563eb', seriesId: 's1' } };
+
+    const result = removeSeriesMarks(original, 'otra-serie');
+
+    expect(result.removedCount).toBe(0);
+    expect(result.markedDays).toEqual(original);
+    expect(Object.keys(original)).toEqual(['1-1']);
+  });
 });

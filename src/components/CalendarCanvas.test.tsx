@@ -46,4 +46,41 @@ describe('CalendarCanvas', () => {
     expect(page).not.toBeNull();
     expect(page?.style.getPropertyValue('--cal-bg')).toBe('#fefce8');
   });
+
+  it('usa 3 columnas en una página semestral parcial', () => {
+    setCanvasState({ layout: 'semestral' });
+    const months = generateYearData(2027, 'monday', 'es').slice(0, 5);
+    render(<CalendarCanvas months={months} onSelectDay={() => {}} />);
+
+    const grid = screen.getByTestId('calendar-grid-0');
+    expect(grid.style.gridTemplateColumns).toContain('repeat(3,');
+  });
+
+  it('usa 3 columnas en una página trimestral parcial', () => {
+    setCanvasState({ layout: 'trimestral' });
+    const months = generateYearData(2027, 'monday', 'es').slice(0, 2);
+    render(<CalendarCanvas months={months} onSelectDay={() => {}} />);
+
+    const grid = screen.getByTestId('calendar-grid-0');
+    expect(grid.style.gridTemplateColumns).toContain('repeat(2,');
+  });
+
+  it('usa una sola columna en layout mensual', () => {
+    setCanvasState({ layout: 'mensual' });
+    const months = generateYearData(2027, 'monday', 'es').slice(0, 1);
+    render(<CalendarCanvas months={months} onSelectDay={() => {}} />);
+
+    const grid = screen.getByTestId('calendar-grid-0');
+    expect(grid.style.gridTemplateColumns).toContain('repeat(1,');
+  });
+
+  it('preserva filas y huecos del layout anual', () => {
+    setCanvasState({ layout: 'anual' });
+    const year = generateYearData(2027, 'monday', 'es');
+    render(<CalendarCanvas months={year} onSelectDay={() => {}} />);
+
+    const grid = screen.getByTestId('calendar-grid-0');
+    expect(grid.className).toContain('grid-rows-3');
+    expect(grid.className).toContain('gap-3');
+  });
 });

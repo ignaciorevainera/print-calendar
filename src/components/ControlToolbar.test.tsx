@@ -1,9 +1,25 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ControlToolbar } from './ControlToolbar';
 import { useCalendarStore } from '../store/useCalendarStore';
 
 describe('ControlToolbar clear-all confirm', () => {
+  const renderToolbar = (onClearSelectedDays = vi.fn()) => {
+    render(
+      <ControlToolbar
+        onPrint={vi.fn()}
+        onClearSelectedDays={onClearSelectedDays}
+        onOpenHolidaysModal={vi.fn()}
+      />,
+    );
+    return onClearSelectedDays;
+  };
+
+  afterEach(() => {
+    vi.useRealTimers();
+    useCalendarStore.setState({ markedDays: {} });
+  });
+
   it('deshabilita el borrado sin días marcados', () => {
     useCalendarStore.setState({ markedDays: {} });
     render(
@@ -54,5 +70,41 @@ describe('ControlToolbar clear-all confirm', () => {
 
     expect(useCalendarStore.getState().year).toBe(2027);
     expect(yearInput.value).toBe('2027');
+  });
+
+  it('se desarma solo tras 4 segundos', () => {
+    vi.useFakeTimers();
+    useCalendarStore.setState({ markedDays: { '1-15': { color: '#dc2626', label: 'Fiesta' } } });
+    const onClearSelectedDays = renderToolbar();
+    const clearButton = screen.getByRole('button', { name: /Desmarcar todos/i });
+
+    fireEvent.click(clearButton);
+    expect(screen.getByText('¿Confirmar borrado?')).toBeTruthy();
+
+    act(() => {
+      vi.advanceTimersByTime(4000);
+    });
+    expect(screen.queryByText('¿Confirmar borrado?')).toBeNull();
+
+    fireEvent.click(clearButton);
+    expect(onClearSelectedDays).not.toHaveBeenCalled();
+    vi.useRealTimers();
+  });
+
+  it('se desarma cuando no quedan días marcados', () => {
+    useCalendarStore.setState({ markedDays: { '1-15': { color: '#dc2626', label: 'Fiesta' } } });
+    const onClearSelectedDays = renderToolbar();
+    const clearButton = screen.getByRole('button', { name: /Desmarcar todos/i });
+
+    fireEvent.click(clearButton);
+    expect(screen.getByText('¿Confirmar borrado?')).toBeTruthy();
+
+    act(() => {
+      useCalendarStore.setState({ markedDays: {} });
+    });
+
+    expect(screen.queryByText('¿Confirmar borrado?')).toBeNull();
+    fireEvent.click(clearButton);
+    expect(onClearSelectedDays).not.toHaveBeenCalled();
   });
 });

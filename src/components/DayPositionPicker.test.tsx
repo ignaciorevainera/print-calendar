@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { DayPositionPicker } from './DayPositionPicker';
+import { useCalendarStore } from '../store/useCalendarStore';
 
 describe('DayPositionPicker', () => {
   it('usa disabledMessage al pulsar una posición deshabilitada', () => {
@@ -47,6 +48,76 @@ describe('DayPositionPicker', () => {
     );
 
     fireEvent.click(screen.getByTitle('↗ Superior Derecha'));
+
+    expect(onShowToast).toHaveBeenCalledWith(
+      'Posición de nota ajustada a Sup. Derecha para evitar colisión',
+      'info',
+    );
+  });
+
+  it('usa el mensaje de cuadrante compartido cuando no hay disabledMessage', () => {
+    const onShowToast = vi.fn();
+    render(
+      <DayPositionPicker
+        value="center"
+        onChange={() => {}}
+        onShowToast={onShowToast}
+        disabledPositions={['top-left']}
+        oppositeElementPosition="top-left"
+      />,
+    );
+
+    fireEvent.click(screen.getByTitle('Posición no disponible'));
+
+    expect(onShowToast).toHaveBeenCalledWith(
+      'No se puede colocar la nota y el número en el mismo cuadrante',
+      'error',
+    );
+  });
+
+  it('usa el mensaje de fila central cuando no hay disabledMessage', () => {
+    const onShowToast = vi.fn();
+    render(
+      <DayPositionPicker
+        value="bottom-left"
+        onChange={(_pos, onBlocked) => onBlocked?.()}
+        onShowToast={onShowToast}
+      />,
+    );
+
+    fireEvent.click(screen.getByTitle('• Centro'));
+
+    expect(onShowToast).toHaveBeenCalledWith(
+      'No se puede usar la fila central porque hay días festivos cargados en el calendario',
+      'error',
+    );
+  });
+
+  it('anuncia el ajuste del número cuando el picker es de nota', () => {
+    const onShowToast = vi.fn();
+    render(
+      <DayPositionPicker
+        pickerType="note"
+        value="center"
+        onChange={(_pos, _onBlocked, onDeflected) => onDeflected?.('bottom-left')}
+        onShowToast={onShowToast}
+      />,
+    );
+
+    fireEvent.click(screen.getByTitle('↗ Superior Derecha'));
+
+    expect(onShowToast).toHaveBeenCalledWith(
+      'Posición de número ajustada a Inf. Izquierda para evitar colisión',
+      'info',
+    );
+  });
+
+  it('anuncia el ajuste de la nota al escribir en el almacén', () => {
+    const onShowToast = vi.fn();
+    useCalendarStore.setState({ dayNumberPosition: 'center', dayNotePosition: 'bottom-left' });
+    render(<DayPositionPicker onShowToast={onShowToast} />);
+
+    fireEvent.click(screen.getByTitle('↙ Inferior Izquierda'));
 
     expect(onShowToast).toHaveBeenCalledWith(
       'Posición de nota ajustada a Sup. Derecha para evitar colisión',

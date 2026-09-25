@@ -117,4 +117,11 @@ describe('DayColorModal', () => {
 
     expect(screen.getByText('4/250')).toBeTruthy();
   });
+
+  it('muestra los contadores en cero al abrir', () => {
+    renderModal();
+
+    expect(screen.getByText('0/30')).toBeTruthy();
+    expect(screen.getByText('0/250')).toBeTruthy();
+  });
 });
