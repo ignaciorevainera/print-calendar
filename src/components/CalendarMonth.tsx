@@ -213,9 +213,12 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
               const textColor = isSelected && markInfo?.color ? getContrastTextColor(markInfo.color) : undefined;
               const cellNotePos = resolveNotePosition(dayNumberPosition, dayNotePosition, Boolean(markInfo?.isHoliday || markInfo?.label));
 
+              const noteSuffix = markInfo?.note ? ` | Nota: ${markInfo.note}` : '';
               const dayTitle = isSelected
                 ? markInfo?.label
-                  ? `${day} de ${month.name}: ${markInfo.label} - Clic para editar o desmarcar`
+                  ? `${day} de ${month.name}: ${markInfo.label}${noteSuffix} - Clic para editar o desmarcar`
+                  : markInfo?.note
+                  ? `${day} de ${month.name}: ${markInfo.note} - Clic para editar o desmarcar`
                   : `Día marcado: ${day} de ${month.name} - Clic para cambiar color o desmarcar`
                 : `Marcar ${day} de ${month.name} (elegir color)`;
 
@@ -257,12 +260,12 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                         <div
                           className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden flex ${positionClassMap[dayNumberPosition]}`}
                         >
-                          <div className={`flex w-full shrink-0 ${sizeClassMap[dayNumberSize]} ${positionClassMap[dayNumberPosition]}`}>
+                          <div className={`shrink-0 ${sizeClassMap[dayNumberSize]}`}>
                             <span>{day}</span>
                           </div>
                         </div>
                         {isSelected && markInfo?.label && (
-                          <div className="col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 hidden lg:flex print:flex items-center justify-center p-0.5 pointer-events-none">
+                          <div className="col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 flex items-center justify-center p-0.5 pointer-events-none">
                             <span className={`inline-block w-full text-center font-bold rounded truncate max-w-full ${
                               textColor === '#0f172a' ? 'text-slate-900 bg-black/10' : 'text-white bg-black/20'
                             } ${labelSizeMap[dayTextSize]}`}>
@@ -272,7 +275,7 @@ export const CalendarMonth: React.FC<CalendarMonthProps> = ({
                         )}
                         {isSelected && markInfo?.note && (
                           <div
-                            className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden hidden lg:flex print:flex ${positionClassMap[cellNotePos]}`}
+                            className={`col-start-1 row-start-1 w-full h-full min-h-0 min-w-0 overflow-hidden flex ${positionClassMap[cellNotePos]}`}
                           >
                             <span
                               className={`${noteSizeMap[dayTextSize]} ${noteTextAlignMap[cellNotePos]} ${

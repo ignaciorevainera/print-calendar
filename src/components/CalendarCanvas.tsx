@@ -111,7 +111,7 @@ export const CalendarCanvas: React.FC<CalendarCanvasProps> = ({
 
           <div
             data-testid={`calendar-grid-${pageIndex}`}
-            className={`grid ${gridClassMap[layout]} flex-1 h-full w-full min-h-0 box-border`}
+            className={`grid ${gridClassMap[layout]} flex-1 w-full min-h-0 box-border`}
             style={{
               gridTemplateColumns: `repeat(${Math.min(pageMonths.length, gridBaseColsMap[layout])}, minmax(0, 1fr))`,
             }}

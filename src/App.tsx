@@ -2,7 +2,6 @@ import React, { useState, useMemo, useEffect } from "react";
 import { MarkedDaysMap, RecurrenceOptions } from "./types";
 import {
   useCalendarStore,
-  hasHolidayOrLabelMarked,
 } from "./store/useCalendarStore";
 import { generateYearData } from "./utils/calendarHelper";
 import { calculateRecurringDays } from "./utils/recurrenceHelper";
@@ -85,30 +84,17 @@ export default function App() {
     }, 4500);
   };
 
-  const checkAndResetMiddlePositions = (nextMarkedDays: MarkedDaysMap) => {
-    const hasHolidaysOrLabels = hasHolidayOrLabelMarked(nextMarkedDays);
-    if (!hasHolidaysOrLabels) return;
-
-    const {
-      dayNumberPosition,
-      dayNotePosition,
-      setDayNumberPosition,
-      setDayNotePosition,
-    } = useCalendarStore.getState();
+  const handlePositionAdjustmentNotification = (
+    numPos: string,
+    notePos: string,
+  ) => {
     let message = "";
-
-    const isMiddleRow = (pos: string) =>
-      pos.startsWith("middle") || pos === "center";
-
-    if (isMiddleRow(dayNumberPosition)) {
-      setDayNumberPosition("top-right");
+    if (numPos === "top-right") {
       message += "Número de día movido a superior derecha. ";
     }
-    if (isMiddleRow(dayNotePosition)) {
-      setDayNotePosition("bottom-left");
+    if (notePos === "bottom-left") {
       message += "Nota movida a inferior izquierda. ";
     }
-
     if (message) {
       showToast(
         `${message}Los festivos o etiquetas ocupan la fila central.`,
@@ -146,11 +132,47 @@ export default function App() {
         markedDays,
       );
 
-      let updatedMarkedDays: MarkedDaysMap = {};
-      setMarkedDays((prev) => {
-        const updates: MarkedDaysMap = {};
-        for (const key of targetKeys) {
-          const existing = prev[key];
+      setMarkedDays(
+        (prev) => {
+          const updates: MarkedDaysMap = {};
+          for (const key of targetKeys) {
+            const existing = prev[key];
+            const nextLabel =
+              label !== undefined
+                ? label.trim() !== ""
+                  ? label.trim()
+                  : undefined
+                : existing?.label;
+            const nextNote =
+              note !== undefined
+                ? note.trim() !== ""
+                  ? note.trim()
+                  : undefined
+                : existing?.note;
+
+            updates[key] = {
+              color,
+              label: nextLabel,
+              note: nextNote,
+              seriesId,
+              isHoliday: existing?.isHoliday,
+            };
+          }
+
+          return {
+            ...prev,
+            ...updates,
+          };
+        },
+        handlePositionAdjustmentNotification,
+      );
+
+      showToast(`Se han marcado ${targetKeys.length} días`, "success");
+      setActiveDayModal(null);
+    } else {
+      setMarkedDays(
+        (prev) => {
+          const existing = prev[dayKey];
           const nextLabel =
             label !== undefined
               ? label.trim() !== ""
@@ -164,58 +186,20 @@ export default function App() {
                 : undefined
               : existing?.note;
 
-          updates[key] = {
-            color,
-            label: nextLabel,
-            note: nextNote,
-            seriesId,
-            isHoliday: existing?.isHoliday,
+          return {
+            ...prev,
+            [dayKey]: {
+              color,
+              label: nextLabel,
+              note: nextNote,
+              isHoliday: existing?.isHoliday,
+            },
           };
-        }
-
-        const next = {
-          ...prev,
-          ...updates,
-        };
-        updatedMarkedDays = next;
-        return next;
-      });
-
-      showToast(`Se han marcado ${targetKeys.length} días`, "success");
-      checkAndResetMiddlePositions(updatedMarkedDays);
-      setActiveDayModal(null);
-    } else {
-      let updatedMarkedDays: MarkedDaysMap = {};
-      setMarkedDays((prev) => {
-        const existing = prev[dayKey];
-        const nextLabel =
-          label !== undefined
-            ? label.trim() !== ""
-              ? label.trim()
-              : undefined
-            : existing?.label;
-        const nextNote =
-          note !== undefined
-            ? note.trim() !== ""
-              ? note.trim()
-              : undefined
-            : existing?.note;
-
-        const next = {
-          ...prev,
-          [dayKey]: {
-            color,
-            label: nextLabel,
-            note: nextNote,
-            isHoliday: existing?.isHoliday,
-          },
-        };
-        updatedMarkedDays = next;
-        return next;
-      });
+        },
+        handlePositionAdjustmentNotification,
+      );
 
       showToast(`Día ${dayNumber} de ${monthName} guardado`, "success");
-      checkAndResetMiddlePositions(updatedMarkedDays);
       setActiveDayModal(null);
     }
   };
@@ -252,18 +236,15 @@ export default function App() {
     countryLabel: string,
     count: number,
   ) => {
-    let updatedMarkedDays: MarkedDaysMap = {};
-    setMarkedDays((prev) => {
-      const next = append ? { ...prev, ...holidaysMap } : holidaysMap;
-      updatedMarkedDays = next;
-      return next;
-    });
+    setMarkedDays(
+      (prev) => (append ? { ...prev, ...holidaysMap } : holidaysMap),
+      handlePositionAdjustmentNotification,
+    );
 
     showToast(
       `Se han cargado ${count} días festivos de ${countryLabel} en el calendario`,
       "success",
     );
-    checkAndResetMiddlePositions(updatedMarkedDays);
   };
 
   const handlePrint = () => {
@@ -273,7 +254,9 @@ export default function App() {
   return (
     <div
       data-theme={palette === 'nocturno' ? 'dark' : 'light'}
-      className="min-h-screen md:h-screen flex flex-col md:flex-row bg-slate-100 selection:bg-blue-100 relative overflow-x-hidden md:overflow-hidden print:h-auto print:overflow-visible"
+      className={`min-h-screen md:h-screen flex flex-col md:flex-row ${
+        palette === 'nocturno' ? 'bg-slate-900' : 'bg-slate-100'
+      } selection:bg-blue-100 relative overflow-x-hidden md:overflow-hidden print:h-auto print:overflow-visible`}
     >
       {/* Área Principal de Visualización del Calendario */}
       <main className="flex-1 min-w-0 flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 print:p-0 print:w-full print:overflow-visible overflow-auto">

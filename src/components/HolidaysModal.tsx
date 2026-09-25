@@ -89,12 +89,14 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
         setRawHolidays(data);
         setIsLoadingHolidays(false);
         setSelectedRegion('');
+        setScopeFilter('all');
       })
       .catch((err) => {
         if (controller.signal.aborted) return;
         setErrorMessage(err.message || `No se pudieron cargar los festivos de ${year} para este país.`);
         setRawHolidays([]);
         setIsLoadingHolidays(false);
+        setScopeFilter('all');
       });
 
     return () => {
@@ -111,7 +113,6 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Extract available regions / subdivisions from holiday data
   const availableRegions = useMemo(() => {
     const regionSet = new Set<string>();
     rawHolidays.forEach((h) => {
@@ -124,7 +125,12 @@ export const HolidaysModal: React.FC<HolidaysModalProps> = ({
     );
   }, [rawHolidays]);
 
-  // Filtered countries based on search term
+  useEffect(() => {
+    if (scopeFilter === 'region' && availableRegions.length === 0) {
+      setScopeFilter('all');
+    }
+  }, [scopeFilter, availableRegions]);
+
   const filteredCountries = useMemo(() => {
     if (!countrySearch.trim()) return countries;
     const query = countrySearch.toLowerCase();

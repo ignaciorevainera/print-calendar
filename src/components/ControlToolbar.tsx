@@ -18,8 +18,6 @@ import {
 } from 'lucide-react';
 
 interface ControlToolbarProps {
-  isOpen?: boolean;
-  onToggle?: () => void;
   onPrint: () => void;
   onClearSelectedDays: () => void;
   onOpenHolidaysModal: () => void;
@@ -37,8 +35,6 @@ const BG_PRESET_COLORS = [
 ];
 
 export const ControlToolbar: React.FC<ControlToolbarProps> = ({
-  isOpen = true,
-  onToggle,
   onPrint,
   onClearSelectedDays,
   onOpenHolidaysModal,
@@ -166,7 +162,13 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
   }, [year]);
 
   const handleYearCommit = () => {
-    const validYear = Math.min(2100, Math.max(1900, parseInt(tempYear, 10) || new Date().getFullYear()));
+    const trimmed = tempYear.trim();
+    const parsed = parseInt(trimmed, 10);
+    if (isNaN(parsed) || trimmed.length < 4) {
+      setTempYear(String(year));
+      return;
+    }
+    const validYear = Math.min(2100, Math.max(1900, parsed));
     setYear(validYear);
     setTempYear(String(validYear));
   };

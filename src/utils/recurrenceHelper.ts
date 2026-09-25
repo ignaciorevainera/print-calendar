@@ -8,7 +8,7 @@ export function calculateRecurringDays(
   existingMarkedDays: MarkedDaysMap = {}
 ): string[] {
   const result: string[] = [];
-  const targetDate = new Date(year, monthIndex, dayNumber);
+  const targetDate = new Date(year, monthIndex, dayNumber, 12, 0, 0);
   const targetDayOfWeek = targetDate.getDay();
 
   if (options.pattern === 'none') {
@@ -16,7 +16,7 @@ export function calculateRecurringDays(
   } else if (options.pattern === 'weekday_month') {
     const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
     for (let d = 1; d <= daysInMonth; d++) {
-      const date = new Date(year, monthIndex, d);
+      const date = new Date(year, monthIndex, d, 12, 0, 0);
       if (date.getDay() === targetDayOfWeek) {
         result.push(`${monthIndex + 1}-${d}`);
       }
@@ -25,7 +25,7 @@ export function calculateRecurringDays(
     for (let m = 0; m < 12; m++) {
       const daysInMonth = new Date(year, m + 1, 0).getDate();
       for (let d = 1; d <= daysInMonth; d++) {
-        const date = new Date(year, m, d);
+        const date = new Date(year, m, d, 12, 0, 0);
         if (date.getDay() === targetDayOfWeek) {
           result.push(`${m + 1}-${d}`);
         }
@@ -43,14 +43,14 @@ export function calculateRecurringDays(
     if (options.endDate) {
       const parts = options.endDate.split('-').map(Number);
       if (parts.length === 3 && !isNaN(parts[0]) && !isNaN(parts[1]) && !isNaN(parts[2])) {
-        end = new Date(parts[0], parts[1] - 1, parts[2]);
+        end = new Date(parts[0], parts[1] - 1, parts[2], 23, 59, 59);
       } else {
-        end = new Date(options.endDate);
+        end = new Date(year, 11, 31, 23, 59, 59);
       }
     } else {
-      end = new Date(year, 11, 31);
+      end = new Date(year, 11, 31, 23, 59, 59);
     }
-    let curr = new Date(year, monthIndex, dayNumber);
+    let curr = new Date(year, monthIndex, dayNumber, 12, 0, 0);
     while (curr <= end && curr.getFullYear() === year) {
       if (curr.getDay() === targetDayOfWeek) {
         result.push(`${curr.getMonth() + 1}-${curr.getDate()}`);

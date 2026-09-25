@@ -26,11 +26,12 @@ describe('CalendarCanvas', () => {
   it('propaga el fondo personalizado a la página mediante variables CSS', () => {
     useCalendarStore.setState({ layout: 'anual', calendarBgColor: '#fefce8' });
     const year = generateYearData(2027, 'monday', 'es');
-    const { container } = render(<CalendarCanvas months={year} onSelectDay={() => {}} />);
+    const { container, unmount } = render(<CalendarCanvas months={year} onSelectDay={() => {}} />);
 
     const page = container.querySelector('.page-a4') as HTMLElement;
     expect(page.style.getPropertyValue('--cal-bg')).toBe('#fefce8');
 
+    unmount();
     useCalendarStore.setState({ calendarBgColor: '' });
   });
 });

@@ -60,7 +60,10 @@ interface CalendarState {
   setWeekStart: (weekStart: WeekStart) => void;
   setHighlightWeekends: (highlight: boolean) => void;
   setSubtitle: (subtitle: string) => void;
-  setMarkedDays: (markedDays: MarkedDaysMap | ((prev: MarkedDaysMap) => MarkedDaysMap)) => void;
+  setMarkedDays: (
+    markedDays: MarkedDaysMap | ((prev: MarkedDaysMap) => MarkedDaysMap),
+    onPositionAdjusted?: (numPos: DayNumberPosition, notePos: DayNumberPosition) => void
+  ) => void;
   setLayout: (layout: LayoutType) => void;
   setDayNumberSize: (size: DayNumberSize) => void;
   setDayTextSize: (dayTextSize: DayTextSize) => void;
@@ -104,9 +107,33 @@ export const useCalendarStore = create<CalendarState>()(
         setWeekStart: (weekStart) => set({ weekStart }),
         setHighlightWeekends: (highlightWeekends) => set({ highlightWeekends }),
         setSubtitle: (subtitle) => set({ subtitle }),
-        setMarkedDays: (markedDays) => set((state) => ({
-          markedDays: typeof markedDays === 'function' ? markedDays(state.markedDays) : markedDays
-        })),
+        setMarkedDays: (markedDays, onPositionAdjusted) => set((state) => {
+          const nextMarked = typeof markedDays === 'function' ? markedDays(state.markedDays) : markedDays;
+          let newNumberPos = state.dayNumberPosition;
+          let newNotePos = state.dayNotePosition;
+          let adjusted = false;
+
+          if (hasHolidayOrLabelMarked(nextMarked)) {
+            if (isMiddleRow(newNumberPos)) {
+              newNumberPos = 'top-right';
+              adjusted = true;
+            }
+            if (isMiddleRow(newNotePos)) {
+              newNotePos = 'bottom-left';
+              adjusted = true;
+            }
+          }
+
+          if (adjusted && onPositionAdjusted) {
+            onPositionAdjusted(newNumberPos, newNotePos);
+          }
+
+          return {
+            markedDays: nextMarked,
+            dayNumberPosition: newNumberPos,
+            dayNotePosition: newNotePos,
+          };
+        }),
         setLayout: (layout) => set({ layout }),
         setDayNumberSize: (dayNumberSize) => set({ dayNumberSize }),
         setDayTextSize: (dayTextSize) => set({ dayTextSize }),

@@ -1,23 +1,6 @@
 import { MonthInfo, WeekStart, LayoutType, CalendarLocale } from '../types';
 import { getMonthNames } from './i18n';
 
-export const SPANISH_MONTH_NAMES = [
-  'ENERO',
-  'FEBRERO',
-  'MARZO',
-  'ABRIL',
-  'MAYO',
-  'JUNIO',
-  'JULIO',
-  'AGOSTO',
-  'SEPTIEMBRE',
-  'OCTUBRE',
-  'NOVIEMBRE',
-  'DICIEMBRE'
-];
-
-export const DAYS_MONDAY_START = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
-export const DAYS_SUNDAY_START = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
 
 export function isWeekendIndex(index: number, weekStart: WeekStart): boolean {
   if (weekStart === 'monday') {

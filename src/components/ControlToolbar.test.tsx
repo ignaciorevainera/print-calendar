@@ -37,4 +37,22 @@ describe('ControlToolbar clear-all confirm', () => {
     fireEvent.click(clearButton);
     expect(onClearSelectedDays).toHaveBeenCalledTimes(1);
   });
+
+  it('restaura el año actual si el input queda incompleto al desenfocar', () => {
+    useCalendarStore.setState({ year: 2027 });
+    render(
+      <ControlToolbar
+        onPrint={vi.fn()}
+        onClearSelectedDays={vi.fn()}
+        onOpenHolidaysModal={vi.fn()}
+      />,
+    );
+
+    const yearInput = document.getElementById('input-year') as HTMLInputElement;
+    fireEvent.change(yearInput, { target: { value: '202' } });
+    fireEvent.blur(yearInput);
+
+    expect(useCalendarStore.getState().year).toBe(2027);
+    expect(yearInput.value).toBe('2027');
+  });
 });

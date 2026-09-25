@@ -11,22 +11,7 @@ export type PaletteKey =
   | 'marino'
   | 'nocturno';
 
-export interface PaletteOption {
-  id: PaletteKey;
-  name: string;
-  className: string;
-  colorSwatch: string;
-}
-
 export type FontFamilyKey = 'jakarta' | 'inter' | 'playfair' | 'roboto' | 'lora' | 'fira' | 'jetbrains';
-
-export interface FontOption {
-  id: FontFamilyKey;
-  name: string;
-  fontClass: string;
-  fontStyleName: string;
-}
-
 export type WeekStart = 'monday' | 'sunday';
 
 export type LayoutType = 'anual' | 'semestral' | 'trimestral' | 'mensual';

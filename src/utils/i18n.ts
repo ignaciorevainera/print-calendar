@@ -24,7 +24,7 @@ export function getMonthNames(locale: CalendarLocale): string[] {
   const tag = LOCALE_TAG_MAP[locale];
   const formatter = new Intl.DateTimeFormat(tag, { month: 'long' });
   const names = Array.from({ length: 12 }, (_, i) =>
-    formatter.format(new Date(2000, i, 1)).toUpperCase()
+    formatter.format(new Date(2000, i, 1, 12, 0, 0)).toUpperCase()
   );
   monthNamesCache[locale] = names;
   return names;
@@ -38,7 +38,7 @@ export function getDayLetters(locale: CalendarLocale, weekStart: WeekStart): str
   const tag = LOCALE_TAG_MAP[locale];
   const formatter = new Intl.DateTimeFormat(tag, { weekday: 'narrow' });
   const base = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(2024, 0, i + 1);
+    const date = new Date(2024, 0, i + 1, 12, 0, 0);
     return formatter.format(date).toUpperCase();
   });
   if (locale === 'es') {
