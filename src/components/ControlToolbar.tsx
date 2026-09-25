@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize, DayNumberPosition, HeaderTitleSize, MonthTitleSize, CalendarLocale, SIZE_OPTIONS } from '../types';
+import { PaletteKey, FontFamilyKey, LayoutType, DayNumberSize, DayTextSize, HeaderTitleSize, MonthTitleSize, CalendarLocale, SIZE_OPTIONS } from '../types';
 import { useCalendarStore, hasHolidayOrLabelMarked } from '../store/useCalendarStore';
 import { DayPositionPicker } from './DayPositionPicker';
+import { MIDDLE_POSITIONS } from '../utils/dayPosition';
 import { LOCALE_OPTIONS, getMonthNames } from '../utils/i18n';
 import { 
   Printer, 
@@ -97,7 +98,6 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
 
   const selectedCount = Object.keys(markedDays).length;
   const hasHolidaysOrLabels = hasHolidayOrLabelMarked(markedDays);
-  const middlePositions: DayNumberPosition[] = ['middle-left', 'center', 'middle-right'];
 
   const visibleMonthsCount = monthRange.end - monthRange.start + 1;
   let chunkSize = 12;
@@ -567,7 +567,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   onChange={setDayNumberPosition}
                   title="Posición número (3×3)"
                   onShowToast={onShowToast}
-                  disabledPositions={hasHolidaysOrLabels ? middlePositions : []}
+                  disabledPositions={hasHolidaysOrLabels ? MIDDLE_POSITIONS : []}
                   disabledMessage="Esta posición está ocupada por la nota o bloqueada por festivos o etiquetas"
                   oppositeElementPosition={dayNotePosition}
                 />
@@ -581,7 +581,7 @@ export const ControlToolbar: React.FC<ControlToolbarProps> = ({
                   onChange={setDayNotePosition}
                   title="Posición nota (3×3)"
                   onShowToast={onShowToast}
-                  disabledPositions={[dayNumberPosition, ...(hasHolidaysOrLabels ? middlePositions : [])]}
+                  disabledPositions={[dayNumberPosition, ...(hasHolidaysOrLabels ? MIDDLE_POSITIONS : [])]}
                   disabledMessage="Esta posición está ocupada por el número o bloqueada por festivos o etiquetas"
                   oppositeElementPosition={dayNumberPosition}
                 />

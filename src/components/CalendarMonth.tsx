@@ -3,6 +3,7 @@ import { MonthInfo, WeekStart, MarkedDaysMap, DayNumberPosition, DayNumberSize, 
 import { isWeekendIndex } from '../utils/calendarHelper';
 import { getContrastTextColor } from '../utils/colorHelper';
 import { getDayLetters } from '../utils/i18n';
+import { isMiddleRow, OPPOSITE_POSITIONS } from '../utils/dayPosition';
 import { useCalendarStore } from '../store/useCalendarStore';
 
 const monthTitleSizeMap: Record<MonthTitleSize, string> = {
@@ -64,20 +65,6 @@ const noteTextAlignMap: Record<DayNumberPosition, string> = {
   'bottom-center': 'text-center',
   'bottom-right': 'text-right',
 };
-
-const OPPOSITE_POSITIONS: Record<DayNumberPosition, DayNumberPosition> = {
-  'top-left': 'bottom-right',
-  'top-center': 'bottom-center',
-  'top-right': 'bottom-left',
-  'middle-left': 'middle-right',
-  'center': 'bottom-right',
-  'middle-right': 'middle-left',
-  'bottom-left': 'top-right',
-  'bottom-center': 'top-center',
-  'bottom-right': 'top-left',
-};
-
-const isMiddleRow = (pos: DayNumberPosition): boolean => pos.startsWith('middle') || pos === 'center';
 
 export function resolveNotePosition(
   numberPos: DayNumberPosition,

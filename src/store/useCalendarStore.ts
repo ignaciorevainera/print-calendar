@@ -15,23 +15,10 @@ import {
   MonthTitleSize,
   CalendarLocale
 } from '../types';
+import { isMiddleRow, OPPOSITE_POSITIONS } from '../utils/dayPosition';
 
 export const hasHolidayOrLabelMarked = (markedDays: MarkedDaysMap): boolean => {
   return Object.values(markedDays).some((d) => d.isHoliday || (d.label && d.label.trim() !== ''));
-};
-
-const isMiddleRow = (pos: DayNumberPosition): boolean => pos.startsWith('middle') || pos === 'center';
-
-const OPPOSITE_POSITIONS: Record<DayNumberPosition, DayNumberPosition> = {
-  'top-left': 'bottom-right',
-  'top-center': 'bottom-center',
-  'top-right': 'bottom-left',
-  'middle-left': 'middle-right',
-  'center': 'bottom-right',
-  'middle-right': 'middle-left',
-  'bottom-left': 'top-right',
-  'bottom-center': 'top-center',
-  'bottom-right': 'top-left',
 };
 
 interface CalendarState {
