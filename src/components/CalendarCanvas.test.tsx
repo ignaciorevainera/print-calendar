@@ -1,12 +1,26 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { CalendarCanvas } from './CalendarCanvas';
 import { useCalendarStore } from '../store/useCalendarStore';
 import { generateYearData } from '../utils/calendarHelper';
 
+const setCanvasState = (overrides: Partial<ReturnType<typeof useCalendarStore.getState>> = {}) => {
+  useCalendarStore.setState({
+    year: 2027,
+    layout: 'anual',
+    monthRange: { start: 1, end: 12 },
+    calendarBgColor: '',
+    ...overrides,
+  });
+};
+
+afterEach(() => {
+  useCalendarStore.setState({ layout: 'anual', calendarBgColor: '' });
+});
+
 describe('CalendarCanvas', () => {
   it('ajusta las columnas a los meses visibles en páginas parciales', () => {
-    useCalendarStore.setState({ layout: 'anual' });
+    setCanvasState({ layout: 'anual' });
     const threeMonths = generateYearData(2027, 'monday', 'es').slice(0, 3);
     render(<CalendarCanvas months={threeMonths} onSelectDay={() => {}} />);
 
@@ -15,7 +29,7 @@ describe('CalendarCanvas', () => {
   });
 
   it('mantiene 4 columnas con el año completo en layout anual', () => {
-    useCalendarStore.setState({ layout: 'anual' });
+    setCanvasState({ layout: 'anual' });
     const year = generateYearData(2027, 'monday', 'es');
     render(<CalendarCanvas months={year} onSelectDay={() => {}} />);
 
@@ -24,14 +38,12 @@ describe('CalendarCanvas', () => {
   });
 
   it('propaga el fondo personalizado a la página mediante variables CSS', () => {
-    useCalendarStore.setState({ layout: 'anual', calendarBgColor: '#fefce8' });
+    setCanvasState({ layout: 'anual', calendarBgColor: '#fefce8' });
     const year = generateYearData(2027, 'monday', 'es');
-    const { container, unmount } = render(<CalendarCanvas months={year} onSelectDay={() => {}} />);
+    const { container } = render(<CalendarCanvas months={year} onSelectDay={() => {}} />);
 
-    const page = container.querySelector('.page-a4') as HTMLElement;
-    expect(page.style.getPropertyValue('--cal-bg')).toBe('#fefce8');
-
-    unmount();
-    useCalendarStore.setState({ calendarBgColor: '' });
+    const page = container.querySelector<HTMLElement>('.page-a4');
+    expect(page).not.toBeNull();
+    expect(page?.style.getPropertyValue('--cal-bg')).toBe('#fefce8');
   });
 });
