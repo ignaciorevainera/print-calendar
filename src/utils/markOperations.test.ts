@@ -45,6 +45,7 @@ describe('removeSeriesMarks', () => {
 
     expect(result.removedCount).toBe(0);
     expect(result.markedDays).toEqual(original);
+    expect(result.markedDays).not.toBe(original);
     expect(Object.keys(original)).toEqual(['1-1']);
   });
 });

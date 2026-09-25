@@ -22,30 +22,18 @@ describe('ControlToolbar clear-all confirm', () => {
 
   it('deshabilita el borrado sin días marcados', () => {
     useCalendarStore.setState({ markedDays: {} });
-    render(
-      <ControlToolbar
-        onPrint={vi.fn()}
-        onClearSelectedDays={vi.fn()}
-        onOpenHolidaysModal={vi.fn()}
-      />,
-    );
+    renderToolbar();
 
-    const clearButton = document.getElementById('btn-clear-all-days') as HTMLButtonElement;
-    expect(clearButton.disabled).toBe(true);
+    const clearButton = screen.getByRole('button', { name: /Desmarcar todos/i });
+    expect((clearButton as HTMLButtonElement).disabled).toBe(true);
   });
 
   it('pide confirmación antes de borrar', () => {
     useCalendarStore.setState({ markedDays: { '1-15': { color: '#dc2626', label: 'Fiesta' } } });
     const onClearSelectedDays = vi.fn();
-    render(
-      <ControlToolbar
-        onPrint={vi.fn()}
-        onClearSelectedDays={onClearSelectedDays}
-        onOpenHolidaysModal={vi.fn()}
-      />,
-    );
+    renderToolbar(onClearSelectedDays);
 
-    const clearButton = document.getElementById('btn-clear-all-days') as HTMLButtonElement;
+    const clearButton = screen.getByRole('button', { name: /Desmarcar todos/i });
     fireEvent.click(clearButton);
     expect(onClearSelectedDays).not.toHaveBeenCalled();
     expect(screen.getByText('¿Confirmar borrado?')).toBeTruthy();
@@ -56,15 +44,9 @@ describe('ControlToolbar clear-all confirm', () => {
 
   it('restaura el año actual si el input queda incompleto al desenfocar', () => {
     useCalendarStore.setState({ year: 2027 });
-    render(
-      <ControlToolbar
-        onPrint={vi.fn()}
-        onClearSelectedDays={vi.fn()}
-        onOpenHolidaysModal={vi.fn()}
-      />,
-    );
+    renderToolbar();
 
-    const yearInput = document.getElementById('input-year') as HTMLInputElement;
+    const yearInput = screen.getByRole('spinbutton') as HTMLInputElement;
     fireEvent.change(yearInput, { target: { value: '202' } });
     fireEvent.blur(yearInput);
 
@@ -82,11 +64,18 @@ describe('ControlToolbar clear-all confirm', () => {
     expect(screen.getByText('¿Confirmar borrado?')).toBeTruthy();
 
     act(() => {
-      vi.advanceTimersByTime(4000);
+      vi.advanceTimersByTime(3999);
+    });
+    expect(screen.getByText('¿Confirmar borrado?')).toBeTruthy();
+
+    act(() => {
+      vi.advanceTimersByTime(1);
     });
     expect(screen.queryByText('¿Confirmar borrado?')).toBeNull();
+    expect((clearButton as HTMLButtonElement).disabled).toBe(false);
 
     fireEvent.click(clearButton);
+    expect(screen.getByText('¿Confirmar borrado?')).toBeTruthy();
     expect(onClearSelectedDays).not.toHaveBeenCalled();
     vi.useRealTimers();
   });
@@ -104,7 +93,7 @@ describe('ControlToolbar clear-all confirm', () => {
     });
 
     expect(screen.queryByText('¿Confirmar borrado?')).toBeNull();
-    fireEvent.click(clearButton);
+    expect(clearButton.hasAttribute('disabled')).toBe(true);
     expect(onClearSelectedDays).not.toHaveBeenCalled();
   });
 });

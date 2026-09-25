@@ -37,7 +37,7 @@ describe('DayPositionPicker', () => {
     expect(onShowToast).toHaveBeenCalledWith('Mensaje personalizado', 'error');
   });
 
-  it('emite el mensaje de deflexión con la etiqueta de la posición', () => {
+  it('emite el mensaje de deflexión mediante callback onDeflected', () => {
     const onShowToast = vi.fn();
     render(
       <DayPositionPicker
@@ -121,6 +121,20 @@ describe('DayPositionPicker', () => {
 
     expect(onShowToast).toHaveBeenCalledWith(
       'Posición de nota ajustada a Sup. Derecha para evitar colisión',
+      'info',
+    );
+  });
+
+  it('ajusta el número desde el almacén al elegir una posición de nota que colisiona', () => {
+    const onShowToast = vi.fn();
+    useCalendarStore.setState({ dayNumberPosition: 'center', dayNotePosition: 'bottom-left' });
+    render(<DayPositionPicker pickerType="note" onShowToast={onShowToast} />);
+
+    fireEvent.click(screen.getByTitle('↙ Inferior Izquierda'));
+
+    expect(useCalendarStore.getState().dayNumberPosition).toBe('bottom-left');
+    expect(onShowToast).toHaveBeenCalledWith(
+      'Posición de número ajustada a Sup. Derecha para evitar colisión',
       'info',
     );
   });

@@ -56,7 +56,7 @@ describe('CalendarCanvas', () => {
     expect(grid.style.gridTemplateColumns).toContain('repeat(3,');
   });
 
-  it('usa 3 columnas en una página trimestral parcial', () => {
+  it('usa 2 columnas en una página trimestral parcial', () => {
     setCanvasState({ layout: 'trimestral' });
     const months = generateYearData(2027, 'monday', 'es').slice(0, 2);
     render(<CalendarCanvas months={months} onSelectDay={() => {}} />);
